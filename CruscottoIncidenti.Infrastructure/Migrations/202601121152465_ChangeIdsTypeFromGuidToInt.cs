@@ -1,0 +1,234 @@
+﻿namespace CruscottoIncidenti.Infrastructure.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class ChangeIdsTypeFromGuidToInt : DbMigration
+    {
+        public override void Up()
+        {
+            DropForeignKey("dbo.Users", "RoleId", "dbo.Roles");
+            DropForeignKey("dbo.Incidents", "AmbitId", "dbo.Ambits");
+            DropForeignKey("dbo.AmbitsToTypes", "TypeId", "dbo.Ambits");
+            DropForeignKey("dbo.OriginsToAmbit", "OriginId", "dbo.Ambits");
+            DropForeignKey("dbo.Incidents", "IncidentTypeId", "dbo.IncidentTypes");
+            DropForeignKey("dbo.AmbitsToTypes", "AmbitId", "dbo.IncidentTypes");
+            DropForeignKey("dbo.Incidents", "OriginId", "dbo.Origins");
+            DropForeignKey("dbo.OriginsToAmbit", "AmbitId", "dbo.Origins");
+            DropForeignKey("dbo.Incidents", "ScenarioId", "dbo.Scenarios");
+            DropForeignKey("dbo.Incidents", "ThreatId", "dbo.Threats");
+            DropIndex("dbo.Incidents", new[] { "IncidentTypeId" });
+            DropIndex("dbo.Incidents", new[] { "AmbitId" });
+            DropIndex("dbo.Incidents", new[] { "OriginId" });
+            DropIndex("dbo.Incidents", new[] { "ThreatId" });
+            DropIndex("dbo.Incidents", new[] { "ScenarioId" });
+            DropIndex("dbo.Users", new[] { "RoleId" });
+            DropIndex("dbo.AmbitsToTypes", new[] { "TypeId" });
+            DropIndex("dbo.AmbitsToTypes", new[] { "AmbitId" });
+            DropIndex("dbo.OriginsToAmbit", new[] { "OriginId" });
+            DropIndex("dbo.OriginsToAmbit", new[] { "AmbitId" });
+            DropPrimaryKey("dbo.Ambits");
+            DropPrimaryKey("dbo.Incidents");
+            DropPrimaryKey("dbo.IncidentTypes");
+            DropPrimaryKey("dbo.Origins");
+            DropPrimaryKey("dbo.Scenarios");
+            DropPrimaryKey("dbo.Threats");
+            DropPrimaryKey("dbo.Roles");
+            DropPrimaryKey("dbo.Users");
+            DropPrimaryKey("dbo.AmbitsToTypes");
+            DropPrimaryKey("dbo.OriginsToAmbit");
+            DropColumn("dbo.Ambits", "Id");
+            AddColumn("dbo.Ambits", "Id", c => c.Int(nullable: false, identity: true, defaultValue: 1));
+            DropColumn("dbo.Incidents", "Id");
+            AddColumn("dbo.Incidents", "Id", c => c.Int(nullable: false, identity: true, defaultValue: 1));
+            DropColumn("dbo.Incidents", "IncidentTypeId");
+            AddColumn("dbo.Incidents", "IncidentTypeId", c => c.Int());
+            DropColumn("dbo.Incidents", "AmbitId");
+            AddColumn("dbo.Incidents", "AmbitId", c => c.Int());
+            DropColumn("dbo.Incidents", "OriginId");
+            AddColumn("dbo.Incidents", "OriginId", c => c.Int());
+            DropColumn("dbo.Incidents", "ThreatId");
+            AddColumn("dbo.Incidents", "ThreatId", c => c.Int());
+            DropColumn("dbo.Incidents", "ScenarioId");
+            AddColumn("dbo.Incidents", "ScenarioId", c => c.Int());
+            DropColumn("dbo.Incidents", "CreatedBy");
+            AddColumn("dbo.Incidents", "CreatedBy", c => c.Int());
+            DropColumn("dbo.Incidents", "LastModifiedBy");
+            AddColumn("dbo.Incidents", "LastModifiedBy", c => c.Int());
+            DropColumn("dbo.IncidentTypes", "Id");
+            AddColumn("dbo.IncidentTypes", "Id", c => c.Int(nullable: false, identity: true, defaultValue: 1));
+            DropColumn("dbo.Origins", "Id");
+            AddColumn("dbo.Origins", "Id", c => c.Int(nullable: false, identity: true, defaultValue: 1));
+            DropColumn("dbo.Scenarios", "Id");
+            AddColumn("dbo.Scenarios", "Id", c => c.Int(nullable: false, identity: true, defaultValue: 1));
+            DropColumn("dbo.Threats", "Id");
+            AddColumn("dbo.Threats", "Id", c => c.Int(nullable: false, identity: true, defaultValue: 1));
+            DropColumn("dbo.Roles", "Id");
+            AddColumn("dbo.Roles", "Id", c => c.Int(nullable: false));
+            Sql(@"UPDATE dbo.Roles SET Id = 
+                    CASE WHEN Name = 'Administrator' THEN 1
+                         WHEN Name = 'Operator' THEN 2
+                         ELSE 3
+                    END;");
+            DropColumn("dbo.Users", "Id");
+            AddColumn("dbo.Users", "Id", c => c.Int(nullable: false, identity: true, defaultValue: 1));
+            DropColumn("dbo.Users", "RoleId");
+            AddColumn("dbo.Users", "RoleId", c => c.Int(nullable: false, defaultValue: 1));
+            DropColumn("dbo.Users", "CreatedBy");
+            AddColumn("dbo.Users", "CreatedBy", c => c.Int());
+            DropColumn("dbo.Users", "LastModifiedBy");
+            AddColumn("dbo.Users", "LastModifiedBy", c => c.Int());
+            DropColumn("dbo.AmbitsToTypes", "TypeId");
+            AddColumn("dbo.AmbitsToTypes", "TypeId", c => c.Int(nullable: false, defaultValue: 1));
+            DropColumn("dbo.AmbitsToTypes", "AmbitId");
+            AddColumn("dbo.AmbitsToTypes", "AmbitId", c => c.Int(nullable: false, defaultValue: 1));
+            DropColumn("dbo.OriginsToAmbit", "OriginId");
+            AddColumn("dbo.OriginsToAmbit", "OriginId", c => c.Int(nullable: false, defaultValue: 1));
+            DropColumn("dbo.OriginsToAmbit", "AmbitId");
+            AddColumn("dbo.OriginsToAmbit", "AmbitId", c => c.Int(nullable: false, defaultValue: 1));
+            AddPrimaryKey("dbo.Ambits", "Id");
+            AddPrimaryKey("dbo.Incidents", "Id");
+            AddPrimaryKey("dbo.IncidentTypes", "Id");
+            AddPrimaryKey("dbo.Origins", "Id");
+            AddPrimaryKey("dbo.Scenarios", "Id");
+            AddPrimaryKey("dbo.Threats", "Id");
+            AddPrimaryKey("dbo.Roles", "Id");
+            AddPrimaryKey("dbo.Users", "Id");
+            AddPrimaryKey("dbo.AmbitsToTypes", new[] { "TypeId", "AmbitId" });
+            AddPrimaryKey("dbo.OriginsToAmbit", new[] { "OriginId", "AmbitId" });
+            CreateIndex("dbo.Incidents", "IncidentTypeId");
+            CreateIndex("dbo.Incidents", "AmbitId");
+            CreateIndex("dbo.Incidents", "OriginId");
+            CreateIndex("dbo.Incidents", "ThreatId");
+            CreateIndex("dbo.Incidents", "ScenarioId");
+            CreateIndex("dbo.Users", "RoleId");
+            CreateIndex("dbo.AmbitsToTypes", "TypeId");
+            CreateIndex("dbo.AmbitsToTypes", "AmbitId");
+            CreateIndex("dbo.OriginsToAmbit", "OriginId");
+            CreateIndex("dbo.OriginsToAmbit", "AmbitId");
+            AddForeignKey("dbo.Users", "RoleId", "dbo.Roles", "Id");
+            AddForeignKey("dbo.Incidents", "AmbitId", "dbo.Ambits", "Id");
+            AddForeignKey("dbo.AmbitsToTypes", "TypeId", "dbo.Ambits", "Id");
+            AddForeignKey("dbo.OriginsToAmbit", "OriginId", "dbo.Ambits", "Id");
+            AddForeignKey("dbo.Incidents", "IncidentTypeId", "dbo.IncidentTypes", "Id");
+            AddForeignKey("dbo.AmbitsToTypes", "AmbitId", "dbo.IncidentTypes", "Id");
+            AddForeignKey("dbo.Incidents", "OriginId", "dbo.Origins", "Id");
+            AddForeignKey("dbo.OriginsToAmbit", "AmbitId", "dbo.Origins", "Id");
+            AddForeignKey("dbo.Incidents", "ScenarioId", "dbo.Scenarios", "Id");
+            AddForeignKey("dbo.Incidents", "ThreatId", "dbo.Threats", "Id");
+        }
+        
+        public override void Down()
+        {
+            DropForeignKey("dbo.Incidents", "ThreatId", "dbo.Threats");
+            DropForeignKey("dbo.Incidents", "ScenarioId", "dbo.Scenarios");
+            DropForeignKey("dbo.OriginsToAmbit", "AmbitId", "dbo.Origins");
+            DropForeignKey("dbo.Incidents", "OriginId", "dbo.Origins");
+            DropForeignKey("dbo.AmbitsToTypes", "AmbitId", "dbo.IncidentTypes");
+            DropForeignKey("dbo.Incidents", "IncidentTypeId", "dbo.IncidentTypes");
+            DropForeignKey("dbo.OriginsToAmbit", "OriginId", "dbo.Ambits");
+            DropForeignKey("dbo.AmbitsToTypes", "TypeId", "dbo.Ambits");
+            DropForeignKey("dbo.Incidents", "AmbitId", "dbo.Ambits");
+            DropForeignKey("dbo.Users", "RoleId", "dbo.Roles");
+            DropIndex("dbo.OriginsToAmbit", new[] { "AmbitId" });
+            DropIndex("dbo.OriginsToAmbit", new[] { "OriginId" });
+            DropIndex("dbo.AmbitsToTypes", new[] { "AmbitId" });
+            DropIndex("dbo.AmbitsToTypes", new[] { "TypeId" });
+            DropIndex("dbo.Users", new[] { "RoleId" });
+            DropIndex("dbo.Incidents", new[] { "ScenarioId" });
+            DropIndex("dbo.Incidents", new[] { "ThreatId" });
+            DropIndex("dbo.Incidents", new[] { "OriginId" });
+            DropIndex("dbo.Incidents", new[] { "AmbitId" });
+            DropIndex("dbo.Incidents", new[] { "IncidentTypeId" });
+            DropPrimaryKey("dbo.OriginsToAmbit");
+            DropPrimaryKey("dbo.AmbitsToTypes");
+            DropPrimaryKey("dbo.Users");
+            DropPrimaryKey("dbo.Roles");
+            DropPrimaryKey("dbo.Threats");
+            DropPrimaryKey("dbo.Scenarios");
+            DropPrimaryKey("dbo.Origins");
+            DropPrimaryKey("dbo.IncidentTypes");
+            DropPrimaryKey("dbo.Incidents");
+            DropPrimaryKey("dbo.Ambits");
+            DropColumn("dbo.Ambits", "Id");
+            AddColumn("dbo.Ambits", "Id", c => c.Guid(nullable: false, defaultValue: new Guid("da1c0433-bbe3-40a0-8af7-35ace53af0de")));
+            DropColumn("dbo.Incidents", "Id");
+            AddColumn("dbo.Incidents", "Id", c => c.Guid(nullable: false, defaultValue: new Guid("c711560b-d3fc-47ad-9b56-4d84b3a0219e")));
+            DropColumn("dbo.Incidents", "IncidentTypeId");
+            AddColumn("dbo.Incidents", "IncidentTypeId", c => c.Guid());
+            DropColumn("dbo.Incidents", "AmbitId");
+            AddColumn("dbo.Incidents", "AmbitId", c => c.Guid());
+            DropColumn("dbo.Incidents", "OriginId");
+            AddColumn("dbo.Incidents", "OriginId", c => c.Guid());
+            DropColumn("dbo.Incidents", "ThreatId");
+            AddColumn("dbo.Incidents", "ThreatId", c => c.Guid());
+            DropColumn("dbo.Incidents", "ScenarioId");
+            AddColumn("dbo.Incidents", "ScenarioId", c => c.Guid());
+            DropColumn("dbo.Incidents", "CreatedBy");
+            AddColumn("dbo.Incidents", "CreatedBy", c => c.Guid());
+            DropColumn("dbo.Incidents", "LastModifiedBy");
+            AddColumn("dbo.Incidents", "LastModifiedBy", c => c.Guid());
+            DropColumn("dbo.IncidentTypes", "Id");
+            AddColumn("dbo.IncidentTypes", "Id", c => c.Guid(nullable: false, defaultValue: new Guid("8f80bc18-b8af-4d6e-b3bb-0312b1f1aba8")));
+            DropColumn("dbo.Origins", "Id");
+            AddColumn("dbo.Origins", "Id", c => c.Guid(nullable: false, defaultValue: new Guid("95a07db4-5c23-47f8-b29c-e93b47f9da63")));
+            DropColumn("dbo.Scenarios", "Id");
+            AddColumn("dbo.Scenarios", "Id", c => c.Guid(nullable: false, defaultValue: new Guid("968de016-cb1b-4fa6-8dbf-77a1d71c63f7")));
+            DropColumn("dbo.Threats", "Id");
+            AddColumn("dbo.Threats", "Id", c => c.Guid(nullable: false, defaultValue: new Guid("1e7ad8fe-483d-4a32-bb24-33998a67ac5a")));
+            DropColumn("dbo.Roles", "Id");
+            AddColumn("dbo.Roles", "Id", c => c.Guid(nullable: false));
+            Sql(@"UPDATE dbo.Roles SET Id = 
+                    CASE WHEN Name = 'Administrator' THEN '37305504-16da-412c-8e13-eb1e9748d9b'
+                         WHEN Name = 'Operator' THEN '247851b3-99b8-4958-a9b7-9b406d167cc6'
+                         ELSE 'ed9400b3-83f3-4e97-af10-90007ccb634e'
+                    END;");
+            DropColumn("dbo.Users", "Id");
+            AddColumn("dbo.Users", "Id", c => c.Guid(nullable: false, defaultValue: new Guid("59238933-0b32-4ad8-afc7-e37289fa7497")));
+            DropColumn("dbo.Users", "RoleId");
+            AddColumn("dbo.Users", "RoleId", c => c.Guid(nullable: false, defaultValue: new Guid("37305504-16da-412c-8e13-eb1e9748d9b")));
+            DropColumn("dbo.Users", "CreatedBy");
+            AddColumn("dbo.Users", "CreatedBy", c => c.Guid());
+            DropColumn("dbo.Users", "LastModifiedBy");
+            AddColumn("dbo.Users", "LastModifiedBy", c => c.Guid());
+            DropColumn("dbo.AmbitsToTypes", "TypeId");
+            AddColumn("dbo.AmbitsToTypes", "TypeId", c => c.Guid(nullable: false, defaultValue: new Guid("8f80bc18-b8af-4d6e-b3bb-0312b1f1aba8")));
+            DropColumn("dbo.AmbitsToTypes", "AmbitId");
+            AddColumn("dbo.AmbitsToTypes", "AmbitId", c => c.Guid(nullable: false, defaultValue: new Guid("da1c0433-bbe3-40a0-8af7-35ace53af0de")));
+            DropColumn("dbo.OriginsToAmbit", "OriginId");
+            AddColumn("dbo.OriginsToAmbit", "OriginId", c => c.Guid(nullable: false, defaultValue: new Guid("95a07db4-5c23-47f8-b29c-e93b47f9da63")));
+            DropColumn("dbo.OriginsToAmbit", "AmbitId");
+            AddColumn("dbo.OriginsToAmbit", "AmbitId", c => c.Guid(nullable: false, defaultValue: new Guid("da1c0433-bbe3-40a0-8af7-35ace53af0de")));
+            AddPrimaryKey("dbo.OriginsToAmbit", new[] { "OriginId", "AmbitId" });
+            AddPrimaryKey("dbo.AmbitsToTypes", new[] { "TypeId", "AmbitId" });
+            AddPrimaryKey("dbo.Users", "Id");
+            AddPrimaryKey("dbo.Roles", "Id");
+            AddPrimaryKey("dbo.Threats", "Id");
+            AddPrimaryKey("dbo.Scenarios", "Id");
+            AddPrimaryKey("dbo.Origins", "Id");
+            AddPrimaryKey("dbo.IncidentTypes", "Id");
+            AddPrimaryKey("dbo.Incidents", "Id");
+            AddPrimaryKey("dbo.Ambits", "Id");
+            CreateIndex("dbo.OriginsToAmbit", "AmbitId");
+            CreateIndex("dbo.OriginsToAmbit", "OriginId");
+            CreateIndex("dbo.AmbitsToTypes", "AmbitId");
+            CreateIndex("dbo.AmbitsToTypes", "TypeId");
+            CreateIndex("dbo.Users", "RoleId");
+            CreateIndex("dbo.Incidents", "ScenarioId");
+            CreateIndex("dbo.Incidents", "ThreatId");
+            CreateIndex("dbo.Incidents", "OriginId");
+            CreateIndex("dbo.Incidents", "AmbitId");
+            CreateIndex("dbo.Incidents", "IncidentTypeId");
+            AddForeignKey("dbo.Incidents", "ThreatId", "dbo.Threats", "Id");
+            AddForeignKey("dbo.Incidents", "ScenarioId", "dbo.Scenarios", "Id");
+            AddForeignKey("dbo.OriginsToAmbit", "AmbitId", "dbo.Origins", "Id");
+            AddForeignKey("dbo.Incidents", "OriginId", "dbo.Origins", "Id");
+            AddForeignKey("dbo.AmbitsToTypes", "AmbitId", "dbo.IncidentTypes", "Id");
+            AddForeignKey("dbo.Incidents", "IncidentTypeId", "dbo.IncidentTypes", "Id");
+            AddForeignKey("dbo.OriginsToAmbit", "OriginId", "dbo.Ambits", "Id");
+            AddForeignKey("dbo.AmbitsToTypes", "TypeId", "dbo.Ambits", "Id");
+            AddForeignKey("dbo.Incidents", "AmbitId", "dbo.Ambits", "Id");
+            AddForeignKey("dbo.Users", "RoleId", "dbo.Roles", "Id", cascadeDelete: true);
+        }
+    }
+}

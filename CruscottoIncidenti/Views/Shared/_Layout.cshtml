@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CruscottoIncidenti Admin - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/dataTables")
+    @RenderSection("Styles", required: false)
+</head>
+<body class="d-flex flex-column vh-100">
+    <header>
+        @Html.Partial("_Navbar")
+    </header>
+    <div class="d-lg-flex flex-fill">
+        <div class="col">
+            <main class="container">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/dataTables")
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

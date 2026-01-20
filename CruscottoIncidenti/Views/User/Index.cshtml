@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal" tabindex="-1" id="userModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" id="userModalContent">
+        </div>
+    </div>
+</div>
+
+<div class="my-5">
+    <table id="usersTable" class="w-100 table table-striped table-bordered table-hover " />
+    <div id="buttonsContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        $(getUsersGrid());
+    </script>
+}
+

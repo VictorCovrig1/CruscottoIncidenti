@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5CE1CACA-6535-408D-8DC5-7F2F999C30FF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CruscottoIncidenti.Infrastructure</RootNamespace>
+    <AssemblyName>CruscottoIncidenti.Infrastructure</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=6.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.6.4.0\lib\netstandard2.0\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.10.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.10.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Migrations\202601060930258_InitialMigration.cs" />
+    <Compile Include="Migrations\202601060930258_InitialMigration.Designer.cs">
+      <DependentUpon>202601060930258_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601061230003_AddPasswordField.cs" />
+    <Compile Include="Migrations\202601061230003_AddPasswordField.Designer.cs">
+      <DependentUpon>202601061230003_AddPasswordField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601121152465_ChangeIdsTypeFromGuidToInt.cs" />
+    <Compile Include="Migrations\202601121152465_ChangeIdsTypeFromGuidToInt.Designer.cs">
+      <DependentUpon>202601121152465_ChangeIdsTypeFromGuidToInt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601151603111_RemoveDefaultValueConstraintForKeys.cs" />
+    <Compile Include="Migrations\202601151603111_RemoveDefaultValueConstraintForKeys.Designer.cs">
+      <DependentUpon>202601151603111_RemoveDefaultValueConstraintForKeys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601160855564_ChangeIdentityToSpecificValue.cs" />
+    <Compile Include="Migrations\202601160855564_ChangeIdentityToSpecificValue.Designer.cs">
+      <DependentUpon>202601160855564_ChangeIdentityToSpecificValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601161125080_FixMisedplacedForeignKeysForManyToManyRelationShips.cs" />
+    <Compile Include="Migrations\202601161125080_FixMisedplacedForeignKeysForManyToManyRelationShips.Designer.cs">
+      <DependentUpon>202601161125080_FixMisedplacedForeignKeysForManyToManyRelationShips.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601161203231_RemoveDefaultValuesForGeneratedTables.cs" />
+    <Compile Include="Migrations\202601161203231_RemoveDefaultValuesForGeneratedTables.Designer.cs">
+      <DependentUpon>202601161203231_RemoveDefaultValuesForGeneratedTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601191443429_AddManyToManyRelatioshipForUsersAndRoles.cs" />
+    <Compile Include="Migrations\202601191443429_AddManyToManyRelatioshipForUsersAndRoles.Designer.cs">
+      <DependentUpon>202601191443429_AddManyToManyRelatioshipForUsersAndRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Persistance\Configurations\AmbitConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\IncidentConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\IncidentTypeConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\OriginConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\RoleConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\ScenarioConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\ThreatConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\UserConfiguration.cs" />
+    <Compile Include="InfrastructureBuilderExtensions.cs" />
+    <Compile Include="InfrastructureModule.cs" />
+    <Compile Include="Persistance\CruscottoIncidentiDbContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CurrentUserService.cs" />
+    <Compile Include="Services\DateTimeService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CruscottoIncidenti.Application\CruscottoIncidenti.Application.csproj">
+      <Project>{83523332-F826-433F-BF54-159A7BF57161}</Project>
+      <Name>CruscottoIncidenti.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CruscottoIncidenti.Common\CruscottoIncidenti.Common.csproj">
+      <Project>{7E7627E4-2A0B-470E-8590-A0BB1F4C818C}</Project>
+      <Name>CruscottoIncidenti.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CruscottoIncidenti.Domain\CruscottoIncidenti.Domain.csproj">
+      <Project>{15068243-961C-47D9-8682-6F9E307306F5}</Project>
+      <Name>CruscottoIncidenti.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202601060930258_InitialMigration.resx">
+      <DependentUpon>202601060930258_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601061230003_AddPasswordField.resx">
+      <DependentUpon>202601061230003_AddPasswordField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601121152465_ChangeIdsTypeFromGuidToInt.resx">
+      <DependentUpon>202601121152465_ChangeIdsTypeFromGuidToInt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601151603111_RemoveDefaultValueConstraintForKeys.resx">
+      <DependentUpon>202601151603111_RemoveDefaultValueConstraintForKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601160855564_ChangeIdentityToSpecificValue.resx">
+      <DependentUpon>202601160855564_ChangeIdentityToSpecificValue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601161125080_FixMisedplacedForeignKeysForManyToManyRelationShips.resx">
+      <DependentUpon>202601161125080_FixMisedplacedForeignKeysForManyToManyRelationShips.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601161203231_RemoveDefaultValuesForGeneratedTables.resx">
+      <DependentUpon>202601161203231_RemoveDefaultValuesForGeneratedTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601191443429_AddManyToManyRelatioshipForUsersAndRoles.resx">
+      <DependentUpon>202601191443429_AddManyToManyRelatioshipForUsersAndRoles.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+</Project>

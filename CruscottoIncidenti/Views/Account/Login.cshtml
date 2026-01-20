@@ -1,0 +1,51 @@
+﻿
+@model CruscottoIncidenti.Application.User.ViewModels.LoginViewModel
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="d-flex align-items-center justify-content-center vh-100">
+   @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "col-12 col-md-6 bg-white text-center p-4 rounded", id = "loginForm" }))
+   {
+        @Html.AntiForgeryToken();
+
+        <h1 class="mb-4">Cruscotto Incidenti</h1>
+        <h3 class="pb-4 font-weight-normal">Authentication</h3>
+
+        @Html.ValidationMessage("IncorrectLogin", string.Empty, new { @class = "text-danger" })
+        <div class="form-group pt-3">
+            <div class="input-group justify-content-center mb-1">
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = @Html.DisplayNameFor(m => m.Username) })
+                <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                </div>
+            </div>
+            @Html.ValidationMessageFor(m => m.Username, string.Empty, new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group pt-3 pb-2">
+            <div class="input-group justify-content-center  mb-1">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = @Html.DisplayNameFor(m => m.Password) })
+                <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                </div>
+            </div>
+            @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-success btn-block mt-4">
+            Login
+            <span class="spinner-border spinner-border-sm text-light d-none"/>
+        </button>
+    }
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $(document).on('submit', 'form', function () {
+                $('.spinner-border').removeClass('d-none');
+            });
+        });
+    </script>
+}
