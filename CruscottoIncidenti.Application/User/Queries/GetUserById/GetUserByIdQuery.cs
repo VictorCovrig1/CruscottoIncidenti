@@ -24,15 +24,21 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUserById
         public async Task<UserViewModel> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             return await _context.Users
+                .Include(x => x.Roles)
                 .Where(x => x.Id == request.Id)
                 .Select(x => new UserViewModel
-                { 
+                {
                     Id = x.Id,
                     UserName = x.UserName,
                     Email = x.Email,
                     FullName = x.FullName,
                     IsEnabled = x.IsEnabled,
-                    Roles = x.Roles.Select(r => new RoleViewModel { Id = r.Id, Name = r.Name }).ToList()
+                    Roles = _context.Roles.Select(r => new RoleViewModel 
+                    { 
+                        Id = r.Id,
+                        Name = r.Name,
+                        IsSelected = x.Roles.Select(ur => ur.Id).Contains(r.Id)
+                    }).ToList()
                 }).FirstOrDefaultAsync(cancellationToken);
         }
     }

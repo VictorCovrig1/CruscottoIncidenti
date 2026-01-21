@@ -12,9 +12,8 @@ namespace CruscottoIncidenti.Application.User.Commands.UpdateUser.Validation
 
             RuleFor(x => x.FullName).NotEmpty().WithMessage("Full name can't be empty");
 
-            RuleFor(x => x.Username)
-                .NotEmpty().WithMessage("Username can't be empty")
-                .MaximumLength(7).WithMessage("Username can't be longer than 7 characters");
+            RuleFor(x => x.Roles).Must(roles => roles != null && roles.Count > 0)
+                .WithMessage("User should have at least one role");
         }
     }
 }

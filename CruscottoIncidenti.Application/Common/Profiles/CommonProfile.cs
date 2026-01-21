@@ -11,7 +11,8 @@ namespace CruscottoIncidenti.Application.Common.Profiles
         {
             CreateMap<UserViewModel, UpdateUserCommand>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles.Select(r => r.Id)));
+                .ForMember(dest => dest.Roles, opt => opt.MapFrom
+                    (src => src.Roles.Where(r => r.IsSelected).Select(r => r.Id)));
         }
     }
 }

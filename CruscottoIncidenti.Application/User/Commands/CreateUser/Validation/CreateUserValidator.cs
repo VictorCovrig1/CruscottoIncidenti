@@ -24,8 +24,7 @@ namespace CruscottoIncidenti.Application.User.Commands.CreateUser.Validation
                 .Matches(@"\d").WithMessage("Password should contain at least one numeric character")
                 .Matches(@"^(?=.*\W)(?=\S+$).*").WithMessage("Password should contain at least one special character");
 
-            RuleFor(x => x.Roles)
-                .Must(r => r.Count > 0)
+            RuleFor(x => x.Roles).Must(roles => roles != null && roles.Count > 0)
                 .WithMessage("User should have at least one role");
         }
     }

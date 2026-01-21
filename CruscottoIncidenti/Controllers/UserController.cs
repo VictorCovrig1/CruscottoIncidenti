@@ -8,8 +8,10 @@ using CruscottoIncidenti.Application.Roles.Queries.GetRoles;
 using CruscottoIncidenti.Application.TableParameters;
 using CruscottoIncidenti.Application.User.Commands.CreateUser;
 using CruscottoIncidenti.Application.User.Commands.CreateUser.Validation;
+using CruscottoIncidenti.Application.User.Commands.DeleteUser;
 using CruscottoIncidenti.Application.User.Commands.UpdateUser;
 using CruscottoIncidenti.Application.User.Commands.UpdateUser.Validation;
+using CruscottoIncidenti.Application.User.Queries.GetDetailedUserById;
 using CruscottoIncidenti.Application.User.Queries.GetUserById;
 using CruscottoIncidenti.Application.User.Queries.GetUsers;
 using CruscottoIncidenti.Utils;
@@ -38,6 +40,25 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult> GetDetailedUserModal(int id, bool shouldBeDeleted = false)
+        {
+            var user = await Mediator.Send(new GetDetailedUserByIdQuery { Id = id });
+            user.ShouldBeDeleted = shouldBeDeleted;
+
+            return PartialView("_DetailedUserModal", user);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            var statusCode = await Mediator.Send(new DeleteUserCommand { Id = id }) ? 
+                HttpStatusCode.OK :
+                HttpStatusCode.InternalServerError;
+
+            return new HttpStatusCodeResult(statusCode);
+        }
+
+        [HttpGet]
         public async Task<ActionResult> GetCreateUserModal(CreateUserCommand user = null)
         {
             var roles = await Mediator.Send(new GetRolesQuery());
@@ -48,7 +69,7 @@ namespace CruscottoIncidenti.Controllers
                 selectRoles.Add(new SelectListItem() { Value = role.Id.ToString(), Text = role.Name });
             }
 
-            ViewBag.Roles = selectRoles;
+            ViewBag.AllRoles = selectRoles;
 
             return PartialView("_CreateUserModal", user);
         }
@@ -75,9 +96,11 @@ namespace CruscottoIncidenti.Controllers
             HttpStatusCode statusCode;
             try
             {
-                statusCode = await Mediator.Send(user) ? HttpStatusCode.OK : HttpStatusCode.BadRequest;
+                statusCode = await Mediator.Send(user) ? 
+                    HttpStatusCode.OK : 
+                    HttpStatusCode.InternalServerError;
 
-                if (statusCode == HttpStatusCode.BadRequest)
+                if (statusCode == HttpStatusCode.InternalServerError)
                     throw new Exception("Could not insert user");
             }
             catch (DublicatedEntityException ex)
@@ -102,10 +125,14 @@ namespace CruscottoIncidenti.Controllers
             var selectRoles = new List<SelectListItem>();
             foreach (var role in user.Roles)
             {
-                selectRoles.Add(new SelectListItem() { Value = role.Id.ToString(), Text = role.Name });
+                selectRoles.Add(new SelectListItem() 
+                { 
+                    Value = role.Id.ToString(), 
+                    Text = role.Name
+                });
             }
 
-            ViewBag.Roles = selectRoles;
+            ViewBag.AllRoles = selectRoles;
             var viewUser = Mapper.Map<UpdateUserCommand>(user);
 
             return PartialView("_UpdateUserModal", viewUser);
@@ -132,9 +159,9 @@ namespace CruscottoIncidenti.Controllers
             HttpStatusCode statusCode;
             try
             {
-                statusCode = await Mediator.Send(user) ? HttpStatusCode.OK : HttpStatusCode.BadRequest;
+                statusCode = await Mediator.Send(user) ? HttpStatusCode.OK : HttpStatusCode.InternalServerError;
 
-                if (statusCode == HttpStatusCode.BadRequest)
+                if (statusCode == HttpStatusCode.InternalServerError)
                     throw new Exception("Could not update user");
             }
             catch (DublicatedEntityException ex)

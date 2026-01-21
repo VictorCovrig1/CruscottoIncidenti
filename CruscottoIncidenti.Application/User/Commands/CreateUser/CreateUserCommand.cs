@@ -67,7 +67,9 @@ namespace CruscottoIncidenti.Application.User.Commands.CreateUser
                 Password = encrypted,
                 Email = request.Email,
                 FullName = request.FullName,
-                Roles = await _context.Roles.Where(x => request.Roles.Contains(x.Id)).ToListAsync(cancellationToken)
+                Roles = await _context.Roles.Include(b => b.Users)
+                    .Where(x => request.Roles.Contains(x.Id))
+                    .ToListAsync(cancellationToken)
             };
 
             _context.Users.Add(user);

@@ -26,7 +26,7 @@ namespace CruscottoIncidenti.Application.Roles.Queries.GetRoles
             return await _context.Roles.Select(role => new RoleViewModel 
             {
                 Id = role.Id, 
-                Name = role.Name 
+                Name = role.Name
             }).ToListAsync();
         }
     }

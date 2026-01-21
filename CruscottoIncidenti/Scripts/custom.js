@@ -6,11 +6,14 @@ function getUsersGrid() {
     var table = $("#usersTable").DataTable({
         processing: true,
         serverSide: true,
-        retrieve: true,
         ajax: {
             url: "/User/GetUserGrid",
             type: "POST"
         },
+        columnDefs: [
+            { orderSequence: ["asc", "desc"], targets: "_all" }
+        ],
+        order: [[1, 'asc']],
         select: "single",
         layout: {
             bottom2Start: {
@@ -39,7 +42,8 @@ function getUsersGrid() {
                     {
                         text: "<i class='fas fa-info'></i> Details",
                         action: function (e, dt, node, config) {
-                            alert("Button clicked!");
+                            var selectedId = dt.rows({ selected: true }).data()[0].id;
+                            detailedAction(selectedId);
                         },
                         attr: {
                             id: "detailsButton",
@@ -49,7 +53,8 @@ function getUsersGrid() {
                     {
                         text: "<i class='fas fa-trash'></i> Delete",
                         action: function (e, dt, node, config) {
-                            alert("Button clicked!");
+                            var selectedId = dt.rows({ selected: true }).data()[0].id;
+                            detailedAction(selectedId, true);
                         },
                         attr: {
                             id: "deleteButton",
@@ -68,7 +73,7 @@ function getUsersGrid() {
                 render: function (data, type, full, meta) {
                     return data ?
                         "<i class='fas fa-check-circle text-success'></i>" :
-                        "<i class='fas fa-x text-danger'></i>";
+                        "<i class='fas fa-times-circle text-danger'></i>";
                 }
             }
         ]
@@ -87,6 +92,10 @@ function getUsersGrid() {
         var rowNode = table.row(indexes).node();
         $(rowNode).find("td:eq(2) i").removeClass("text-white").addClass("text-success");
     });
+
+    table.on("draw.dt", function (e, settings) {
+        $("#editButton, #detailsButton, #deleteButton").prop("disabled", true);
+    });
 }
 
 function createAction() {
@@ -94,7 +103,7 @@ function createAction() {
         url: "/User/GetCreateUserModal",
         method: "GET",
         success: (data) => {
-            $("#userModalContent").html(data);
+            $("#userModal").html(data);
             $("#userModal").modal("show");
             $('.selectpicker').selectpicker();
         }
@@ -106,9 +115,20 @@ function editAction(id) {
         url: `/User/GetEditUserModal/${id}`,
         method: "GET",
         success: (data) => {
-            $("#userModalContent").html(data);
+            $("#userModal").html(data);
             $("#userModal").modal("show");
             $('.selectpicker').selectpicker();
+        }
+    });
+}
+
+function detailedAction(id, shouldBeDeleted = false) {
+    $.ajax({
+        url: `/User/GetDetailedUserModal/${id}?shouldBeDeleted=${shouldBeDeleted}`,
+        method: "GET",
+        success: (data) => {
+            $("#userModal").html(data);
+            $("#userModal").modal("show");
         }
     });
 }
@@ -118,6 +138,6 @@ function onSuccessModalAction(data) {
         $("#userModal").modal("hide");
         $("#usersTable").DataTable().ajax.reload();
     }
-    else 
+    else
         $('.selectpicker').selectpicker();
 }

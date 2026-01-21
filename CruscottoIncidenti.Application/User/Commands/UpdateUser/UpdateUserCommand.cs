@@ -16,9 +16,9 @@ namespace CruscottoIncidenti.Application.User.Commands.UpdateUser
 
         public int UserId { get; set; }
 
-        public string Username { get; set; }
-
         public string FullName { get; set; }
+
+        public string Username { get; set; }
 
         public string Email { get; set; }
 
@@ -36,30 +36,27 @@ namespace CruscottoIncidenti.Application.User.Commands.UpdateUser
 
         public async Task<bool> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
-
             var dublicatedEmailUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower() && user.Id != request.UserId);
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower() && u.Id != request.UserId);
 
             if (dublicatedEmailUser != null)
                 throw new DublicatedEntityException
                     ($"Another user with the same email ({dublicatedEmailUser.Email}) already exists");
 
-            var dublicatedUsernameUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.UserName.ToLower() == request.Username.ToLower() && user.Id != request.UserId);
-
-            if (dublicatedUsernameUser != null)
-                throw new DublicatedEntityException
-                    ($"Another user with the same username ({dublicatedUsernameUser.UserName}) already exists");
-
-            string encrypted = string.Empty;
+            var user = await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == request.UserId);
 
             user.LastModifiedBy = request.EditorId;
             user.LastModified = DateTime.UtcNow;
-            user.UserName = request.Username;
             user.Email = request.Email;
             user.FullName = request.FullName;
-            user.Roles = await _context.Roles.Where(x => request.Roles.Contains(x.Id)).ToListAsync(cancellationToken);
+            user.IsEnabled = request.IsEnabled;
+
+            user.Roles.Clear();
+
+            var userRoles = _context.Roles.Where(x => request.Roles.Contains(x.Id)).ToList();
+
+            foreach (var role in userRoles)
+                user.Roles.Add(role);
 
             return await _context.SaveChangesAsync(cancellationToken) > 0;
         }

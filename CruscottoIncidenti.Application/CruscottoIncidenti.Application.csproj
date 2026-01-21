@@ -150,10 +150,13 @@
     <Compile Include="TableParameters\DataTablesSearch.cs" />
     <Compile Include="User\Commands\CreateUser\CreateUserCommand.cs" />
     <Compile Include="User\Commands\CreateUser\Validation\CreateUserValidator.cs" />
+    <Compile Include="User\Commands\DeleteUser\DeleteUserCommand.cs" />
     <Compile Include="User\Commands\UpdateUser\UpdateUserCommand.cs" />
     <Compile Include="User\Commands\UpdateUser\Validation\UpdateUserValidation.cs" />
+    <Compile Include="User\Queries\GetDetailedUserById\GetDetailedUserByIdQuery.cs" />
     <Compile Include="User\Queries\GetUserById\GetUserByIdQuery.cs" />
     <Compile Include="User\Queries\GetUserByUserName\GetUserByUserNameQuery.cs" />
+    <Compile Include="User\ViewModels\DetailedUserViewModel.cs" />
     <Compile Include="User\ViewModels\LoginViewModel.cs" />
     <Compile Include="User\Queries\GetUsersGrid\GetUsersGridQuery.cs" />
     <Compile Include="User\ViewModels\UserViewModel.cs" />

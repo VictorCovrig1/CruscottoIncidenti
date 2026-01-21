@@ -490,6 +490,7 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Shared\_CreateUserModal.cshtml" />
     <Content Include="Views\Shared\_UpdateUserModal.cshtml" />
+    <Content Include="Views\Shared\_DetailedUserModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
