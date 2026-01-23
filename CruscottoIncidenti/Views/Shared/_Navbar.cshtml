@@ -11,7 +11,7 @@
         </button>
         <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
             <ul class="navbar-nav flex-grow-1">
-                <li>@Html.ActionLink("Incidents", "Index", "Home", new { area = string.Empty }, new { @class = "nav-link" })</li>
+                <li>@Html.ActionLink("Incidents", "Index", "Incident", new { area = string.Empty }, new { @class = "nav-link" })</li>
                 @if (CurrentUserService.Role == Role.Admin)
                 {
                     <li>@Html.ActionLink("Users", "Index", "User", new { area = string.Empty }, new { @class = "nav-link" })</li>

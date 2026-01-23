@@ -9,7 +9,7 @@ namespace CruscottoIncidenti.Application
         protected override void Load(ContainerBuilder builder)
         {
             builder.AddMediatR(typeof(ApplicationModule).Assembly);
-            builder.RegisterAutoMapper(typeof(ApplicationModule).Assembly);
+            builder.AddAutoMapper(typeof(ApplicationModule).Assembly);
         }
     }
 }

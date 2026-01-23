@@ -7,13 +7,12 @@ using CruscottoIncidenti.Application.Common.Exceptions;
 using CruscottoIncidenti.Application.Roles.Queries.GetRoles;
 using CruscottoIncidenti.Application.TableParameters;
 using CruscottoIncidenti.Application.User.Commands.CreateUser;
-using CruscottoIncidenti.Application.User.Commands.CreateUser.Validation;
 using CruscottoIncidenti.Application.User.Commands.DeleteUser;
 using CruscottoIncidenti.Application.User.Commands.UpdateUser;
-using CruscottoIncidenti.Application.User.Commands.UpdateUser.Validation;
 using CruscottoIncidenti.Application.User.Queries.GetDetailedUserById;
 using CruscottoIncidenti.Application.User.Queries.GetUserById;
 using CruscottoIncidenti.Application.User.Queries.GetUsers;
+using CruscottoIncidenti.Application.Users.Validators;
 using CruscottoIncidenti.Utils;
 using Microsoft.AspNet.Identity;
 
@@ -26,7 +25,7 @@ namespace CruscottoIncidenti.Controllers
         public ActionResult Index() => View();
 
         [HttpPost]
-        public async Task<ActionResult> GetUserGrid(DataTablesParameters parameters)
+        public async Task<ActionResult> GetUsersGrid(DataTablesParameters parameters)
         {
             var result = await Mediator.Send(new GetUsersGridQuery { Parameters = parameters });
 
@@ -51,7 +50,7 @@ namespace CruscottoIncidenti.Controllers
         [HttpPost]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            var statusCode = await Mediator.Send(new DeleteUserCommand { Id = id }) ? 
+            HttpStatusCode statusCode = await Mediator.Send(new DeleteUserCommand { Id = id }) ?
                 HttpStatusCode.OK :
                 HttpStatusCode.InternalServerError;
 
@@ -101,16 +100,16 @@ namespace CruscottoIncidenti.Controllers
                     HttpStatusCode.InternalServerError;
 
                 if (statusCode == HttpStatusCode.InternalServerError)
-                    throw new Exception("Could not insert user");
+                    throw new Exception("An unexpected exception occured");
             }
             catch (DublicatedEntityException ex)
             {
-                ModelState.AddModelError("IncorrectPostUser", ex.Message);
+                ModelState.AddModelError("IncorrectPostUser", ex.FriendlyMessage);
                 return await GetCreateUserModal(user);
             }
             catch(Exception)
             {
-                ModelState.AddModelError("IncorrectPostUser", "Unexpected error occured");
+                ModelState.AddModelError("IncorrectPostUser", "An unexpected exception occured");
                 return await GetCreateUserModal(user);
             }
 
@@ -127,13 +126,16 @@ namespace CruscottoIncidenti.Controllers
             {
                 selectRoles.Add(new SelectListItem() 
                 { 
-                    Value = role.Id.ToString(), 
+                    Value = role.Id.ToString(),
                     Text = role.Name
                 });
             }
 
             ViewBag.AllRoles = selectRoles;
             var viewUser = Mapper.Map<UpdateUserCommand>(user);
+
+            if (ModelState.ContainsKey("Roles"))
+                viewUser.Roles = new List<int>();
 
             return PartialView("_UpdateUserModal", viewUser);
         }
@@ -162,16 +164,16 @@ namespace CruscottoIncidenti.Controllers
                 statusCode = await Mediator.Send(user) ? HttpStatusCode.OK : HttpStatusCode.InternalServerError;
 
                 if (statusCode == HttpStatusCode.InternalServerError)
-                    throw new Exception("Could not update user");
+                    throw new Exception("An unexpected exception occured");
             }
             catch (DublicatedEntityException ex)
             {
-                ModelState.AddModelError("IncorrectUpdateUser", ex.Message);
+                ModelState.AddModelError("IncorrectUpdateUser", ex.FriendlyMessage);
                 return await GetEditUserModal(user.UserId);
             }
             catch (Exception)
             {
-                ModelState.AddModelError("IncorrectPostUser", "Unexpected error occured");
+                ModelState.AddModelError("IncorrectPostUser", "An unexpected exception occured");
                 return await GetEditUserModal(user.UserId);
             }
 

@@ -34,14 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=6.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.6.4.0\lib\netstandard2.0\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=5.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.5.2.0\lib\net461\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper.Contrib.Autofac.DependencyInjection, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.Contrib.Autofac.DependencyInjection.5.6.0\lib\netstandard2.0\AutoMapper.Contrib.Autofac.DependencyInjection.dll</HintPath>
+    <Reference Include="AutoMapper.Contrib.Autofac.DependencyInjection, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.Contrib.Autofac.DependencyInjection.3.1.0\lib\netstandard2.0\AutoMapper.Contrib.Autofac.DependencyInjection.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
@@ -101,6 +101,7 @@
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ComponentModel.Annotations.4.4.1\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -137,7 +138,12 @@
     <Compile Include="ApplicationBuilderExtensions.cs" />
     <Compile Include="ApplicationModule.cs" />
     <Compile Include="Common\Exceptions\DublicatedEntityException.cs" />
+    <Compile Include="Common\Extensions\DataTableExtensions.cs" />
     <Compile Include="Common\Profiles\CommonProfile.cs" />
+    <Compile Include="Incidents\Commands\CreateIncident\CreateIncidentCommand.cs" />
+    <Compile Include="Incidents\Queries\GetIncidentsGridQuery.cs" />
+    <Compile Include="Incidents\Validators\CreateIncidentValidator.cs" />
+    <Compile Include="Incidents\ViewModels\IncidentRowViewModel.cs" />
     <Compile Include="Interfaces\ICruscottoIncidentiDbContext.cs" />
     <Compile Include="Interfaces\ICurrentUserService.cs" />
     <Compile Include="Interfaces\IDateTime.cs" />
@@ -148,20 +154,20 @@
     <Compile Include="TableParameters\DataTablesOrder.cs" />
     <Compile Include="TableParameters\DataTablesParameters.cs" />
     <Compile Include="TableParameters\DataTablesSearch.cs" />
-    <Compile Include="User\Commands\CreateUser\CreateUserCommand.cs" />
-    <Compile Include="User\Commands\CreateUser\Validation\CreateUserValidator.cs" />
-    <Compile Include="User\Commands\DeleteUser\DeleteUserCommand.cs" />
-    <Compile Include="User\Commands\UpdateUser\UpdateUserCommand.cs" />
-    <Compile Include="User\Commands\UpdateUser\Validation\UpdateUserValidation.cs" />
-    <Compile Include="User\Queries\GetDetailedUserById\GetDetailedUserByIdQuery.cs" />
-    <Compile Include="User\Queries\GetUserById\GetUserByIdQuery.cs" />
-    <Compile Include="User\Queries\GetUserByUserName\GetUserByUserNameQuery.cs" />
-    <Compile Include="User\ViewModels\DetailedUserViewModel.cs" />
-    <Compile Include="User\ViewModels\LoginViewModel.cs" />
-    <Compile Include="User\Queries\GetUsersGrid\GetUsersGridQuery.cs" />
-    <Compile Include="User\ViewModels\UserViewModel.cs" />
-    <Compile Include="User\Queries\GetUserByUserName\Validation\GetUserByUsernameValidator.cs" />
-    <Compile Include="User\ViewModels\UserRowViewModel.cs" />
+    <Compile Include="Users\Commands\CreateUser\CreateUserCommand.cs" />
+    <Compile Include="Users\Validators\CreateUserValidator.cs" />
+    <Compile Include="Users\Commands\DeleteUser\DeleteUserCommand.cs" />
+    <Compile Include="Users\Commands\UpdateUser\UpdateUserCommand.cs" />
+    <Compile Include="Users\Validators\UpdateUserValidation.cs" />
+    <Compile Include="Users\Queries\GetDetailedUserById\GetDetailedUserByIdQuery.cs" />
+    <Compile Include="Users\Queries\GetUserById\GetUserByIdQuery.cs" />
+    <Compile Include="Users\Queries\GetUserByUserName\GetUserByUserNameQuery.cs" />
+    <Compile Include="Users\ViewModels\DetailedUserViewModel.cs" />
+    <Compile Include="Users\ViewModels\LoginViewModel.cs" />
+    <Compile Include="Users\Queries\GetUsersGrid\GetUsersGridQuery.cs" />
+    <Compile Include="Users\ViewModels\UserViewModel.cs" />
+    <Compile Include="Users\Validators\GetUserByUsernameValidator.cs" />
+    <Compile Include="Users\ViewModels\UserRowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

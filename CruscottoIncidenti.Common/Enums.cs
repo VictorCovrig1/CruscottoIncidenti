@@ -15,4 +15,12 @@
         Security = 3,
         Maintenance = 4
     }
+
+    public enum Urgency
+    {
+        Low = 0,
+        Medium = 1,
+        High = 2,
+        Critical = 3
+    }
 }

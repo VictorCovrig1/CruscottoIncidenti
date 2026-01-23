@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CruscottoIncidenti.Application.User.Queries.GetUserByUserName;
-using CruscottoIncidenti.Application.User.Queries.GetUserByUserName.Validation;
+using CruscottoIncidenti.Application.Users.Validators;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -48,7 +48,7 @@ namespace CruscottoIncidenti.Controllers
                     var userClaims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, userModel.Id.ToString()),
-                        new Claim(ClaimTypes.Name, userModel.UserName),
+                        new Claim(ClaimTypes.Name, userModel.Username),
                         new Claim("FullName", userModel.FullName),
                         new Claim(ClaimTypes.Email, userModel.Email),
                         new Claim(ClaimTypes.Role, string.Join(",", userModel.Roles))

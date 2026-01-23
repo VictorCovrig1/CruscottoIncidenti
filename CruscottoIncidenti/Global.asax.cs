@@ -1,11 +1,16 @@
-﻿using System.Web;
+﻿using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
+using AutofacSerilogIntegration;
 using CruscottoIncidenti.Application;
 using CruscottoIncidenti.Infrastructure;
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Compact;
 
 namespace CruscottoIncidenti
 {
@@ -45,6 +50,22 @@ namespace CruscottoIncidenti
 
             // Register Infrastructure services.
             builder.AddInfrastructure();
+
+            // Register logging
+            string logFileAbsolutePath = Path.Combine(Server.MapPath("~"), "Logs", "Log-.json");
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Async(a =>
+                {
+                    a.File(new CompactJsonFormatter(), logFileAbsolutePath,
+                        rollingInterval: RollingInterval.Day,
+                        restrictedToMinimumLevel: LogEventLevel.Error,
+                        shared: true);
+                    a.Debug();
+                })
+                .CreateLogger();
+
+            builder.RegisterLogger();
 
             // Add the Configuration service that uses the data from web.config.
             //builder.RegisterType<Configuration>().As<IConfiguration>().SingleInstance();

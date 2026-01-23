@@ -23,6 +23,9 @@ namespace CruscottoIncidenti
                       "~/Scripts/bootstrap.bundle.min.js",
                       "~/Scripts/bootstrap-select.min.js"));
 
+            bundles.Add(new Bundle("~/bundles/toastr").Include(
+                      "~/Scripts/toastr.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/custom").Include(
                       "~/Scripts/custom.js"));
 
@@ -30,6 +33,7 @@ namespace CruscottoIncidenti
                       "~/Content/fontawesome-all.min.css",
                       "~/Content/bootstrap.min.css",
                       "~/Content/bootstrap-select.min.css",
+                      "~/Content/toastr.min.css",
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/dataTables").Include(
@@ -43,6 +47,14 @@ namespace CruscottoIncidenti
                 "~/Content/dataTables.bootstrap5.min.css",
                 "~/Content/select.bootstrap.min.css",
                 "~/Content/buttons.bootstrap.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/datatables/users").Include(
+                "~/Scripts/DataTable/common.js",
+                "~/Scripts/DataTable/users.datatable.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/datatables/incidents").Include(
+                "~/Scripts/DataTable/common.js",
+                "~/Scripts/DataTable/incidents.datatable.js"));
         }
     }
 }

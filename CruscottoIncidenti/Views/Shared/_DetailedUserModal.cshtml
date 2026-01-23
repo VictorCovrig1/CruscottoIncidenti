@@ -77,12 +77,12 @@
         @if (Model.ShouldBeDeleted)
         {
             using (Ajax.BeginForm(new AjaxOptions {
-                Url = $"User/DeleteUser/{Model.Id}", UpdateTargetId = "userModal", OnSuccess = "onSuccessModalAction" }))
+                Url = $"User/DeleteUser/{Model.Id}", UpdateTargetId = "modal", OnSuccess = "onSuccessModalAction", OnFailure = "onFailureModalAction" }))
             {
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger">
-                        Delete
+                        <i class="fas fa-trash"></i> Delete
                         <span class="spinner-border spinner-border-sm text-light d-none" />
                     </button>
                 </div>
