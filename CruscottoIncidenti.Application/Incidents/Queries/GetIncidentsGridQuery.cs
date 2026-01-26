@@ -8,6 +8,7 @@ using CruscottoIncidenti.Application.Common;
 using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Application.TableParameters;
+using CruscottoIncidenti.Common;
 using MediatR;
 
 namespace CruscottoIncidenti.Application.Incidents.Queries
@@ -29,14 +30,14 @@ namespace CruscottoIncidenti.Application.Incidents.Queries
             string orderColumn = request.Parameters.Columns[request.Parameters.Order[0].Column].Name;
             string searchKey = request.Parameters.Search.Value ?? string.Empty;
 
-            var result = await _context.Incidents
-                .Where(x => x.RequestNr.Contains(searchKey) ||
-                    x.Subsystem.Contains(searchKey) ||
-                    x.Type.Contains(searchKey))
+            var incidents = await _context.Incidents
+                .AsNoTracking()
+                .Where(x => (x.RequestNr.Contains(searchKey) || x.Subsystem.Contains(searchKey) 
+                    || x.Type.Contains(searchKey)) && !x.IsDeleted)
                 .OrderBy(orderColumn, request.Parameters.Order[0].Dir)
                 .Skip(request.Parameters.Start)
                 .Take(request.Parameters.Length)
-                .Select(x => new IncidentRowViewModel
+                .Select(x => new
                 {
                     Id = x.Id,
                     RequestNr = x.RequestNr,
@@ -47,11 +48,29 @@ namespace CruscottoIncidenti.Application.Incidents.Queries
                     Urgency = x.Urgency
                 }).ToListAsync(cancellationToken);
 
-            int total = await _context.Incidents
-                .Where(x => x.RequestNr.Contains(searchKey) ||
-                    x.Subsystem.Contains(searchKey) ||
-                    x.Type.Contains(searchKey))
-                .CountAsync(cancellationToken);
+            var result = new List<IncidentRowViewModel>();
+            foreach (var incident in incidents)
+            {
+                result.Add(new IncidentRowViewModel()
+                {
+                    Id = incident.Id,
+                    RequestNr = incident.RequestNr,
+                    Subsystem = incident.Subsystem,
+                    OpenDate = incident.OpenDate.ToString("dd/MM/yyyy HH.mm.ss"),
+                    CloseDate = incident.CloseDate != null ? 
+                        incident.CloseDate.Value.ToString("dd/MM/yyyy HH.mm.ss") : 
+                        null,
+                    Type = incident.Type,
+                    Urgency = incident.Urgency != null ? 
+                        Enum.GetName(typeof(Urgency), incident.Urgency) : 
+                        null
+                });
+            }
+
+            int total = await _context.Incidents.AsNoTracking()
+                    .Where(x => (x.RequestNr.Contains(searchKey) || x.Subsystem.Contains(searchKey) 
+                        || x.Type.Contains(searchKey)) && !x.IsDeleted)
+                    .CountAsync(cancellationToken);
 
             return new Tuple<int, List<IncidentRowViewModel>>(item1: total, item2: result);
         }

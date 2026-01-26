@@ -23,7 +23,8 @@ namespace CruscottoIncidenti.Application.Roles.Queries.GetRoles
 
         public async Task<ICollection<RoleViewModel>> Handle(GetRolesQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Roles.Select(role => new RoleViewModel 
+            return await _context.Roles.AsNoTracking().
+                Select(role => new RoleViewModel 
             {
                 Id = role.Id, 
                 Name = role.Name

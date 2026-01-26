@@ -46,3 +46,7 @@ function setLinksEnabledOrDisabled(table) {
         links.addClass("disabled");
     });
 }
+
+function importData() {
+
+}

@@ -8,6 +8,7 @@ using Autofac.Integration.Mvc;
 using AutofacSerilogIntegration;
 using CruscottoIncidenti.Application;
 using CruscottoIncidenti.Infrastructure;
+using CruscottoIncidenti.Utils;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
@@ -50,6 +51,8 @@ namespace CruscottoIncidenti
 
             // Register Infrastructure services.
             builder.AddInfrastructure();
+
+            ModelMetadataProviders.Current = new CustomModelMetadataProvider();
 
             // Register logging
             string logFileAbsolutePath = Path.Combine(Server.MapPath("~"), "Logs", "Log-.json");

@@ -24,6 +24,7 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUserById
         public async Task<UserViewModel> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             return await _context.Users
+                .AsNoTracking()
                 .Include(x => x.Roles)
                 .Where(x => x.Id == request.Id)
                 .Select(x => new UserViewModel

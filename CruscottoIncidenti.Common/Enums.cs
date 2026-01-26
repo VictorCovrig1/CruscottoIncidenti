@@ -9,18 +9,18 @@
 
     public enum RequestType
     {
-        Incident = 0,
-        Request = 1,
-        Bug = 2,
-        Security = 3,
-        Maintenance = 4
+        Incident = 1,
+        Request = 2,
+        Bug = 3,
+        Security = 4,
+        Maintenance = 5
     }
 
     public enum Urgency
     {
-        Low = 0,
-        Medium = 1,
-        High = 2,
-        Critical = 3
+        Low = 1,
+        Medium = 2,
+        High = 3,
+        Critical = 4
     }
 }

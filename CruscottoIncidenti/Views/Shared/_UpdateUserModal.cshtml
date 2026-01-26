@@ -18,32 +18,31 @@
                 @Html.HiddenFor(m => m.UserId, new { @class = "d-none" })
 
                 <div class="mb-3">
-                    @Html.LabelFor(m => m.Username, "Username", new { @class = "form-label" })
+                    @Html.LabelFor(m => m.Username, new { @class = "form-label fw-bold" })
                     @Html.TextBoxFor(m => m.Username, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.Username), @disabled = "disabled" })
                     @Html.ValidationMessageFor(m => m.Username, string.Empty, new { @class = "text-danger" })
                 </div>
 
                 <div class="mb-3">
-                    @Html.LabelFor(m => m.FullName, "Full Name", new { @class = "form-label" })
+                    @Html.LabelFor(m => m.FullName, new { @class = "form-label fw-bold" })
                     @Html.TextBoxFor(m => m.FullName, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.FullName) })
                     @Html.ValidationMessageFor(m => m.FullName, string.Empty, new { @class = "text-danger" })
                 </div>
 
                 <div class="mb-3">
-                    @Html.LabelFor(m => m.Email, "Email", new { @class = "form-label" })
+                    @Html.LabelFor(m => m.Email, new { @class = "form-label fw-bold" })
                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.Email) })
                     @Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
                 </div>
 
                 <div class="mb-3">
-                    <label for="roles" class="form-label">Roles</label>
-                    @Html.LabelFor(m => m.Roles, "Roles", new { @class = "form-label" })
+                    @Html.LabelFor(m => m.Roles, new { @class = "form-label fw-bold" })
                     @Html.ListBoxFor(m => m.Roles, (IEnumerable<SelectListItem>)ViewBag.AllRoles, new { @class = "selectpicker form-control mw-100" })
                     @Html.ValidationMessageFor(m => m.Roles, string.Empty, new { @class = "text-danger" })
                 </div>
 
                 <div class="mb-3 form-check">
-                    @Html.LabelFor(m => m.IsEnabled, "Enabled", new { @class = "form-label" })
+                    @Html.LabelFor(m => m.IsEnabled, new { @class = "form-label fw-bold" })
                     @Html.CheckBoxFor(m => m.IsEnabled, new { @class = "form-check-input mw-100", placeholder = @Html.DisplayNameFor(m => m.IsEnabled) })
                 </div>
             </div>

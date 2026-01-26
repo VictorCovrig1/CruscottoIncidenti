@@ -15,7 +15,7 @@ namespace CruscottoIncidenti.Application.Incidents.Commands.CreateIncident
 
         public string Subsystem { get; set; }
 
-        public string Type { get; set; }
+        public int Type { get; set; }
 
         public string ApplicationType { get; set; }
 
@@ -55,7 +55,7 @@ namespace CruscottoIncidenti.Application.Incidents.Commands.CreateIncident
             if (lastRequestNumber != null && int.TryParse(lastRequestNumber.Substring(4), out int uniqueNumber))
             {
                 string incrementedRequestNumber = (uniqueNumber + 1).ToString();
-                requestNumber = $"{Constants.RequestNrPRefix}{incrementedRequestNumber.PadLeft(17, '0')}";
+                requestNumber = $"{Constants.RequestNrPRefix}{incrementedRequestNumber.PadLeft(13, '0')}";
             }
             
             var incident = new Incident
@@ -65,7 +65,7 @@ namespace CruscottoIncidenti.Application.Incidents.Commands.CreateIncident
                 RequestNr = requestNumber,
                 Subsystem = request.Subsystem,
                 OpenDate = DateTime.UtcNow,
-                Type = request.Type,
+                Type = Enum.GetName(typeof(RequestType), request.Type),
                 Urgency = request.Urgency,
                 SubCause = request.SubCause,
                 ProblemSumary = request.ProblemSumary,

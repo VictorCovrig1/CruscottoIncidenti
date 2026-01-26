@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -50,9 +51,11 @@ namespace CruscottoIncidenti.Controllers
                         new Claim(ClaimTypes.NameIdentifier, userModel.Id.ToString()),
                         new Claim(ClaimTypes.Name, userModel.Username),
                         new Claim("FullName", userModel.FullName),
-                        new Claim(ClaimTypes.Email, userModel.Email),
-                        new Claim(ClaimTypes.Role, string.Join(",", userModel.Roles))
+                        new Claim(ClaimTypes.Email, userModel.Email)
                     };
+
+                    foreach (var role in userModel.Roles)
+                        userClaims.Add(new Claim(ClaimTypes.Role, role.Name));
 
                     var claimsIdentity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
                     claimsIdentity.AddClaims(userClaims);

@@ -10,12 +10,12 @@ namespace CruscottoIncidenti.Application.Incidents.ViewModels
 
         public string Subsystem { get; set; }
 
-        public DateTime OpenDate { get; set; }
+        public string OpenDate { get; set; }
 
-        public DateTime? CloseDate { get; set; }
+        public string CloseDate { get; set; }
 
         public string Type { get; set; }
 
-        public int? Urgency { get; set; }
+        public string Urgency { get; set; }
     }
 }

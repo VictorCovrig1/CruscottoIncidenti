@@ -22,7 +22,7 @@ function renderUsersGrid() {
         select: "single",
         columns: [
             { data: "id", title: "Id", name: "id", visible: false },
-            { data: "userName", title: "User Name", name: "userName" },
+            { data: "username", title: "User Name", name: "username" },
             { data: "email", title: "Email", name: "email" },
             {
                 data: "isEnabled", title: "Is Enabled", name: "isEnabled",
@@ -122,8 +122,4 @@ function onSuccessModalAction(data) {
 
 function onFailureModalAction() {
     toastr["error"]("Action failed");
-}
-
-function importData() {
-
 }

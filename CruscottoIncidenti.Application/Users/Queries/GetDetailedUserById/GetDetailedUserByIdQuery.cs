@@ -23,6 +23,7 @@ namespace CruscottoIncidenti.Application.User.Queries.GetDetailedUserById
         public async Task<DetailedUserViewModel> Handle(GetDetailedUserByIdQuery request, CancellationToken cancellationToken)
         {
             return await _context.Users
+                .AsNoTracking()
                 .Include(x => x.Roles)
                 .Where(x => x.Id == request.Id)
                 .Select(x => new DetailedUserViewModel

@@ -24,10 +24,10 @@
 
             <div class="row mb-3">
                 <div class="col-6">
-                    @Html.LabelFor(m => m.Id, "ID", new { @class = "fw-bold" }): @Model.Id
+                    @Html.LabelFor(m => m.Id, new { @class = "fw-bold" }): @Model.Id
                 </div>
                 <div class="col-6">
-                    @Html.LabelFor(m => m.UserName, "Username", new { @class = "fw-bold" }): @Model.UserName
+                    @Html.LabelFor(m => m.Username, new { @class = "fw-bold" }): @Model.Username
                 </div>
             </div>
 
@@ -36,13 +36,13 @@
                     @Html.LabelFor(m => m.Created, new { @class = "fw-bold" }): @(Model.Created?.ToString() ?? "-")
                 </div>
                 <div class="col-6">
-                    @Html.LabelFor(m => m.FullName, "Full Name", new { @class = "fw-bold" }) : @Model.FullName
+                    @Html.LabelFor(m => m.FullName, new { @class = "fw-bold" }) : @Model.FullName
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-6">
-                    @Html.LabelFor(m => m.CreatedBy, "Created By", new { @class = "fw-bold" }): @(Model.CreatedBy?.ToString() ?? "-")
+                    @Html.LabelFor(m => m.CreatedBy, new { @class = "fw-bold" }): @(Model.CreatedBy?.ToString() ?? "-")
                 </div>
                 <div class="col-6">
                     @Html.LabelFor(m => m.Email, new { @class = "fw-bold" }): @Model.Email
@@ -51,20 +51,20 @@
 
             <div class="row mb-3">
                 <div class="col-6">
-                    @Html.LabelFor(m => m.LastModified, "Last Modified", new { @class = "fw-bold" }): @(Model.LastModified?.ToString() ?? "-")
+                    @Html.LabelFor(m => m.LastModified, new { @class = "fw-bold" }): @(Model.LastModified?.ToString() ?? "-")
                 </div>
                 <div class="col-6">
-                    @Html.LabelFor(m => m.IsEnabled, "Enabled", new { @class = "fw-bold" }): @Html.CheckBoxFor(m => m.IsEnabled,
+                    @Html.LabelFor(m => m.IsEnabled, new { @class = "fw-bold" }): @Html.CheckBoxFor(m => m.IsEnabled,
                         new { @class = "form-check-input mw-100", placeholder = @Html.DisplayNameFor(m => m.IsEnabled), disabled = "disabled" })
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-6">
-                    @Html.LabelFor(m => m.LastModifiedBy, "Last Modified By", new { @class = "fw-bold" }): @(Model.LastModifiedBy?.ToString() ?? "-")
+                    @Html.LabelFor(m => m.LastModifiedBy, new { @class = "fw-bold" }): @(Model.LastModifiedBy?.ToString() ?? "-")
                 </div>
                 <div class="col-6">
-                    @Html.LabelFor(m => m.Roles, "Roles", new { @class = "fw-bold" }):
+                    @Html.LabelFor(m => m.Roles, new { @class = "fw-bold" }):
                     <ul>
                         @foreach (var role in Model.Roles)
                         {

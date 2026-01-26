@@ -24,6 +24,8 @@ namespace CruscottoIncidenti.Infrastructure.Persistance.Configurations
 
             Property(x => x.ProblemSumary).HasMaxLength(500).IsRequired();
 
+            Property(x => x.ProblemDescription).IsRequired();
+
             Property(x => x.ThirdParty).HasMaxLength(100);
         }
     }

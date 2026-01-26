@@ -17,11 +17,11 @@ namespace CruscottoIncidenti.Application.Interfaces
 
         DbSet<Ambit> Ambits { get; set; }
 
-        DbSet<Origin> Origin { get; set; }
+        DbSet<Origin> Origins { get; set; }
 
-        DbSet<Scenario> Scenario { get; set; }
+        DbSet<Scenario> Scenarios { get; set; }
 
-        DbSet<Threat> Threat { get; set; }
+        DbSet<Threat> Threats { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 

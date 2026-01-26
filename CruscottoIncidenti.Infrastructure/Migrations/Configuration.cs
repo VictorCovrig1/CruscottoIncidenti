@@ -107,6 +107,7 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
                 Urgency = 2,
                 SubCause = "Problem with login",
                 ProblemSumary = "Cannot login into application",
+                ProblemDescription = "Some description",
                 IncidentTypeId = incidentType.Id,
                 IncidentType = incidentType,
                 AmbitId = ambit.Id,
@@ -127,11 +128,11 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
             threat.Incidents.Add(incident);
             scenario.Incidents.Add(incident);
 
-            context.Origin.AddOrUpdate(origin);
+            context.Origins.AddOrUpdate(origin);
             context.Ambits.AddOrUpdate(ambit);
             context.IncidentTypes.AddOrUpdate(incidentType);
-            context.Threat.AddOrUpdate(threat);
-            context.Scenario.AddOrUpdate(scenario);
+            context.Threats.AddOrUpdate(threat);
+            context.Scenarios.AddOrUpdate(scenario);
             context.Incidents.AddOrUpdate(incident);
 
             base.Seed(context);

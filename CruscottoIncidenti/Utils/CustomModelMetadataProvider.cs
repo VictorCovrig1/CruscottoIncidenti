@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Web.ModelBinding;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
 
 namespace CruscottoIncidenti.Utils
 {
@@ -17,8 +18,8 @@ namespace CruscottoIncidenti.Utils
 
         private string SplitCamelCase(string propertyName)
         {
-            return System.Text.RegularExpressions.Regex.Replace(
-                propertyName, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ");
+            string propertyWithoutId = Regex.Replace(propertyName, @"(?<!^)Id", string.Empty);
+            return Regex.Replace(propertyWithoutId, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ");
         }
     }
 }

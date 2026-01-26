@@ -30,6 +30,7 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUsers
             string searchKey = request.Parameters.Search.Value ?? string.Empty;
 
             var result = await _context.Users
+                .AsNoTracking()
                 .Include("Roles")
                 .Where(x => x.UserName.Contains(searchKey) || x.Email.Contains(searchKey))
                 .OrderBy(orderColumn, request.Parameters.Order[0].Dir)
@@ -43,7 +44,7 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUsers
                     IsEnabled = x.IsEnabled,
                 }).ToListAsync(cancellationToken);
 
-            int total = await _context.Users
+            int total = await _context.Users.AsNoTracking()
                 .Where(x => x.UserName.Contains(searchKey) || x.Email.Contains(searchKey))
                 .CountAsync(cancellationToken);
 

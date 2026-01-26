@@ -1,6 +1,4 @@
-﻿using System;
-using CruscottoIncidenti.Application.Incidents.Commands.CreateIncident;
-using CruscottoIncidenti.Common;
+﻿using CruscottoIncidenti.Application.Incidents.Commands.CreateIncident;
 using FluentValidation;
 
 namespace CruscottoIncidenti.Application.Incidents.Validators
@@ -15,9 +13,12 @@ namespace CruscottoIncidenti.Application.Incidents.Validators
 
             RuleFor(x => x.Type)
                 .NotEmpty().WithMessage("Request Type can't be empty")
-                .IsEnumName(typeof(RequestType));
+                .GreaterThan(0).WithMessage("Request Type should be greater than 0")
+                .LessThan(6).WithMessage("Request Type should be less than 6");
 
-            RuleFor(x => x.Urgency).Must(x => Enum.IsDefined(typeof(Urgency), x));
+            RuleFor(x => x.Urgency)
+                .GreaterThan(0).WithMessage("Urgency should be greater than 0")
+                .LessThan(6).WithMessage("Urgency should be less than 6");
 
             RuleFor(x => x.ApplicationType)
                 .MaximumLength(50).WithMessage("Too long name for Application Type (max. 50)");
@@ -32,15 +33,20 @@ namespace CruscottoIncidenti.Application.Incidents.Validators
             RuleFor(x => x.ThirdParty)
                 .MaximumLength(100).WithMessage("Too long name for Third Party (max. 100)");
 
-            RuleFor(x => x.AmbitId).GreaterThan(0);
+            RuleFor(x => x.AmbitId)
+                .GreaterThan(0).WithMessage("Ambit ID should be greater than 0");
 
-            RuleFor(x => x.OriginId).GreaterThan(0);
+            RuleFor(x => x.OriginId)
+                .GreaterThan(0).WithMessage("Origin ID should be greater than 0");
 
-            RuleFor(x => x.IncidentTypeId).GreaterThan(0);
+            RuleFor(x => x.IncidentTypeId)
+                .GreaterThan(0).WithMessage("Incident ID should be greater than 0");
 
-            RuleFor(x => x.ThreatId).GreaterThan(0);
+            RuleFor(x => x.ThreatId)
+                .GreaterThan(0).WithMessage("Threat ID should be greater than 0");
 
-            RuleFor(x => x.ScenarioId).GreaterThan(0);
+            RuleFor(x => x.ScenarioId)
+                .GreaterThan(0).WithMessage("Scenario ID should be greater than 0");
         }
     }
 }

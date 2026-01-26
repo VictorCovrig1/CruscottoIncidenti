@@ -49,12 +49,12 @@ namespace CruscottoIncidenti
                 "~/Content/buttons.bootstrap.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/datatables/users").Include(
-                "~/Scripts/DataTable/common.js",
-                "~/Scripts/DataTable/users.datatable.js"));
+                "~/Scripts/custom/DataTable/common.js",
+                "~/Scripts/custom/DataTable/users.datatable.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/datatables/incidents").Include(
-                "~/Scripts/DataTable/common.js",
-                "~/Scripts/DataTable/incidents.datatable.js"));
+                "~/Scripts/custom/DataTable/common.js",
+                "~/Scripts/custom/DataTable/incidents.datatable.js"));
         }
     }
 }

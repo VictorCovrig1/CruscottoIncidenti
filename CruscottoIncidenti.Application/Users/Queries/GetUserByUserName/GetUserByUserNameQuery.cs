@@ -36,6 +36,7 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUserByUserName
             }
 
             return await _context.Users
+                .AsNoTracking()
                 .Where(x => x.UserName.ToLower() == request.UserName.ToLower() && 
                     x.IsEnabled && x.Password == encrypted)
                 .Select(x => new UserViewModel

@@ -113,6 +113,14 @@
     <Compile Include="Migrations\202601191443429_AddManyToManyRelatioshipForUsersAndRoles.Designer.cs">
       <DependentUpon>202601191443429_AddManyToManyRelatioshipForUsersAndRoles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202601260942283_MakeProblemDescriptionRequired.cs" />
+    <Compile Include="Migrations\202601260942283_MakeProblemDescriptionRequired.Designer.cs">
+      <DependentUpon>202601260942283_MakeProblemDescriptionRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601261018560_ReplaceForeignKeysForManyToManyTables.cs" />
+    <Compile Include="Migrations\202601261018560_ReplaceForeignKeysForManyToManyTables.Designer.cs">
+      <DependentUpon>202601261018560_ReplaceForeignKeysForManyToManyTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Persistance\Configurations\AmbitConfiguration.cs" />
     <Compile Include="Persistance\Configurations\IncidentConfiguration.cs" />
@@ -171,6 +179,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202601191443429_AddManyToManyRelatioshipForUsersAndRoles.resx">
       <DependentUpon>202601191443429_AddManyToManyRelatioshipForUsersAndRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601260942283_MakeProblemDescriptionRequired.resx">
+      <DependentUpon>202601260942283_MakeProblemDescriptionRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601261018560_ReplaceForeignKeysForManyToManyTables.resx">
+      <DependentUpon>202601261018560_ReplaceForeignKeysForManyToManyTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

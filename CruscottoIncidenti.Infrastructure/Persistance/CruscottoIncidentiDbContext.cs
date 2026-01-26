@@ -33,11 +33,11 @@ namespace CruscottoIncidenti.Infrastructure.Persistance
 
         public DbSet<Ambit> Ambits { get; set; }
 
-        public DbSet<Origin> Origin { get; set; }
+        public DbSet<Origin> Origins { get; set; }
 
-        public DbSet<Scenario> Scenario {  get; set; }
+        public DbSet<Scenario> Scenarios {  get; set; }
 
-        public DbSet<Threat> Threat {  get; set; }
+        public DbSet<Threat> Threats {  get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
