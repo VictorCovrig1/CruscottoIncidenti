@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Security;
 using CruscottoIncidenti.Application.Common.Exceptions;
-using CruscottoIncidenti.Application.Roles.Queries.GetRoles;
+using CruscottoIncidenti.Application.Roles.Queries;
 using CruscottoIncidenti.Application.TableParameters;
-using CruscottoIncidenti.Application.User.Commands.CreateUser;
-using CruscottoIncidenti.Application.User.Commands.DeleteUser;
-using CruscottoIncidenti.Application.User.Commands.UpdateUser;
-using CruscottoIncidenti.Application.User.Queries.GetDetailedUserById;
-using CruscottoIncidenti.Application.User.Queries.GetUserById;
-using CruscottoIncidenti.Application.User.Queries.GetUsers;
+using CruscottoIncidenti.Application.User.Commands;
+using CruscottoIncidenti.Application.User.Queries;
 using CruscottoIncidenti.Application.Users.Validators;
 using CruscottoIncidenti.Utils;
 using Microsoft.AspNet.Identity;
@@ -39,10 +36,29 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetDetailedUserModal(int id, bool shouldBeDeleted = false)
+        public async Task<ActionResult> GetDetailedUser(int id, bool shouldBeDeleted = false)
         {
             var user = await Mediator.Send(new GetDetailedUserByIdQuery { Id = id });
-            user.ShouldBeDeleted = shouldBeDeleted;
+
+            if (user != null)
+                user.ShouldBeDeleted = shouldBeDeleted;
+
+            //var selectRoles = new List<SelectListItem>();
+            var userRoles = await Mediator.Send(new GetRolesQuery());
+
+            var selectRoles = new List<SelectListItem>();
+            foreach (var role in userRoles)
+            {
+                selectRoles.Add(new SelectListItem() 
+                { 
+                    Value = role.Id.ToString(), 
+                    Text = role.Name 
+                });
+            }
+
+            ViewBag.AllRoles = selectRoles;
+
+            //user.UserRoles = user.AllRoles.Where(x => x.IsSelected).Select(x => x.Id).ToList();
 
             return PartialView("_DetailedUserModal", user);
         }
@@ -58,7 +74,7 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetCreateUserModal(CreateUserCommand user = null)
+        public async Task<ActionResult> GetCreateUser(CreateUserCommand user = null)
         {
             var roles = await Mediator.Send(new GetRolesQuery());
 
@@ -89,7 +105,7 @@ namespace CruscottoIncidenti.Controllers
                     ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
 
-                return await GetCreateUserModal(user);
+                return await GetCreateUser(user);
             }
 
             HttpStatusCode statusCode;
@@ -98,28 +114,23 @@ namespace CruscottoIncidenti.Controllers
                 statusCode = await Mediator.Send(user) ? 
                     HttpStatusCode.OK : 
                     HttpStatusCode.InternalServerError;
-
-                if (statusCode == HttpStatusCode.InternalServerError)
-                    throw new Exception("An unexpected exception occured");
             }
-            catch (DublicatedEntityException ex)
+            catch (CustomException ex)
             {
                 ModelState.AddModelError("IncorrectPostUser", ex.FriendlyMessage);
-                return await GetCreateUserModal(user);
-            }
-            catch(Exception)
-            {
-                ModelState.AddModelError("IncorrectPostUser", "An unexpected exception occured");
-                return await GetCreateUserModal(user);
+                return await GetCreateUser(user);
             }
 
             return new HttpStatusCodeResult(statusCode);
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetEditUserModal(int id)
+        public async Task<ActionResult> GetUpdateUser(int id)
         {
             var user = await Mediator.Send(new GetUserByIdQuery() { Id = id });
+
+            if(user == null)
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
 
             var selectRoles = new List<SelectListItem>();
             foreach (var role in user.Roles)
@@ -141,7 +152,7 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditUser(UpdateUserCommand user)
+        public async Task<ActionResult> UpdateUser(UpdateUserCommand user)
         {
             user.EditorId = int.Parse(HttpContext.User.Identity.GetUserId());
 
@@ -155,26 +166,20 @@ namespace CruscottoIncidenti.Controllers
                     ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
 
-                return await GetEditUserModal(user.UserId);
+                return await GetUpdateUser(user.UserId);
             }
 
             HttpStatusCode statusCode;
             try
             {
-                statusCode = await Mediator.Send(user) ? HttpStatusCode.OK : HttpStatusCode.InternalServerError;
-
-                if (statusCode == HttpStatusCode.InternalServerError)
-                    throw new Exception("An unexpected exception occured");
+                statusCode = await Mediator.Send(user) ? 
+                    HttpStatusCode.OK : 
+                    HttpStatusCode.InternalServerError;
             }
-            catch (DublicatedEntityException ex)
+            catch (CustomException ex)
             {
                 ModelState.AddModelError("IncorrectUpdateUser", ex.FriendlyMessage);
-                return await GetEditUserModal(user.UserId);
-            }
-            catch (Exception)
-            {
-                ModelState.AddModelError("IncorrectPostUser", "An unexpected exception occured");
-                return await GetEditUserModal(user.UserId);
+                return await GetUpdateUser(user.UserId);
             }
 
             return new HttpStatusCodeResult(statusCode);

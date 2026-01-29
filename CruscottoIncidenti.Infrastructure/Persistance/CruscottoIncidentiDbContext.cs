@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,13 +26,19 @@ namespace CruscottoIncidenti.Infrastructure.Persistance
 
         public DbSet<Role> Roles { get; set; }
 
+        public DbSet<UserToRole> UsersToRoles { get; set; }
+
         public DbSet<Incident> Incidents { get; set; }
 
         public DbSet<IncidentType> IncidentTypes { get; set; }
 
         public DbSet<Ambit> Ambits { get; set; }
 
+        public DbSet<AmbitToType> AmbitsToTypes { get; set; }
+
         public DbSet<Origin> Origins { get; set; }
+
+        public DbSet<OriginToAmbit> OriginsToAmbits { get; set; }
 
         public DbSet<Scenario> Scenarios {  get; set; }
 
@@ -66,10 +71,13 @@ namespace CruscottoIncidenti.Infrastructure.Persistance
 
             modelBuilder.Configurations.Add(new UserConfiguration());
             modelBuilder.Configurations.Add(new RoleConfiguration());
+            modelBuilder.Configurations.Add(new UserToRoleConfiguration());
             modelBuilder.Configurations.Add(new AmbitConfiguration());
+            modelBuilder.Configurations.Add(new AmbitToTypeConfiguration());
             modelBuilder.Configurations.Add(new IncidentConfiguration());
             modelBuilder.Configurations.Add(new IncidentTypeConfiguration());
             modelBuilder.Configurations.Add(new OriginConfiguration());
+            modelBuilder.Configurations.Add(new OriginToAmbitConfiguration());
             modelBuilder.Configurations.Add(new ScenarioConfiguration());
             modelBuilder.Configurations.Add(new ThreatConfiguration());
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using CruscottoIncidenti.Application.Ambits.Queries;
-using CruscottoIncidenti.Application.Incidents.Commands.CreateIncident;
+using CruscottoIncidenti.Application.Incidents.Commands;
 using CruscottoIncidenti.Application.Incidents.Queries;
 using CruscottoIncidenti.Application.Incidents.Validators;
 using CruscottoIncidenti.Application.IncidentTypes.Queries;
@@ -127,23 +127,38 @@ namespace CruscottoIncidenti.Controllers
                 return await GetCreateIncident(incident);
             }
 
-            try
-            {
-                var isSuccessful = await Mediator.Send(incident);
+            await Mediator.Send(incident);
 
-                if (isSuccessful)
-                    return RedirectToAction("Index");
-                else
-                {
-                    ModelState.AddModelError("IncorrectPostIncident", "An unexpected exception occured");
-                    return await GetCreateIncident(incident);
-                }  
-            }
-            catch(Exception)
-            {
-                ModelState.AddModelError("IncorrectPostIncident", "An unexpected exception occured");
-                return await GetCreateIncident(incident);
-            }
+            return RedirectToAction("Index");
         }
+
+        //[HttpGet]
+        //public async Task<ActionResult> GetUpdateIncident(int id)
+        //{
+
+        //}
+
+        //[HttpPost]
+        //public async Task<ActionResult> UpdateIncident(UpdateIncidentCommand incident)
+        //{
+        //    incident.EditorId = int.Parse(HttpContext.User.Identity.GetUserId());
+
+        //    var validator = new UpdateIncidentValidator();
+        //    var validateResult = validator.Validate(incident);
+
+        //    if (!validateResult.IsValid)
+        //    {
+        //        foreach (var error in validateResult.Errors)
+        //        {
+        //            ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+        //        }
+
+        //        return await GetUpdateIncident(incident.IncidentId);
+        //    }
+
+        //    await Mediator.Send(incident);
+
+        //    return RedirectToAction("Index");
+        //}
     }
 }

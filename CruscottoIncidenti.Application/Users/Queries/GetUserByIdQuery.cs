@@ -7,25 +7,25 @@ using CruscottoIncidenti.Application.Roles.ViewModels;
 using CruscottoIncidenti.Application.User.ViewModels;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.User.Queries.GetUserById
+namespace CruscottoIncidenti.Application.User.Queries
 {
     public class GetUserByIdQuery : IRequest<UserViewModel>
     {
         public int Id { get; set; }
     }
 
-    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserViewModel>
+    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserViewModel>
     {
         private readonly ICruscottoIncidentiDbContext _context;
 
-        public GetUserByIdQueryHandler(ICruscottoIncidentiDbContext context)
+        public GetUserByIdHandler(ICruscottoIncidentiDbContext context)
             => _context = context;
 
         public async Task<UserViewModel> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .AsNoTracking()
-                .Include(x => x.Roles)
+                .Include(x => x.UserRoles)
                 .Where(x => x.Id == request.Id)
                 .Select(x => new UserViewModel
                 {
@@ -38,7 +38,7 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUserById
                     { 
                         Id = r.Id,
                         Name = r.Name,
-                        IsSelected = x.Roles.Select(ur => ur.Id).Contains(r.Id)
+                        IsSelected = x.UserRoles.Select(ur => ur.RoleId).Contains(r.Id)
                     }).ToList()
                 }).FirstOrDefaultAsync(cancellationToken);
         }

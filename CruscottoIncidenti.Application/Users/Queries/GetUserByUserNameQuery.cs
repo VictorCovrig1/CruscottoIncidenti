@@ -9,7 +9,7 @@ using CruscottoIncidenti.Application.Roles.ViewModels;
 using CruscottoIncidenti.Application.User.ViewModels;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.User.Queries.GetUserByUserName
+namespace CruscottoIncidenti.Application.User.Queries
 {
     public class GetUserByUserNameQuery : IRequest<UserViewModel>
     {
@@ -17,11 +17,11 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUserByUserName
         public string Password { get; set; }
     }
 
-    public class GetUserByUserNameQueryHandler : IRequestHandler<GetUserByUserNameQuery, UserViewModel>
+    public class GetUserByUserNameHandler : IRequestHandler<GetUserByUserNameQuery, UserViewModel>
     {
         private readonly ICruscottoIncidentiDbContext _context;
 
-        public GetUserByUserNameQueryHandler(ICruscottoIncidentiDbContext context)
+        public GetUserByUserNameHandler(ICruscottoIncidentiDbContext context)
             => _context = context;
 
         public async Task<UserViewModel> Handle(GetUserByUserNameQuery request, CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUserByUserName
                     Email = x.Email,
                     FullName = x.FullName,
                     IsEnabled = x.IsEnabled,
-                    Roles = x.Roles.Select(r => new RoleViewModel { Id = r.Id, Name = r.Name }).ToList()
+                    Roles = x.UserRoles.Select(r => new RoleViewModel { Id = r.RoleId, Name = r.Role.Name }).ToList()
                 }).FirstOrDefaultAsync(cancellationToken);
         }
     }

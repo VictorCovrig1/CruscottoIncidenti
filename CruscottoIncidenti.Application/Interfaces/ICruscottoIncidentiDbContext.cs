@@ -11,13 +11,19 @@ namespace CruscottoIncidenti.Application.Interfaces
 
         DbSet<Role> Roles { get; set; }
 
+        DbSet<UserToRole> UsersToRoles { get; set; }
+
         DbSet<Incident> Incidents { get; set; }
 
         DbSet<IncidentType> IncidentTypes { get; set; }
 
         DbSet<Ambit> Ambits { get; set; }
 
+        DbSet<AmbitToType> AmbitsToTypes { get; set; }
+
         DbSet<Origin> Origins { get; set; }
+
+        DbSet<OriginToAmbit> OriginsToAmbits { get; set; }
 
         DbSet<Scenario> Scenarios { get; set; }
 

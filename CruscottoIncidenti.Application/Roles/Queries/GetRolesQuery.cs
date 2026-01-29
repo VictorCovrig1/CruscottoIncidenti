@@ -7,7 +7,7 @@ using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Application.Roles.ViewModels;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.Roles.Queries.GetRoles
+namespace CruscottoIncidenti.Application.Roles.Queries
 {
     public class GetRolesQuery : IRequest<ICollection<RoleViewModel>>
     {

@@ -1,10 +1,11 @@
 ﻿using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
+using CruscottoIncidenti.Application.Common.Exceptions;
 using CruscottoIncidenti.Application.Interfaces;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.User.Commands.DeleteUser
+namespace CruscottoIncidenti.Application.User.Commands
 {
     public class DeleteUserCommand : IRequest<bool>
     {
@@ -20,16 +21,15 @@ namespace CruscottoIncidenti.Application.User.Commands.DeleteUser
 
         public async Task<bool> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == request.Id);
+            var user = await _context.Users.Include(u => u.UserRoles).FirstOrDefaultAsync(u => u.Id == request.Id);
 
-            if (user != null)
-            {
-                user.Roles.Clear();
-                _context.Users.Remove(user);
-                return await _context.SaveChangesAsync(cancellationToken) > 0;
-            }
-            else
-                return false;
+            if (user == null)
+                throw new CustomException($"User ({request.Id}) not found");
+
+            user.UserRoles.Clear();
+
+            _context.Users.Remove(user);
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }

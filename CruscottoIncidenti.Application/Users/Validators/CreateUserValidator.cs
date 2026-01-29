@@ -1,4 +1,4 @@
-﻿using CruscottoIncidenti.Application.User.Commands.CreateUser;
+﻿using CruscottoIncidenti.Application.User.Commands;
 using FluentValidation;
 
 namespace CruscottoIncidenti.Application.Users.Validators
@@ -19,11 +19,14 @@ namespace CruscottoIncidenti.Application.Users.Validators
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password can't be empty")
-                .MinimumLength(8).WithMessage("Password length should be 8 characters or longer")
-                .Matches("[A-Z]+").WithMessage("Password should contain at least one uppercase character")
-                .Matches("[a-z]+").WithMessage("Password should contain at least one lowercase character")
-                .Matches(@"\d").WithMessage("Password should contain at least one numeric character")
-                .Matches(@"^(?=.*\W)(?=\S+$).*").WithMessage("Password should contain at least one special character");
+                .MinimumLength(8).WithMessage("8 characters")
+                .Matches("[A-Z]+").WithMessage("one uppercase character")
+                .Matches("[a-z]+").WithMessage("one lowercase character")
+                .Matches(@"\d").WithMessage("one numeric character")
+                .Matches(@"^(?=.*\W)(?=\S+$).*").WithMessage("one special character");
+
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("Confirm Password can't be empty");
 
             RuleFor(x => x.Roles).Must(roles => roles != null && roles.Count > 0)
                 .WithMessage("User should have at least one role");

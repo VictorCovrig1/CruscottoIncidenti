@@ -13,6 +13,9 @@ namespace CruscottoIncidenti.Utils
             if (string.IsNullOrEmpty(metadata.DisplayName))
                 metadata.DisplayName = SplitCamelCase(propertyName);
 
+            if (propertyName == "IsChangePasswordEnabled")
+                metadata.DisplayName = "Change Password";
+
             return metadata;
         }
 

@@ -25,7 +25,7 @@ function renderUsersGrid() {
             { data: "username", title: "User Name", name: "username" },
             { data: "email", title: "Email", name: "email" },
             {
-                data: "isEnabled", title: "Is Enabled", name: "isEnabled",
+                data: "isEnabled", title: "Is Enabled", name: "isEnabled", orderable: false,
                 render: function (data, type, full, meta) {
                     return data ?
                         "<i class='fas fa-check-circle text-success'></i>" :
@@ -62,7 +62,7 @@ function setButtonsEnabledOrDisabled(table) {
 
 function createAction() {
     $.ajax({
-        url: "/User/GetCreateUserModal",
+        url: "/User/GetCreateUser",
         method: "GET",
         success: (data) => {
             $("#modal").html(data);
@@ -79,7 +79,8 @@ function editAction() {
     var id = table.rows({ selected: true }).data()[0].id;
 
     $.ajax({
-        url: `/User/GetEditUserModal/${id}`,
+        url: "/User/GetUpdateUser",
+        data: { id: id },
         method: "GET",
         success: (data) => {
             $("#modal").html(data);
@@ -96,11 +97,16 @@ function detailedAction(shouldBeDeleted = false) {
     var id = table.rows({ selected: true }).data()[0].id;
 
     $.ajax({
-        url: `/User/GetDetailedUserModal/${id}?shouldBeDeleted=${shouldBeDeleted}`,
+        url: "/User/GetDetailedUser",
+        data: {
+            id: id,
+            shouldBeDeleted: shouldBeDeleted
+        },
         method: "GET",
         success: (data) => {
             $("#modal").html(data);
             $("#modal").modal("show");
+            $('.selectpicker').selectpicker();
         },
         error: () => {
             toastr["error"]("Modal failed to open");

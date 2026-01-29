@@ -25,10 +25,15 @@ namespace CruscottoIncidenti.Application.IncidentTypes.Queries
             if (request.AmbitId == 0)
                 return new Dictionary<string, string>();
 
-            var ambit = await _context.Ambits.Include("IncidentTypes").AsNoTracking().
-                FirstOrDefaultAsync(a => a.Id == request.AmbitId);
+            var ambit = await _context.Ambits
+                .Include(x => x.AmbitToTypes
+                .Select(a => a.Type))
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == request.AmbitId);
 
-            return ambit.IncidentTypes.ToList().ToDictionary(k => k.Id.ToString(), v => v.Name);
+            return ambit.AmbitToTypes.ToList()
+                .ToDictionary(k => k.TypeId
+                .ToString(), v => v.Type.Name);
         }
     }
 }

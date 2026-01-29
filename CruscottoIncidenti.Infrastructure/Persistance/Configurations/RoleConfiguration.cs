@@ -11,14 +11,6 @@ namespace CruscottoIncidenti.Infrastructure.Persistance.Configurations
 
             Property(x => x.Name).HasMaxLength(13).IsRequired();
             HasIndex(x => x.Name).IsUnique();
-
-            HasMany(x => x.Users).
-            WithMany(x => x.Roles).
-            Map(cs =>
-            {
-                cs.MapLeftKey("RoleId");
-                cs.MapRightKey("UserId");
-            });
         }
     }
 }

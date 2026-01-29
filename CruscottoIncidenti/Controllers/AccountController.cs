@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using CruscottoIncidenti.Application.User.Queries.GetUserByUserName;
+using CruscottoIncidenti.Application.User.Queries;
 using CruscottoIncidenti.Application.Users.Validators;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;

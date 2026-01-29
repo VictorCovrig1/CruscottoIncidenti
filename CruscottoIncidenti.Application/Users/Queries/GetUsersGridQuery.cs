@@ -10,7 +10,7 @@ using CruscottoIncidenti.Application.TableParameters;
 using CruscottoIncidenti.Application.User.ViewModels;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.User.Queries.GetUsers
+namespace CruscottoIncidenti.Application.User.Queries
 {
     public class GetUsersGridQuery : IRequest<Tuple<int, List<UserRowViewModel>>>
     {
@@ -31,7 +31,7 @@ namespace CruscottoIncidenti.Application.User.Queries.GetUsers
 
             var result = await _context.Users
                 .AsNoTracking()
-                .Include("Roles")
+                .Include(x => x.UserRoles)
                 .Where(x => x.UserName.Contains(searchKey) || x.Email.Contains(searchKey))
                 .OrderBy(orderColumn, request.Parameters.Order[0].Dir)
                 .Skip(request.Parameters.Start)

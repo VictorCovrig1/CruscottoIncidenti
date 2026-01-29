@@ -9,8 +9,9 @@ using MediatR;
 using System.Data.Entity;
 using CruscottoIncidenti.Application.Common.Exceptions;
 using System.Collections.Generic;
+using CruscottoIncidenti.Domain.Entities;
 
-namespace CruscottoIncidenti.Application.User.Commands.CreateUser
+namespace CruscottoIncidenti.Application.User.Commands
 {
     public class CreateUserCommand : IRequest<bool>
     {
@@ -19,6 +20,8 @@ namespace CruscottoIncidenti.Application.User.Commands.CreateUser
         public string Username { get; set; }
 
         public string Password { get; set; }
+
+        public string ConfirmPassword { get; set; }
 
         public string FullName { get; set; }
 
@@ -40,17 +43,20 @@ namespace CruscottoIncidenti.Application.User.Commands.CreateUser
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower());
             
             if (dublicatedEmailUser != null)
-                throw new DublicatedEntityException
+                throw new CustomException
                     ($"User with the same email ({dublicatedEmailUser.Email}) already exists");
 
             var dublicatedUsernameUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.UserName.ToLower() == request.Username.ToLower());
 
             if (dublicatedUsernameUser != null)
-                throw new DublicatedEntityException
+                throw new CustomException
                     ($"User with the same username ({dublicatedUsernameUser.UserName}) already exists");
 
             string encrypted = string.Empty;
+
+            if (request.Password != request.ConfirmPassword)
+                throw new CustomException("Password and Confirm Password doesn't match");
 
             using (SHA256 hash = SHA256.Create())
             {
@@ -66,11 +72,17 @@ namespace CruscottoIncidenti.Application.User.Commands.CreateUser
                 UserName = request.Username,
                 Password = encrypted,
                 Email = request.Email,
-                FullName = request.FullName,
-                Roles = await _context.Roles.Include(b => b.Users)
-                    .Where(x => request.Roles.Contains(x.Id))
-                    .ToListAsync(cancellationToken)
+                FullName = request.FullName
             };
+
+            foreach (var roleId in request.Roles)
+            {
+                user.UserRoles.Add(new UserToRole()
+                {
+                    RoleId = roleId,
+                    UserId = user.Id
+                });
+            }
 
             _context.Users.Add(user);
 

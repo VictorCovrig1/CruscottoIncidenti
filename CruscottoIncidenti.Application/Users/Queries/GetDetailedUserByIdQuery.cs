@@ -6,39 +6,43 @@ using CruscottoIncidenti.Application.User.ViewModels;
 using MediatR;
 using System.Linq;
 
-namespace CruscottoIncidenti.Application.User.Queries.GetDetailedUserById
+namespace CruscottoIncidenti.Application.User.Queries
 {
     public class GetDetailedUserByIdQuery : IRequest<DetailedUserViewModel>
     {
         public int Id { get; set; }
     }
 
-    public class GetDetailedUserByIdQueryHandler : IRequestHandler<GetDetailedUserByIdQuery, DetailedUserViewModel>
+    public class GetDetailedUserByIdHandler : IRequestHandler<GetDetailedUserByIdQuery, DetailedUserViewModel>
     {
         private readonly ICruscottoIncidentiDbContext _context;
 
-        public GetDetailedUserByIdQueryHandler(ICruscottoIncidentiDbContext context)
+        public GetDetailedUserByIdHandler(ICruscottoIncidentiDbContext context)
             => _context = context;
 
         public async Task<DetailedUserViewModel> Handle(GetDetailedUserByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Users
+            var roles = _context.Users.Where(x => x.Id == request.Id).Include(x => x.UserRoles).Select(x => x.UserRoles.Select(y => y.RoleId)).ToList();
+
+            var result = await _context.Users
                 .AsNoTracking()
-                .Include(x => x.Roles)
+                .Include(x => x.UserRoles)
                 .Where(x => x.Id == request.Id)
                 .Select(x => new DetailedUserViewModel
                 {
                     Id = x.Id,
-                    Created = x.Created,
+                    Created = x.Created == null ? string.Empty : x.Created.ToString(),
                     CreatedBy = x.CreatedBy,
-                    LastModified = x.LastModified,
+                    LastModified = x.LastModified == null ? string.Empty : x.LastModified.ToString(),
                     LastModifiedBy = x.LastModifiedBy,
                     Username = x.UserName,
                     Email = x.Email,
                     FullName = x.FullName,
                     IsEnabled = x.IsEnabled,
-                    Roles = x.Roles.Select(r => r.Name).ToList()
+                    Roles = x.UserRoles.Select(r => r.RoleId).ToList()
                 }).FirstOrDefaultAsync(cancellationToken);
+
+            return result;
         }
     }
 }

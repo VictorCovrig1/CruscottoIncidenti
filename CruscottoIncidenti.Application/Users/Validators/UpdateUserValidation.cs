@@ -1,4 +1,4 @@
-﻿using CruscottoIncidenti.Application.User.Commands.UpdateUser;
+﻿using CruscottoIncidenti.Application.User.Commands;
 using FluentValidation;
 
 namespace CruscottoIncidenti.Application.Users.Validators
@@ -15,6 +15,16 @@ namespace CruscottoIncidenti.Application.Users.Validators
 
             RuleFor(x => x.Roles).Must(roles => roles != null && roles.Count > 0)
                 .WithMessage("User should have at least one role");
+
+            RuleFor(x => x.Password)
+                .NotEmpty().WithMessage("Password can't be empty")
+                .
+                .When(x => x.IsChangePasswordEnabled);
+
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("Confirm Password can't be empty")
+                .Equal(x => x.Password).WithMessage("Passswords doesn't match")
+                .When(x => x.IsChangePasswordEnabled);
         }
     }
 }

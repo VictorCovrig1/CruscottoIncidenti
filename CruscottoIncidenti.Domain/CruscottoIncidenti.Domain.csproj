@@ -44,9 +44,12 @@
     <Compile Include="Common\AuditableEntity.cs" />
     <Compile Include="Common\BaseEntity.cs" />
     <Compile Include="Entities\Ambit.cs" />
+    <Compile Include="Entities\AmbitToType.cs" />
     <Compile Include="Entities\Incident.cs" />
     <Compile Include="Entities\IncidentType.cs" />
     <Compile Include="Entities\Origin.cs" />
+    <Compile Include="Entities\OriginToAmbit.cs" />
+    <Compile Include="Entities\UserToRole.cs" />
     <Compile Include="Entities\Scenario.cs" />
     <Compile Include="Entities\Threat.cs" />
     <Compile Include="Interfaces\IAuditableEntity.cs" />

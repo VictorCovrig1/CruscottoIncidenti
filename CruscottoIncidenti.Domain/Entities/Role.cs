@@ -9,6 +9,6 @@ namespace CruscottoIncidenti.Domain.Entities
 
         public string Description { get; set; }
 
-        public ICollection<User> Users { get; set; } = new HashSet<User>();
+        public ICollection<UserToRole> RoleUsers { get; set; } = new HashSet<UserToRole>();
     }
 }

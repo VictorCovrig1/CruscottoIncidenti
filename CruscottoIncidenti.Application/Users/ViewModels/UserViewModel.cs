@@ -15,6 +15,6 @@ namespace CruscottoIncidenti.Application.User.ViewModels
 
         public bool IsEnabled { get; set; }
 
-        public List<RoleViewModel> Roles { get; set; }
+        public ICollection<RoleViewModel> Roles { get; set; }
     }
 }

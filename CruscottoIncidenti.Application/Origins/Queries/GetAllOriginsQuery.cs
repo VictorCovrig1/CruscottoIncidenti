@@ -21,9 +21,9 @@ namespace CruscottoIncidenti.Application.Origins.Queries
 
         public async Task<Dictionary<int, string>> Handle(GetAllOriginsQuery request, CancellationToken cancellationToken)
         {
-            var threats = await _context.Origins.AsNoTracking().ToListAsync();
+            var origins = await _context.Origins.AsNoTracking().ToListAsync();
 
-            return threats.ToDictionary(k => k.Id, v => v.Name);
+            return origins.ToDictionary(k => k.Id, v => v.Name);
         }
     }
 }

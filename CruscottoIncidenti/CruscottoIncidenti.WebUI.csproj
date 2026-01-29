@@ -530,9 +530,9 @@
     <Content Include="webfonts\fa-brands-400.eot" />
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\Shared\_CreateUserModal.cshtml" />
-    <Content Include="Views\Shared\_UpdateUserModal.cshtml" />
-    <Content Include="Views\Shared\_DetailedUserModal.cshtml" />
+    <Content Include="Views\User\_CreateUserModal.cshtml" />
+    <Content Include="Views\User\_UpdateUserModal.cshtml" />
+    <Content Include="Views\User\_DetailedUserModal.cshtml" />
     <Content Include="Views\Incident\Index.cshtml" />
     <Content Include="Views\Incident\CreateIncident.cshtml" />
     <Content Include="Views\Incident\UpdateIncident.cshtml" />

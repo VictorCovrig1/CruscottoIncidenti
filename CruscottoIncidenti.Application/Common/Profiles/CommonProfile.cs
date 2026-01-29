@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
-using CruscottoIncidenti.Application.User.Commands.UpdateUser;
+using CruscottoIncidenti.Application.User.Commands;
 using CruscottoIncidenti.Application.User.ViewModels;
 
 namespace CruscottoIncidenti.Application.Common.Profiles

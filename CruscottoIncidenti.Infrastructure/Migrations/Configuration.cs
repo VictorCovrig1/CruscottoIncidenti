@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Linq;
 using CruscottoIncidenti.Domain.Entities;
 using CruscottoIncidenti.Infrastructure.Persistance;
 
@@ -15,6 +17,7 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
+
             var adminRole = new Role()
             {
                 Id = 1,
@@ -40,7 +43,6 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
 
             var adminUser = new User()
             {
-                Id = 1,
                 FullName = "Covrig Victor",
                 Email = "admin@admin.com",
                 UserName = "CRME001",
@@ -48,58 +50,97 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
                 Password = "f1490065b81c7f1e406793b5c89994d5c21123ebba42a81a8dfcbfdf77a57d6e",
             };
 
-            if(!adminUser.Roles.Contains(adminRole))
-                adminUser.Roles.Add(adminRole);
+            if(!adminUser.UserRoles.Any(x => 
+                x.UserId == adminUser.Id && x.RoleId == adminRole.Id))
+            {
+                adminUser.UserRoles.Add(new UserToRole
+                {
+                    User = adminUser,
+                    UserId = adminUser.Id,
+                    Role = adminRole,
+                    RoleId = adminRole.Id
+                });
+            }
 
-            if(!adminUser.Roles.Contains(operatorRole))
-            adminUser.Roles.Add(operatorRole);
+            if (!adminUser.UserRoles.Any(x => 
+                x.UserId == adminUser.Id && x.RoleId == operatorRole.Id))
+            {
+                adminUser.UserRoles.Add(new UserToRole
+                {
+                    User = adminUser,
+                    UserId = adminUser.Id,
+                    Role = operatorRole,
+                    RoleId = operatorRole.Id
+                });
+            }
 
-            if (!adminUser.Roles.Contains(userRole))
-                adminUser.Roles.Add(userRole);
+            if (!adminUser.UserRoles.Any(x => 
+                x.UserId == adminUser.Id && x.RoleId == userRole.Id))
+            {
+                adminUser.UserRoles.Add(new UserToRole
+                {
+                    User = adminUser,
+                    UserId = adminUser.Id,
+                    Role = userRole,
+                    RoleId = userRole.Id
+                });
+            }
 
-            context.Users.AddOrUpdate(adminUser);
+            if (!context.Users.Any(x => x.Email == adminUser.Email))
+                context.Users.AddOrUpdate(adminUser);
 
             var origin = new Origin()
             {
-                Id = 1,
                 Name = "Applicativa"
             };
 
             var ambit = new Ambit()
             {
-                Id = 1,
                 Name = "Software"
             };
 
             var incidentType = new IncidentType()
             {
-                Id = 1,
                 Name = "Saturazione risorse"
             };
 
-            origin.Ambits.Add(ambit);
-            ambit.Origins.Add(origin);
-            ambit.IncidentTypes.Add(incidentType);
-            incidentType.Ambits.Add(ambit);
+            if(!origin.OriginToAmbits.Any(x => x.AmbitId == ambit.Id && x.OriginId == origin.Id))
+            {
+                origin.OriginToAmbits.Add(new OriginToAmbit()
+                {
+                    Origin = origin,
+                    OriginId = origin.Id,
+                    Ambit = ambit,
+                    AmbitId = ambit.Id,
+                });
+            }
+
+            if (!ambit.AmbitToTypes.Any(x => x.AmbitId == ambit.Id && x.TypeId == incidentType.Id))
+            {
+                ambit.AmbitToTypes.Add(new AmbitToType()
+                {
+                    Type = incidentType,
+                    TypeId = incidentType.Id,
+                    Ambit = ambit,
+                    AmbitId = ambit.Id,
+                });
+            }
 
             var threat = new Threat()
             {
-                Id = 1,
                 Name = "New threat"
             };
 
             var scenario = new Scenario()
             {
-                Id = 1,
                 Name = "New scenario"
             };
 
             var incident = new Incident()
-            { 
-                Id = 1,
+            {
                 Created = DateTime.Now,
                 CreatedBy = adminUser.Id,
-                RequestNr = "2as3fgs3fggs23fs5",
+                RequestNr = "HOST0000000000001",
                 Subsystem = "AA",
                 OpenDate = DateTime.Now,
                 Type = "Incident",
@@ -128,12 +169,23 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
             threat.Incidents.Add(incident);
             scenario.Incidents.Add(incident);
 
-            context.Origins.AddOrUpdate(origin);
-            context.Ambits.AddOrUpdate(ambit);
-            context.IncidentTypes.AddOrUpdate(incidentType);
-            context.Threats.AddOrUpdate(threat);
-            context.Scenarios.AddOrUpdate(scenario);
-            context.Incidents.AddOrUpdate(incident);
+            if (!context.Origins.Any(x => x.Name == origin.Name))
+                context.Origins.AddOrUpdate(origin);
+
+            if (!context.Ambits.Any(x => x.Name == ambit.Name))
+                context.Ambits.AddOrUpdate(ambit);
+
+            if (!context.IncidentTypes.Any(x => x.Name == incidentType.Name))
+                context.IncidentTypes.AddOrUpdate(incidentType);
+
+            if (!context.Threats.Any(x => x.Name == threat.Name))
+                context.Threats.AddOrUpdate(threat);
+
+            if (!context.Scenarios.Any(x => x.Name == scenario.Name))
+                context.Scenarios.AddOrUpdate(scenario);
+
+            if (!context.Incidents.Any(x => x.RequestNr == incident.RequestNr))
+                context.Incidents.AddOrUpdate(incident);
 
             base.Seed(context);
         }

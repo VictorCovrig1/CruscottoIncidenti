@@ -121,12 +121,19 @@
     <Compile Include="Migrations\202601261018560_ReplaceForeignKeysForManyToManyTables.Designer.cs">
       <DependentUpon>202601261018560_ReplaceForeignKeysForManyToManyTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202601280950198_AddExplicitManyToManyTables.cs" />
+    <Compile Include="Migrations\202601280950198_AddExplicitManyToManyTables.Designer.cs">
+      <DependentUpon>202601280950198_AddExplicitManyToManyTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Persistance\Configurations\AmbitConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\OriginToAmbitConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\AmbitToTypeConfiguration.cs" />
     <Compile Include="Persistance\Configurations\IncidentConfiguration.cs" />
     <Compile Include="Persistance\Configurations\IncidentTypeConfiguration.cs" />
     <Compile Include="Persistance\Configurations\OriginConfiguration.cs" />
     <Compile Include="Persistance\Configurations\RoleConfiguration.cs" />
+    <Compile Include="Persistance\Configurations\UserToRoleConfiguration.cs" />
     <Compile Include="Persistance\Configurations\ScenarioConfiguration.cs" />
     <Compile Include="Persistance\Configurations\ThreatConfiguration.cs" />
     <Compile Include="Persistance\Configurations\UserConfiguration.cs" />
@@ -185,6 +192,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202601261018560_ReplaceForeignKeysForManyToManyTables.resx">
       <DependentUpon>202601261018560_ReplaceForeignKeysForManyToManyTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601280950198_AddExplicitManyToManyTables.resx">
+      <DependentUpon>202601280950198_AddExplicitManyToManyTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

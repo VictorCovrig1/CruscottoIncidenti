@@ -17,6 +17,6 @@ namespace CruscottoIncidenti.Domain.Entities
 
         public bool IsEnabled { get; set; }
 
-        public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
+        public ICollection<UserToRole> UserRoles { get; set; } = new HashSet<UserToRole>();
     }
 }

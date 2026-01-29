@@ -1,25 +1,23 @@
-﻿@model CruscottoIncidenti.Application.User.Commands.UpdateUser.UpdateUserCommand
+﻿@model CruscottoIncidenti.Application.User.Commands.CreateUserCommand
 
 <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content modal-lg" id="userModalContent">
+    <div class="modal-content" id="userModalContent">
         <div class="modal-header">
-            <h5 class="modal-title">Edit User</h5>
+            <h5 class="modal-title">Create User</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-       @using (Ajax.BeginForm("EditUser", "User", new AjaxOptions { UpdateTargetId = "modal", OnSuccess = "onSuccessModalAction" }))
+       @using (Ajax.BeginForm("CreateUser", "User", new AjaxOptions { UpdateTargetId = "modal", 
+            OnSuccess = "onSuccessModalAction", OnFailure = "onFailureModalAction" }))
         {
             <div class="modal-body">
                 @Html.AntiForgeryToken()
-
                 <div class="mb-2">
-                    @Html.ValidationMessage("IncorrectUpdateUser", string.Empty, new { @class = "text-danger" })
+                    @Html.ValidationMessage("IncorrectPostUser", string.Empty, new { @class = "text-danger" })
                 </div>
-
-                @Html.HiddenFor(m => m.UserId, new { @class = "d-none" })
 
                 <div class="mb-3">
                     @Html.LabelFor(m => m.Username, new { @class = "form-label fw-bold" })
-                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.Username), @disabled = "disabled" })
+                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.Username) })
                     @Html.ValidationMessageFor(m => m.Username, string.Empty, new { @class = "text-danger" })
                 </div>
 
@@ -36,25 +34,36 @@
                 </div>
 
                 <div class="mb-3">
+                    @Html.LabelFor(m => m.Password, new { @class = "form-label fw-bold" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.Password) })
+                    @foreach (var error in ViewData.ModelState["Password"]?.Errors ?? Enumerable.Empty<ModelError>())
+                    {
+                        <span class="text-danger">@error.ErrorMessage</span><br />
+                    }
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "form-label fw-bold" })
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.ConfirmPassword) })
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword, string.Empty, new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
                     @Html.LabelFor(m => m.Roles, new { @class = "form-label fw-bold" })
                     @Html.ListBoxFor(m => m.Roles, (IEnumerable<SelectListItem>)ViewBag.AllRoles, new { @class = "selectpicker form-control mw-100" })
                     @Html.ValidationMessageFor(m => m.Roles, string.Empty, new { @class = "text-danger" })
-                </div>
-
-                <div class="mb-3 form-check">
-                    @Html.LabelFor(m => m.IsEnabled, new { @class = "form-label fw-bold" })
-                    @Html.CheckBoxFor(m => m.IsEnabled, new { @class = "form-check-input mw-100", placeholder = @Html.DisplayNameFor(m => m.IsEnabled) })
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-pen"></i> Edit
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Add
                     <span class="spinner-border spinner-border-sm text-light d-none" />
                 </button>
             </div>
-        }
+         }
     </div>
 </div>
+
 

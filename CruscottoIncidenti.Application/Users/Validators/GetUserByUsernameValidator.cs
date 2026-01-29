@@ -1,4 +1,4 @@
-﻿using CruscottoIncidenti.Application.User.Queries.GetUserByUserName;
+﻿using CruscottoIncidenti.Application.User.Queries;
 using FluentValidation;
 
 namespace CruscottoIncidenti.Application.Users.Validators

@@ -7,7 +7,7 @@ namespace CruscottoIncidenti.Domain.Entities
     {
         public string Name { get; set; }
 
-        public ICollection<Ambit> Ambits { get; set; } = new HashSet<Ambit>();
+        public ICollection<AmbitToType> TypeToAmbits { get; set; } = new HashSet<AmbitToType>();
 
         public ICollection<Incident> Incidents { get; set; } = new HashSet<Incident>();
     }

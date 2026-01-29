@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace CruscottoIncidenti.Application.Incidents.Validators
 {
-    public class CreateIncidentValidator : AbstractValidator<CreateIncidentCommand>
+    public class UpdateIncidentValidator : AbstractValidator<UpdateIncidentCommand>
     {
-        public CreateIncidentValidator()
+        public UpdateIncidentValidator()
         {
-            RuleFor(x => x.CreatorId).NotEmpty().GreaterThan(0);
+            RuleFor(x => x.EditorId).NotEmpty().GreaterThan(0);
 
             RuleFor(x => x.Subsystem).Length(2).WithMessage("Subsystem must have 2 characters");
 

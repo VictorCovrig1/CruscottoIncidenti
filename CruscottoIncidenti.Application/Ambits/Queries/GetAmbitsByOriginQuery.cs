@@ -25,8 +25,12 @@ namespace CruscottoIncidenti.Application.Ambits.Queries
             if (request.OriginId == 0)
                 return new Dictionary<string, string>();
 
-            var ambits = await _context.Ambits.Include("Origins").AsNoTracking().
-                Where(a => a.Origins.Select(o => o.Id).Contains(request.OriginId)).ToListAsync();
+            var ambits = await _context.Ambits
+                .Include(x => x.AmbitToOrigins)
+                .AsNoTracking()
+                .Where(a => a.AmbitToOrigins
+                .FirstOrDefault(x => x.OriginId == request.OriginId) != null)
+                .ToListAsync();
 
             return ambits.ToDictionary(k => k.Id.ToString(), v => v.Name);
         }

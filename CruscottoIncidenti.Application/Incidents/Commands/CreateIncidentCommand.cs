@@ -7,7 +7,7 @@ using CruscottoIncidenti.Common;
 using CruscottoIncidenti.Domain.Entities;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.Incidents.Commands.CreateIncident
+namespace CruscottoIncidenti.Application.Incidents.Commands
 {
     public class CreateIncidentCommand : IRequest<bool>
     {
@@ -49,9 +49,10 @@ namespace CruscottoIncidenti.Application.Incidents.Commands.CreateIncident
 
         public async Task<bool> Handle(CreateIncidentCommand request, CancellationToken cancellationToken)
         {
-            string lastRequestNumber = _context.Incidents.OrderByDescending(i => i.Id).FirstOrDefault()?.RequestNr;
-            string requestNumber = Constants.DefaultRequestNr;
+            string lastRequestNumber = _context.Incidents.AsNoTracking()
+                .OrderByDescending(i => i.Id).FirstOrDefault()?.RequestNr;
 
+            string requestNumber = Constants.DefaultRequestNr;
             if (lastRequestNumber != null && int.TryParse(lastRequestNumber.Substring(4), out int uniqueNumber))
             {
                 string incrementedRequestNumber = (uniqueNumber + 1).ToString();
