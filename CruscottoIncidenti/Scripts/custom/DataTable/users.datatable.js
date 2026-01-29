@@ -65,9 +65,10 @@ function createAction() {
         url: "/User/GetCreateUser",
         method: "GET",
         success: (data) => {
-            $("#modal").html(data);
+            $("#userModalContent").html(data);
             $("#modal").modal("show");
             $(".selectpicker").selectpicker();
+            $(".modal-dialog").removeClass("modal-lg");
         },
         error: () => {
             toastr["error"]("Modal failed to open");
@@ -83,9 +84,10 @@ function editAction() {
         data: { id: id },
         method: "GET",
         success: (data) => {
-            $("#modal").html(data);
+            $("#userModalContent").html(data);
             $("#modal").modal("show");
-            $('.selectpicker').selectpicker();
+            $(".selectpicker").selectpicker();
+            $(".modal-dialog").addClass("modal-lg");
         },
         error: () => {
             toastr["error"]("Modal failed to open");
@@ -104,9 +106,10 @@ function detailedAction(shouldBeDeleted = false) {
         },
         method: "GET",
         success: (data) => {
-            $("#modal").html(data);
+            $("#userModalContent").html(data);
             $("#modal").modal("show");
             $('.selectpicker').selectpicker();
+            $(".modal-dialog").removeClass("modal-lg");
         },
         error: () => {
             toastr["error"]("Modal failed to open");

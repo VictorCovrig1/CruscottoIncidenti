@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Security;
 using CruscottoIncidenti.Application.Common.Exceptions;
 using CruscottoIncidenti.Application.Roles.Queries;
 using CruscottoIncidenti.Application.TableParameters;
@@ -11,7 +9,9 @@ using CruscottoIncidenti.Application.User.Commands;
 using CruscottoIncidenti.Application.User.Queries;
 using CruscottoIncidenti.Application.Users.Validators;
 using CruscottoIncidenti.Utils;
+using FluentValidation;
 using Microsoft.AspNet.Identity;
+using static CruscottoIncidenti.Common.Constants;
 
 namespace CruscottoIncidenti.Controllers
 {
@@ -104,14 +104,18 @@ namespace CruscottoIncidenti.Controllers
                 {
                     ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
-
-                return await GetCreateUser(user);
             }
+
+            var passwordValidateResult = validator.Validate(user, ruleSet: PasswordRuleSet);
+            ModelState.ValidatePasswordCharRules(passwordValidateResult, user);
+
+            if (!validateResult.IsValid || !passwordValidateResult.IsValid)
+                return await GetCreateUser(user);
 
             HttpStatusCode statusCode;
             try
             {
-                statusCode = await Mediator.Send(user) ? 
+                statusCode = await Mediator.Send(user) ?
                     HttpStatusCode.OK : 
                     HttpStatusCode.InternalServerError;
             }
@@ -165,9 +169,13 @@ namespace CruscottoIncidenti.Controllers
                 {
                     ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
-
-                return await GetUpdateUser(user.UserId);
             }
+
+            var passwordValidateResult = validator.Validate(user, ruleSet: PasswordRuleSet);
+            ModelState.ValidatePasswordCharRules(passwordValidateResult, user);
+
+            if (!validateResult.IsValid || !passwordValidateResult.IsValid)
+                return await GetUpdateUser(user.UserId);
 
             HttpStatusCode statusCode;
             try

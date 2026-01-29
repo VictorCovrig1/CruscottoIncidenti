@@ -1,5 +1,6 @@
 ﻿using CruscottoIncidenti.Application.User.Commands;
 using FluentValidation;
+using static CruscottoIncidenti.Common.Constants;
 
 namespace CruscottoIncidenti.Application.Users.Validators
 {
@@ -18,13 +19,23 @@ namespace CruscottoIncidenti.Application.Users.Validators
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password can't be empty")
-                .
-                .When(x => x.IsChangePasswordEnabled);
+                .When(x => x.IsPasswordEnabled);
+
+            RuleSet(PasswordRuleSet, () =>
+            {
+                RuleFor(x => x.Password)
+                    .MinimumLength(8).WithMessage("8 characters")
+                    .Matches("[A-Z]+").WithMessage("one uppercase character")
+                    .Matches("[a-z]+").WithMessage("one lowercase character")
+                    .Matches(@"\d").WithMessage("one numeric character")
+                    .Matches(@"^(?=.*\W)(?=\S+$).*").WithMessage("one special character")
+                    .When(x => x.IsPasswordEnabled);
+            });
 
             RuleFor(x => x.ConfirmPassword)
                 .NotEmpty().WithMessage("Confirm Password can't be empty")
                 .Equal(x => x.Password).WithMessage("Passswords doesn't match")
-                .When(x => x.IsChangePasswordEnabled);
+                .When(x => x.IsPasswordEnabled);
         }
     }
 }

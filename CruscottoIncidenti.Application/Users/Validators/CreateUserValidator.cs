@@ -1,5 +1,6 @@
 ﻿using CruscottoIncidenti.Application.User.Commands;
 using FluentValidation;
+using static CruscottoIncidenti.Common.Constants;
 
 namespace CruscottoIncidenti.Application.Users.Validators
 {
@@ -9,7 +10,8 @@ namespace CruscottoIncidenti.Application.Users.Validators
         {
             RuleFor(x => x.CreatorId).NotEmpty().GreaterThan(0);
 
-            RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("Email should be a valid email address");
+            RuleFor(x => x.Email).NotEmpty().WithMessage("Email can't be empty")
+                .EmailAddress().WithMessage("Email should be a valid email address");
 
             RuleFor(x => x.FullName).NotEmpty().WithMessage("Full name can't be empty");
 
@@ -18,12 +20,17 @@ namespace CruscottoIncidenti.Application.Users.Validators
                 .MaximumLength(7).WithMessage("Username can't be longer than 7 characters");
 
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage("Password can't be empty")
-                .MinimumLength(8).WithMessage("8 characters")
-                .Matches("[A-Z]+").WithMessage("one uppercase character")
-                .Matches("[a-z]+").WithMessage("one lowercase character")
-                .Matches(@"\d").WithMessage("one numeric character")
-                .Matches(@"^(?=.*\W)(?=\S+$).*").WithMessage("one special character");
+                .NotEmpty().WithMessage("Password can't be empty");
+
+            RuleSet(PasswordRuleSet, () =>
+            {
+                RuleFor(x => x.Password)
+                    .MinimumLength(8).WithMessage("8 characters")
+                    .Matches("[A-Z]+").WithMessage("one uppercase character")
+                    .Matches("[a-z]+").WithMessage("one lowercase character")
+                    .Matches(@"\d").WithMessage("one numeric character")
+                    .Matches(@"^(?=.*\W)(?=\S+$).*").WithMessage("one special character");
+            });
 
             RuleFor(x => x.ConfirmPassword)
                 .NotEmpty().WithMessage("Confirm Password can't be empty");

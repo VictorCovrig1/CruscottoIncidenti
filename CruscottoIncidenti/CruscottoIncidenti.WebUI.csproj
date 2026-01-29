@@ -267,6 +267,7 @@
     <Compile Include="Utils\CustomModelMetadataProvider.cs" />
     <Compile Include="Utils\CustomPageBase.cs" />
     <Compile Include="Utils\JsonCamelCaseResult.cs" />
+    <Compile Include="Utils\ModelStateExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />

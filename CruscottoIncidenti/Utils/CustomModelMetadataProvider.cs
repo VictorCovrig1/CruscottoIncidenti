@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using CruscottoIncidenti.Application.User.Commands;
 
 namespace CruscottoIncidenti.Utils
 {
@@ -13,7 +14,7 @@ namespace CruscottoIncidenti.Utils
             if (string.IsNullOrEmpty(metadata.DisplayName))
                 metadata.DisplayName = SplitCamelCase(propertyName);
 
-            if (propertyName == "IsChangePasswordEnabled")
+            if (propertyName == nameof(UpdateUserCommand.IsPasswordEnabled))
                 metadata.DisplayName = "Change Password";
 
             return metadata;

@@ -23,7 +23,7 @@ namespace CruscottoIncidenti.Application.User.Commands
 
         public string Email { get; set; }
 
-        public bool IsChangePasswordEnabled { get; set; }
+        public bool IsPasswordEnabled { get; set; }
 
         public string Password { get; set; }
 

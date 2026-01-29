@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CruscottoIncidenti.Application.Incidents.ViewModels
+﻿namespace CruscottoIncidenti.Application.Incidents.ViewModels
 {
     public class IncidentRowViewModel
     {
