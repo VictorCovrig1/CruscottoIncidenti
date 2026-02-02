@@ -1,15 +1,13 @@
-﻿using CruscottoIncidenti.Application.User.Commands;
+﻿using CruscottoIncidenti.Application.Users.ViewModels;
 using FluentValidation;
 using static CruscottoIncidenti.Common.Constants;
 
 namespace CruscottoIncidenti.Application.Users.Validators
 {
-    public class UpdateUserValidation : AbstractValidator<UpdateUserCommand>
+    public class UpdateUserValidation : AbstractValidator<UpdateUserViewModel>
     {
         public UpdateUserValidation() 
         {
-            RuleFor(x => x.EditorId).NotEmpty().GreaterThan(0);
-
             RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("Email should be a valid email address");
 
             RuleFor(x => x.FullName).NotEmpty().WithMessage("Full name can't be empty");

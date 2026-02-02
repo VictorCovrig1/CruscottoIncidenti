@@ -8,9 +8,9 @@ using CruscottoIncidenti.Application.TableParameters;
 using CruscottoIncidenti.Application.User.Commands;
 using CruscottoIncidenti.Application.User.Queries;
 using CruscottoIncidenti.Application.Users.Validators;
+using CruscottoIncidenti.Application.Users.ViewModels;
 using CruscottoIncidenti.Utils;
 using FluentValidation;
-using Microsoft.AspNet.Identity;
 using static CruscottoIncidenti.Common.Constants;
 
 namespace CruscottoIncidenti.Controllers
@@ -26,12 +26,12 @@ namespace CruscottoIncidenti.Controllers
         {
             var result = await Mediator.Send(new GetUsersGridQuery { Parameters = parameters });
 
-            return new JsonCamelCaseResult(new
+            return Json(new
             {
-                Draw = parameters.Draw,
-                RecordsFiltered = result.Item1,
-                RecordsTotal = result.Item1,
-                Data = result.Item2
+                draw = parameters.Draw,
+                recordsFiltered = result.Item1,
+                recordsTotal = result.Item1,
+                data = result.Item2
             });
         }
 
@@ -43,7 +43,6 @@ namespace CruscottoIncidenti.Controllers
             if (user != null)
                 user.ShouldBeDeleted = shouldBeDeleted;
 
-            //var selectRoles = new List<SelectListItem>();
             var userRoles = await Mediator.Send(new GetRolesQuery());
 
             var selectRoles = new List<SelectListItem>();
@@ -58,23 +57,18 @@ namespace CruscottoIncidenti.Controllers
 
             ViewBag.AllRoles = selectRoles;
 
-            //user.UserRoles = user.AllRoles.Where(x => x.IsSelected).Select(x => x.Id).ToList();
-
             return PartialView("_DetailedUserModal", user);
         }
 
         [HttpPost]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            HttpStatusCode statusCode = await Mediator.Send(new DeleteUserCommand { Id = id }) ?
-                HttpStatusCode.OK :
-                HttpStatusCode.InternalServerError;
-
-            return new HttpStatusCodeResult(statusCode);
+            await Mediator.Send(new DeleteUserCommand { Id = id });
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetCreateUser(CreateUserCommand user = null)
+        public async Task<ActionResult> GetCreateUser(CreateUserViewModel user = null)
         {
             var roles = await Mediator.Send(new GetRolesQuery());
 
@@ -91,10 +85,8 @@ namespace CruscottoIncidenti.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateUser(CreateUserCommand user)
+        public async Task<ActionResult> CreateUser(CreateUserViewModel user)
         {
-            user.CreatorId = int.Parse(HttpContext.User.Identity.GetUserId());
-
             var validator = new CreateUserValidator();
             var validateResult = validator.Validate(user);
 
@@ -112,12 +104,9 @@ namespace CruscottoIncidenti.Controllers
             if (!validateResult.IsValid || !passwordValidateResult.IsValid)
                 return await GetCreateUser(user);
 
-            HttpStatusCode statusCode;
             try
             {
-                statusCode = await Mediator.Send(user) ?
-                    HttpStatusCode.OK : 
-                    HttpStatusCode.InternalServerError;
+                await Mediator.Send(user);
             }
             catch (CustomException ex)
             {
@@ -125,19 +114,21 @@ namespace CruscottoIncidenti.Controllers
                 return await GetCreateUser(user);
             }
 
-            return new HttpStatusCodeResult(statusCode);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [HttpGet]
         public async Task<ActionResult> GetUpdateUser(int id)
         {
-            var user = await Mediator.Send(new GetUserByIdQuery() { Id = id });
+            var user = await Mediator.Send(new GetUserToUpdateQuery() { Id = id });
 
             if(user == null)
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
 
+            var roles = await Mediator.Send(new GetRolesQuery());
+
             var selectRoles = new List<SelectListItem>();
-            foreach (var role in user.Roles)
+            foreach (var role in roles)
             {
                 selectRoles.Add(new SelectListItem() 
                 { 
@@ -147,19 +138,16 @@ namespace CruscottoIncidenti.Controllers
             }
 
             ViewBag.AllRoles = selectRoles;
-            var viewUser = Mapper.Map<UpdateUserCommand>(user);
 
-            if (ModelState.ContainsKey("Roles"))
-                viewUser.Roles = new List<int>();
+            //if (ModelState.ContainsKey("Roles"))
+            //    viewUser.Roles = new List<int>();
 
-            return PartialView("_UpdateUserModal", viewUser);
+            return PartialView("_UpdateUserModal", user);
         }
 
         [HttpPost]
-        public async Task<ActionResult> UpdateUser(UpdateUserCommand user)
+        public async Task<ActionResult> UpdateUser(UpdateUserViewModel user)
         {
-            user.EditorId = int.Parse(HttpContext.User.Identity.GetUserId());
-
             var validator = new UpdateUserValidation();
             var validateResult = validator.Validate(user);
 
@@ -175,22 +163,19 @@ namespace CruscottoIncidenti.Controllers
             ModelState.ValidatePasswordCharRules(passwordValidateResult, user);
 
             if (!validateResult.IsValid || !passwordValidateResult.IsValid)
-                return await GetUpdateUser(user.UserId);
+                return await GetUpdateUser(user.Id);
 
-            HttpStatusCode statusCode;
             try
             {
-                statusCode = await Mediator.Send(user) ? 
-                    HttpStatusCode.OK : 
-                    HttpStatusCode.InternalServerError;
+                await Mediator.Send(user); 
             }
             catch (CustomException ex)
             {
                 ModelState.AddModelError("IncorrectUpdateUser", ex.FriendlyMessage);
-                return await GetUpdateUser(user.UserId);
+                return await GetUpdateUser(user.Id);
             }
 
-            return new HttpStatusCodeResult(statusCode);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
     }
 }

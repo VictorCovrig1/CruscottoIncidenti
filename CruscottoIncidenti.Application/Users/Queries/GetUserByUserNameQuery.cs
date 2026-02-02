@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Application.Roles.ViewModels;
-using CruscottoIncidenti.Application.User.ViewModels;
+using CruscottoIncidenti.Application.Users.ViewModels;
 using MediatR;
 
 namespace CruscottoIncidenti.Application.User.Queries

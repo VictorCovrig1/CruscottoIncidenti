@@ -1,14 +1,7 @@
-﻿@model CruscottoIncidenti.Application.User.ViewModels.DetailedUserViewModel
+﻿@model CruscottoIncidenti.Application.Users.ViewModels.DetailedUserViewModel
 
 <div class="modal-header">
-    @if (Model.ShouldBeDeleted)
-    {
-        <h5 class="modal-title">Delete User</h5>
-    }
-    else
-    {
-        <h5 class="modal-title">Detailed User</h5>
-    }
+    <h5 class="modal-title">@(Model.ShouldBeDeleted ? "Delete User" : "Detailed User")</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
@@ -54,16 +47,27 @@
 
 @if (Model.ShouldBeDeleted)
 {
-    using (Ajax.BeginForm(new AjaxOptions {Url = $"User/DeleteUser/{Model.Id}",
-        UpdateTargetId = "userModalContent", OnSuccess = "onSuccessModalAction", OnFailure = "onFailureModalAction" }))
-    {
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-danger">
-                <i class="fas fa-trash"></i> Delete
-                <span class="spinner-border spinner-border-sm text-light d-none" />
-            </button>
-        </div>
-    }
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" onclick="deleteUser(@Model.Id);">
+            <i class="fas fa-trash"></i> Delete
+            <span class="spinner-border spinner-border-sm text-light d-none" />
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+    </div>
 }
 
+<script>
+    function deleteUser(id) {
+        $.ajax({
+            url: "/User/DeleteUser",
+            data: {
+                id: id
+            },
+            method: "POST",
+            success: (data) => onSuccessModalAction(data),
+            error: () => onFailureModalAction()
+        });
+        return false;
+    }
+</script>

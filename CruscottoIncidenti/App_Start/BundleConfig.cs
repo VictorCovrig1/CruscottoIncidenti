@@ -55,6 +55,15 @@ namespace CruscottoIncidenti
             bundles.Add(new ScriptBundle("~/bundles/datatables/incidents").Include(
                 "~/Scripts/custom/DataTable/common.js",
                 "~/Scripts/custom/DataTable/incidents.datatable.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/incidentCommon").Include(
+                "~/Scripts/custom/incidents.common.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-picker").Include(
+                "~/Scripts/bootstrap-datepicker.min.js"));
+
+            bundles.Add(new StyleBundle("~/Content/bootstrap-picker").Include(
+                "~/Content/bootstrap-datepicker.min.css"));
         }
     }
 }

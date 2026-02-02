@@ -8,36 +8,24 @@ using CruscottoIncidenti.Application.Interfaces;
 using MediatR;
 using System.Data.Entity;
 using CruscottoIncidenti.Application.Common.Exceptions;
-using System.Collections.Generic;
 using CruscottoIncidenti.Domain.Entities;
+using CruscottoIncidenti.Application.Users.ViewModels;
 
 namespace CruscottoIncidenti.Application.User.Commands
 {
-    public class CreateUserCommand : IRequest<bool>
-    {
-        public int CreatorId { get; set; }
 
-        public string Username { get; set; }
-
-        public string Password { get; set; }
-
-        public string ConfirmPassword { get; set; }
-
-        public string FullName { get; set; }
-
-        public string Email { get; set; }
-
-        public List<int> Roles { get; set; }
-    }
-
-    public class CreateUserHandler : IRequestHandler<CreateUserCommand, bool>
+    public class CreateUserHandler : IRequestHandler<CreateUserViewModel,  Unit>
     {
         private readonly ICruscottoIncidentiDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
 
-        public CreateUserHandler(ICruscottoIncidentiDbContext context)
-            => _context = context;
+        public CreateUserHandler(ICruscottoIncidentiDbContext context, ICurrentUserService currentUserService)
+        {
+            _context = context;
+            _currentUserService = currentUserService;
+        }
 
-        public async Task<bool> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateUserViewModel request, CancellationToken cancellationToken)
         {
             var dublicatedEmailUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower());
@@ -67,7 +55,7 @@ namespace CruscottoIncidenti.Application.User.Commands
 
             var user = new Domain.Entities.User
             {
-                CreatedBy = request.CreatorId,
+                CreatedBy = _currentUserService.UserId,
                 Created = DateTime.UtcNow,
                 UserName = request.Username,
                 Password = encrypted,
@@ -85,8 +73,9 @@ namespace CruscottoIncidenti.Application.User.Commands
             }
 
             _context.Users.Add(user);
+            await _context.SaveChangesAsync(cancellationToken);
 
-            return await _context.SaveChangesAsync(cancellationToken) > 0;
+            return Unit.Value;
         }
     }
 }

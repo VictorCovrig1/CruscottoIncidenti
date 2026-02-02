@@ -7,19 +7,19 @@ using MediatR;
 
 namespace CruscottoIncidenti.Application.User.Commands
 {
-    public class DeleteUserCommand : IRequest<bool>
+    public class DeleteUserCommand : IRequest<Unit>
     {
         public int Id { get; set; }
     }
 
-    public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, bool>
+    public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Unit>
     {
         private readonly ICruscottoIncidentiDbContext _context;
 
         public DeleteUserHandler(ICruscottoIncidentiDbContext context)
             => _context = context;
 
-        public async Task<bool> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users.Include(u => u.UserRoles).FirstOrDefaultAsync(u => u.Id == request.Id);
 
@@ -29,7 +29,9 @@ namespace CruscottoIncidenti.Application.User.Commands
             user.UserRoles.Clear();
 
             _context.Users.Remove(user);
-            return await _context.SaveChangesAsync(cancellationToken) > 0;
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return Unit.Value;
         }
     }
 }

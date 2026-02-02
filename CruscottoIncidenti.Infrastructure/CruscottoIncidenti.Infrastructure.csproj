@@ -125,6 +125,14 @@
     <Compile Include="Migrations\202601280950198_AddExplicitManyToManyTables.Designer.cs">
       <DependentUpon>202601280950198_AddExplicitManyToManyTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202601291344191_ChangeUrgencyTypeFromIntToString.cs" />
+    <Compile Include="Migrations\202601291344191_ChangeUrgencyTypeFromIntToString.Designer.cs">
+      <DependentUpon>202601291344191_ChangeUrgencyTypeFromIntToString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.cs" />
+    <Compile Include="Migrations\202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.Designer.cs">
+      <DependentUpon>202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Persistance\Configurations\AmbitConfiguration.cs" />
     <Compile Include="Persistance\Configurations\OriginToAmbitConfiguration.cs" />
@@ -195,6 +203,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202601280950198_AddExplicitManyToManyTables.resx">
       <DependentUpon>202601280950198_AddExplicitManyToManyTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601291344191_ChangeUrgencyTypeFromIntToString.resx">
+      <DependentUpon>202601291344191_ChangeUrgencyTypeFromIntToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.resx">
+      <DependentUpon>202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

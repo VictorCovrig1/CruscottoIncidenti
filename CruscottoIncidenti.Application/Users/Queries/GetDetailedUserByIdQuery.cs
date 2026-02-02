@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
-using CruscottoIncidenti.Application.User.ViewModels;
+using CruscottoIncidenti.Application.Users.ViewModels;
 using MediatR;
 using System.Linq;
 
@@ -22,27 +22,23 @@ namespace CruscottoIncidenti.Application.User.Queries
 
         public async Task<DetailedUserViewModel> Handle(GetDetailedUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var roles = _context.Users.Where(x => x.Id == request.Id).Include(x => x.UserRoles).Select(x => x.UserRoles.Select(y => y.RoleId)).ToList();
-
-            var result = await _context.Users
+            return (await _context.Users
                 .AsNoTracking()
                 .Include(x => x.UserRoles)
                 .Where(x => x.Id == request.Id)
+                .ToListAsync(cancellationToken))
                 .Select(x => new DetailedUserViewModel
                 {
                     Id = x.Id,
-                    Created = x.Created == null ? string.Empty : x.Created.ToString(),
-                    CreatedBy = x.CreatedBy,
-                    LastModified = x.LastModified == null ? string.Empty : x.LastModified.ToString(),
-                    LastModifiedBy = x.LastModifiedBy,
+                    LastModified = x.LastModified.HasValue ? 
+                        x.LastModified.Value.ToString("dd/MM/yyyy") : 
+                        string.Empty,
                     Username = x.UserName,
                     Email = x.Email,
                     FullName = x.FullName,
                     IsEnabled = x.IsEnabled,
                     Roles = x.UserRoles.Select(r => r.RoleId).ToList()
-                }).FirstOrDefaultAsync(cancellationToken);
-
-            return result;
+                }).FirstOrDefault();
         }
     }
 }

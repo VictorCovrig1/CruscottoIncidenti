@@ -8,22 +8,22 @@ using MediatR;
 
 namespace CruscottoIncidenti.Application.Threats.Queries
 {
-    public class GetAllThreatsQuery : IRequest<Dictionary<int, string>>
+    public class GetAllThreatsQuery : IRequest<Dictionary<string, string>>
     {
     }
 
-    public class GetAllThreatsHandler : IRequestHandler<GetAllThreatsQuery, Dictionary<int, string>>
+    public class GetAllThreatsHandler : IRequestHandler<GetAllThreatsQuery, Dictionary<string, string>>
     {
         private readonly ICruscottoIncidentiDbContext _context;
 
         public GetAllThreatsHandler(ICruscottoIncidentiDbContext context)
             => _context = context;
 
-        public async Task<Dictionary<int, string>> Handle(GetAllThreatsQuery request, CancellationToken cancellationToken)
+        public async Task<Dictionary<string, string>> Handle(GetAllThreatsQuery request, CancellationToken cancellationToken)
         {
             var threats = await _context.Threats.AsNoTracking().ToListAsync();
 
-            return threats.ToDictionary(k => k.Id, v => v.Name);
+            return threats.ToDictionary(k => k.Id.ToString(), v => v.Name);
         }
     }
 }

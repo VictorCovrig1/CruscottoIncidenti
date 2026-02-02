@@ -145,7 +145,7 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
                 OpenDate = DateTime.Now,
                 Type = "Incident",
                 ApplicationType = "Incident",
-                Urgency = 2,
+                Urgency = "Low",
                 SubCause = "Problem with login",
                 ProblemSumary = "Cannot login into application",
                 ProblemDescription = "Some description",

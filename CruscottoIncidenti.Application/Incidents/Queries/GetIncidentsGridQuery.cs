@@ -4,11 +4,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using CruscottoIncidenti.Application.Common;
 using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Application.TableParameters;
-using CruscottoIncidenti.Common;
 using MediatR;
 
 namespace CruscottoIncidenti.Application.Incidents.Queries
@@ -20,10 +20,15 @@ namespace CruscottoIncidenti.Application.Incidents.Queries
 
     public class GetIncidentsGridHandler : IRequestHandler<GetIncidentsGridQuery, Tuple<int, List<IncidentRowViewModel>>>
     {
-        private readonly ICruscottoIncidentiDbContext _context;
+        private readonly ICruscottoIncidentiDbContext _context; 
+        private readonly IMapper _mapper;
 
-        public GetIncidentsGridHandler(ICruscottoIncidentiDbContext context)
-            => _context = context;
+
+        public GetIncidentsGridHandler(ICruscottoIncidentiDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
         public async Task<Tuple<int, List<IncidentRowViewModel>>> Handle(GetIncidentsGridQuery request, CancellationToken cancellationToken)
         {
@@ -49,21 +54,19 @@ namespace CruscottoIncidenti.Application.Incidents.Queries
                 }).ToListAsync(cancellationToken);
 
             var result = new List<IncidentRowViewModel>();
-            foreach (var incident in incidents)
+            foreach(var incident in incidents)
             {
                 result.Add(new IncidentRowViewModel()
                 {
                     Id = incident.Id,
                     RequestNr = incident.RequestNr,
                     Subsystem = incident.Subsystem,
-                    OpenDate = incident.OpenDate.ToString("dd/MM/yyyy HH.mm.ss"),
+                    OpenDate = incident.OpenDate.ToString("dd/MM/yyyy"),
                     CloseDate = incident.CloseDate != null ? 
-                        incident.CloseDate.Value.ToString("dd/MM/yyyy HH.mm.ss") : 
+                        incident.CloseDate.Value.ToString("dd/MM/yyyy") : 
                         null,
                     Type = incident.Type,
-                    Urgency = incident.Urgency != null ? 
-                        Enum.GetName(typeof(Urgency), incident.Urgency) : 
-                        null
+                    Urgency = incident.Urgency
                 });
             }
 

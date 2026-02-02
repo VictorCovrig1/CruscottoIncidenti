@@ -3,43 +3,37 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
-using CruscottoIncidenti.Application.Roles.ViewModels;
-using CruscottoIncidenti.Application.User.ViewModels;
+using CruscottoIncidenti.Application.Users.ViewModels;
 using MediatR;
 
 namespace CruscottoIncidenti.Application.User.Queries
 {
-    public class GetUserByIdQuery : IRequest<UserViewModel>
+    public class GetUserToUpdateQuery : IRequest<UpdateUserViewModel>
     {
         public int Id { get; set; }
     }
 
-    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserViewModel>
+    public class GetUserToUpdateHandler : IRequestHandler<GetUserToUpdateQuery, UpdateUserViewModel>
     {
         private readonly ICruscottoIncidentiDbContext _context;
 
-        public GetUserByIdHandler(ICruscottoIncidentiDbContext context)
+        public GetUserToUpdateHandler(ICruscottoIncidentiDbContext context)
             => _context = context;
 
-        public async Task<UserViewModel> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UpdateUserViewModel> Handle(GetUserToUpdateQuery request, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .AsNoTracking()
                 .Include(x => x.UserRoles)
                 .Where(x => x.Id == request.Id)
-                .Select(x => new UserViewModel
+                .Select(x => new UpdateUserViewModel
                 {
                     Id = x.Id,
                     Username = x.UserName,
                     Email = x.Email,
                     FullName = x.FullName,
                     IsEnabled = x.IsEnabled,
-                    Roles = _context.Roles.Select(r => new RoleViewModel 
-                    { 
-                        Id = r.Id,
-                        Name = r.Name,
-                        IsSelected = x.UserRoles.Select(ur => ur.RoleId).Contains(r.Id)
-                    }).ToList()
+                    Roles = x.UserRoles.Select(r => r.RoleId).ToList()
                 }).FirstOrDefaultAsync(cancellationToken);
         }
     }

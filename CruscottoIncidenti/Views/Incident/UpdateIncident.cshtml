@@ -2,32 +2,67 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@model CruscottoIncidenti.Application.Incidents.Commands.CreateIncidentCommand
+@model CruscottoIncidenti.Application.Incidents.ViewModels.UpdateIncidentViewModel
 
 <div class="pt-5">
     <div class="d-flex justify-content-center">
-        <div class="alert alert-success text-center mb-4 col-8" role="alert">
-            <h5>Create User</h5>
+        <div class="alert alert-primary text-center mb-4 col-8" role="alert">
+            <h5>Edit User</h5>
         </div>
     </div>
 
-
-    @using (Html.BeginForm("CreateIncident", "Incident", FormMethod.Post))
+    @using (Html.BeginForm("UpdateIncident", "Incident", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.Id, new { @class = "d-none" })
+
         <div class="mb-3">
             @Html.ValidationMessage("IncorrectPostIncident", string.Empty, new { @class = "text-danger" })
         </div>
 
         <div class="row">
             <div class="col-6">
+                @Html.LabelFor(m => m.RequestNr, new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(m => m.RequestNr, new { @class = "form-control mw-100", disabled = "disabled" })
+            </div>
+            <div class="col-6">
+                @Html.LabelFor(m => m.Solution, new { @class = "form-label fw-bold" })
+                @Html.TextAreaFor(m => m.Solution, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.Solution) })
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6">
                 @Html.LabelFor(m => m.Subsystem, new { @class = "form-label fw-bold" })
                 @Html.TextBoxFor(m => m.Subsystem, new { @class = "form-control  mw-100", placeholder = @Html.DisplayNameFor(m => m.Subsystem) })
-                @Html.ValidationMessageFor(m => m.Subsystem, string.Empty, new { @class = "text-danger" })
+            </div>
+            <div class="col-6">
+                @Html.LabelFor(m => m.ThreatId, new { @class = "form-label fw-bold" })
+                @Html.DropDownListFor(m => m.ThreatId, (IEnumerable<SelectListItem>)ViewBag.Threats, Constants.PickerDefaultText, new { @class = "form-control mw-100" })
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6">
+                @Html.LabelFor(m => m.OpenDate, new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(m => m.OpenDate, new { @class = "form-control mw-100", data_provide = "datepicker", @data_date_format = "dd/mm/yyyy" })
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.ScenarioId, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.ScenarioId, (IEnumerable<SelectListItem>)ViewBag.Scenarios, "-- None selected --", new { @class = "form-control mw-100" })
+                @Html.DropDownListFor(m => m.ScenarioId, (IEnumerable<SelectListItem>)ViewBag.Scenarios, Constants.PickerDefaultText, new { @class = "form-control mw-100" })
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6">
+                @Html.LabelFor(m => m.CloseDate, new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(m => m.CloseDate, new { @class = "form-control mw-100", data_provide = "datepicker", @data_date_format = "dd/mm/yyyy", data_date_today_highlight = true })
+            </div>
+            <div class="col-6">
+                @Html.LabelFor(m => m.OriginId, new { @class = "form-label fw-bold" })
+                @Html.DropDownListFor(m => m.OriginId, (IEnumerable<SelectListItem>)ViewBag.Origins, Constants.PickerDefaultText,
+                    new { @class = "form-control mw-100", @onchange = $"getAmbitsByOrigin();", @id = "origins" })
             </div>
         </div>
 
@@ -35,25 +70,23 @@
             <div class="col-6">
                 @Html.LabelFor(m => m.Type, new { @class = "form-label fw-bold" })
                 @Html.DropDownListFor(m => m.Type, (IEnumerable<SelectListItem>)ViewBag.Types, new { @class = "form-control mw-100" })
-                @Html.ValidationMessageFor(m => m.Type, string.Empty, new { @class = "text-danger" })
             </div>
             <div class="col-6">
-                @Html.LabelFor(m => m.OriginId, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.OriginId, (IEnumerable<SelectListItem>)ViewBag.Origins, "-- None selected --",
-                    new { @class = "form-control mw-100", @onchange = $"getAmbitsByOrigin();", @id = "origins" })
+                @Html.LabelFor(m => m.AmbitId, new { @class = "form-label fw-bold" })
+                @Html.DropDownListFor(m => m.AmbitId, (IEnumerable<SelectListItem>)ViewBag.Ambits, $"{Constants.PickerDefaultText} ({Constants.SelectOrigin})",
+                    new { @class = "form-control mw-100", @onchange = "getIncidentTypeByAmbit();", @id = "ambits" })
             </div>
         </div>
 
         <div class="row mt-3">
             <div class="col-6">
                 @Html.LabelFor(m => m.Urgency, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.Urgency, (IEnumerable<SelectListItem>)ViewBag.Urgencies, "-- None selected --", new { @class = "form-control mw-100" })
-                @Html.ValidationMessageFor(m => m.ApplicationType, string.Empty, new { @class = "text-danger" })
+                @Html.DropDownListFor(m => m.Urgency, (IEnumerable<SelectListItem>)ViewBag.Urgencies, Constants.PickerDefaultText, new { @class = "form-control mw-100" })
             </div>
             <div class="col-6">
-                @Html.LabelFor(m => m.AmbitId, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.AmbitId, new List<SelectListItem>(), "-- None selected --",
-                    new { @class = "form-control mw-100", @onchange = "getIncidentTypeByAmbit();", @id = "ambits" })
+                @Html.LabelFor(m => m.IncidentTypeId, new { @class = "form-label fw-bold" })
+                @Html.DropDownListFor(m => m.IncidentTypeId, (IEnumerable<SelectListItem>)ViewBag.IncidentTypes,
+                    $"{Constants.PickerDefaultText} ({Constants.SelectAmbit})", new { @class = "form-control mw-100", @id = "types" })
             </div>
         </div>
 
@@ -61,11 +94,10 @@
             <div class="col-6">
                 @Html.LabelFor(m => m.SubCause, new { @class = "form-label fw-bold" })
                 @Html.TextBoxFor(m => m.SubCause, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.SubCause) })
-                @Html.ValidationMessageFor(m => m.SubCause, string.Empty, new { @class = "text-danger" })
             </div>
             <div class="col-6">
-                @Html.LabelFor(m => m.IncidentTypeId, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.IncidentTypeId, new List<SelectListItem>(), "-- None selected --", new { @class = "form-control mw-100", @id = "types" })
+                @Html.LabelFor(m => m.ThirdParty, new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(m => m.ThirdParty, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.ThirdParty) })
             </div>
         </div>
 
@@ -76,9 +108,8 @@
                 @Html.ValidationMessageFor(m => m.ProblemSumary, string.Empty, new { @class = "text-danger" })
             </div>
             <div class="col-6">
-                @Html.LabelFor(m => m.ThirdParty, new { @class = "form-label fw-bold" })
-                @Html.TextBoxFor(m => m.ThirdParty, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.ThirdParty) })
-                @Html.ValidationMessageFor(m => m.ThirdParty, string.Empty, new { @class = "text-danger" })
+                @Html.LabelFor(m => m.ApplicationType, new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(m => m.ApplicationType, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.ApplicationType) })
             </div>
         </div>
 
@@ -86,78 +117,36 @@
             <div class="col-6">
                 @Html.LabelFor(m => m.ProblemDescription, new { @class = "form-label fw-bold" })
                 @Html.TextAreaFor(m => m.ProblemDescription, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.ProblemDescription) })
-            </div>
-            <div class="col-6">
-                @Html.LabelFor(m => m.ApplicationType, new { @class = "form-label fw-bold" })
-                @Html.TextBoxFor(m => m.ApplicationType, new { @class = "form-control mw-100", placeholder = @Html.DisplayNameFor(m => m.ApplicationType) })
-                @Html.ValidationMessageFor(m => m.ApplicationType, string.Empty, new { @class = "text-danger" })
+                @Html.ValidationMessageFor(m => m.ProblemDescription, string.Empty, new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="row mt-3">
-            <div class="col-6">
-                @Html.LabelFor(m => m.ThreatId, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.ThreatId, (IEnumerable<SelectListItem>)ViewBag.Threats, "-- None selected --", new { @class = "form-control mw-100" })
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-center gap-2 mt-5">
+        <div class="d-flex justify-content-center gap-2 my-5">
             <a href="@Url.Action("Index","Incident")" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
-            <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Add</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-pen"></i> Edit</button>
         </div>
     }
 </div>
 
+@section Styles {
+    @Styles.Render("~/Content/bootstrap-picker")
+}
+
 @section Scripts {
+    @Scripts.Render("~/bundles/incidentCommon")
+    @Scripts.Render("~/bundles/bootstrap-picker")
+
     <script>
         $(document).ready(function () {
-            $("#ambits, #types").prop("disabled", true);
+            if (!$("#origins").val()) {
+                $("#ambits").prop("disabled", true);
+                $("#ambits").selectpicker("refresh");
+            }
+            if (!$("#ambits").val()) {
+                $("#types").prop("disabled", true);
+                $("#types").selectpicker("refresh");
+            }
         });
-
-        function getAmbitsByOrigin() {
-            const id = $("#origins").val();
-
-            $.ajax({
-                url: `/Incident/GetAmbitsByOrigin/${id}`,
-                method: "GET",
-                success: (data) => {
-                    $("#ambits").prop("disabled", id == 0);
-
-                    if (id == 0)
-                        $("#types").prop("disabled", true).html("<option value=''>-- None selected --</option>");
-
-                    $("#ambits").html("<option value=''>-- None selected --</option>");
-
-                    for (const [key, value] of Object.entries(data)) {
-                        $("#ambits").append(`<option value=${key}>${value}</option>`);
-                    }
-                },
-                error: () => {
-                    toastr["error"]("Failed to load ambits");
-                }
-            });
-        }
-
-        function getIncidentTypeByAmbit() {
-            const id = $("#ambits").val();
-
-            $.ajax({
-                url: `/Incident/GetIncidentTypeByAmbit/${id}`,
-                method: "GET",
-                success: (data) => {
-                    $("#types").prop("disabled", id == 0);
-
-                    $("#types").html("<option value=''>-- None selected --</option>");
-
-                    for (const [key, value] of Object.entries(data)) {
-                        $("#types").append(`<option value=${key}>${value}</option>`);
-                    }
-                },
-                error: () => {
-                    toastr["error"]("Failed to load ambits");
-                }
-            });
-        }
     </script>
 }
 

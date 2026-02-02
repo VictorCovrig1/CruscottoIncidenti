@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Common;
 using CruscottoIncidenti.Domain.Entities;
@@ -9,45 +10,18 @@ using MediatR;
 
 namespace CruscottoIncidenti.Application.Incidents.Commands
 {
-    public class CreateIncidentCommand : IRequest<bool>
-    {
-        public int CreatorId { get; set; }
-
-        public string Subsystem { get; set; }
-
-        public int Type { get; set; }
-
-        public string ApplicationType { get; set; }
-
-        public int? Urgency { get; set; }
-
-        public string SubCause { get; set; }
-
-        public string ProblemSumary { get; set; }
-
-        public string ProblemDescription { get; set; }
-
-        public int? IncidentTypeId { get; set; }
-
-        public int? AmbitId { get; set; }
-
-        public int? OriginId { get; set; }
-
-        public int? ThreatId { get; set; }
-
-        public int? ScenarioId { get; set; }
-
-        public string ThirdParty { get; set; }
-    }
-
-    public class CreateIncidentHandler : IRequestHandler<CreateIncidentCommand, bool>
+    public class CreateIncidentHandler : IRequestHandler<CreateIncidentViewModel, Unit>
     {
         private readonly ICruscottoIncidentiDbContext _context;
+        private ICurrentUserService _currentUserService;
 
-        public CreateIncidentHandler(ICruscottoIncidentiDbContext context)
-            => _context = context;
+        public CreateIncidentHandler(ICruscottoIncidentiDbContext context, ICurrentUserService currentUserService)
+        {
+            _context = context;
+            _currentUserService = currentUserService;
+        }
 
-        public async Task<bool> Handle(CreateIncidentCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateIncidentViewModel request, CancellationToken cancellationToken)
         {
             string lastRequestNumber = _context.Incidents.AsNoTracking()
                 .OrderByDescending(i => i.Id).FirstOrDefault()?.RequestNr;
@@ -61,13 +35,13 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
             
             var incident = new Incident
             {
-                CreatedBy = request.CreatorId,
+                CreatedBy = _currentUserService.UserId,
                 Created = DateTime.UtcNow,
                 RequestNr = requestNumber,
                 Subsystem = request.Subsystem,
                 OpenDate = DateTime.UtcNow,
                 Type = Enum.GetName(typeof(RequestType), request.Type),
-                Urgency = request.Urgency,
+                Urgency = Enum.GetName(typeof(Urgency), request.Type),
                 SubCause = request.SubCause,
                 ProblemSumary = request.ProblemSumary,
                 ProblemDescription = request.ProblemDescription,
@@ -80,8 +54,9 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
             };
 
             _context.Incidents.Add(incident);
+            await _context.SaveChangesAsync(cancellationToken);
 
-            return await _context.SaveChangesAsync(cancellationToken) > 0;
+            return Unit.Value;
         }
     }
 }

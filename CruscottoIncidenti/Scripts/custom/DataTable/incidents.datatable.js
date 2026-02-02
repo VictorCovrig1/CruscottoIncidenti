@@ -19,12 +19,12 @@ function renderIncidentsGrid() {
         order: [[1, "asc"]],
         select: "single",
         columns: [
-            { data: "id", title: "Id", name: "id", visible: false },
-            { data: "requestNr", title: "Request Number", name: "requestNr" },
-            { data: "openDate", title: "Open Date", name: "openDate" },
-            { data: "closeDate", title: "closeDate", name: "closeDate" },
-            { data: "type", title: "Type", name: "type" },
-            { data: "urgency", title: "Urgency", name: "urgency" },
+            { data: "Id", title: "Id", name: "id", visible: false },
+            { data: "RequestNr", title: "Request Number", name: "requestNr" },
+            { data: "OpenDate", title: "Open Date", name: "openDate" },
+            { data: "CloseDate", title: "Close Date", name: "closeDate" },
+            { data: "Type", title: "Type", name: "type" },
+            { data: "Urgency", title: "Urgency", name: "urgency" },
         ]
     });
 

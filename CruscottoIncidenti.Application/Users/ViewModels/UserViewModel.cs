@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CruscottoIncidenti.Application.Roles.ViewModels;
 
-namespace CruscottoIncidenti.Application.User.ViewModels
+namespace CruscottoIncidenti.Application.Users.ViewModels
 {
     public class UserViewModel
     {

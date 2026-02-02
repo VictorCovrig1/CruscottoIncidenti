@@ -1,16 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace CruscottoIncidenti.Application.User.ViewModels
+namespace CruscottoIncidenti.Application.Users.ViewModels
 {
     public class DetailedUserViewModel
     {
         public int Id { get; set; }
-
-        public int? CreatedBy { get; set; }
-
-        public string Created { get; set; }
-
-        public int? LastModifiedBy { get; set; }
 
         public string LastModified { get; set; }
 

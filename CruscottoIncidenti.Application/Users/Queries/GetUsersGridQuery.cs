@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Common;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Application.TableParameters;
-using CruscottoIncidenti.Application.User.ViewModels;
+using CruscottoIncidenti.Application.Users.ViewModels;
 using MediatR;
 
 namespace CruscottoIncidenti.Application.User.Queries

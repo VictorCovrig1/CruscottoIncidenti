@@ -18,6 +18,8 @@ namespace CruscottoIncidenti.Infrastructure.Persistance.Configurations
 
             Property(x => x.Type).HasMaxLength(25).IsRequired();
 
+            Property(x => x.Urgency).HasMaxLength(8);
+
             Property(x => x.ApplicationType).HasMaxLength(50);
 
             Property(x => x.SubCause).HasMaxLength(100);

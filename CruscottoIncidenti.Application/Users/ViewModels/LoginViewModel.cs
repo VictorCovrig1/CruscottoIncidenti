@@ -1,4 +1,4 @@
-﻿namespace CruscottoIncidenti.Application.User.ViewModels
+﻿namespace CruscottoIncidenti.Application.Users.ViewModels
 {
     public class LoginViewModel
     {

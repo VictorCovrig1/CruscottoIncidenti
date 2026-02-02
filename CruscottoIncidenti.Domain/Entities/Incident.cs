@@ -17,7 +17,7 @@ namespace CruscottoIncidenti.Domain.Entities
 
         public string ApplicationType { get; set; }
 
-        public int? Urgency { get; set; }
+        public string Urgency { get; set; }
 
         public string SubCause { get; set; }
 

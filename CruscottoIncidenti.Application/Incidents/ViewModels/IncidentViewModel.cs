@@ -2,15 +2,17 @@
 {
     public class IncidentViewModel
     {
+        public int Id { get; set; }
+
         public string RequestNr {  get; set; }
 
         public string Subsystem { get; set; }
 
-        public int Type { get; set; }
+        public string Type { get; set; }
 
         public string ApplicationType { get; set; }
 
-        public int? Urgency { get; set; }
+        public string Urgency { get; set; }
 
         public string SubCause { get; set; }
 

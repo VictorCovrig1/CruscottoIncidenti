@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using CruscottoIncidenti.Application.Ambits.Queries;
-using CruscottoIncidenti.Application.Incidents.Commands;
 using CruscottoIncidenti.Application.Incidents.Queries;
 using CruscottoIncidenti.Application.Incidents.Validators;
+using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.IncidentTypes.Queries;
 using CruscottoIncidenti.Application.Origins.Queries;
 using CruscottoIncidenti.Application.Scenarios.Queries;
@@ -14,7 +12,6 @@ using CruscottoIncidenti.Application.TableParameters;
 using CruscottoIncidenti.Application.Threats.Queries;
 using CruscottoIncidenti.Common;
 using CruscottoIncidenti.Utils;
-using Microsoft.AspNet.Identity;
 
 namespace CruscottoIncidenti.Controllers
 {
@@ -28,69 +25,46 @@ namespace CruscottoIncidenti.Controllers
         {
             var result = await Mediator.Send(new GetIncidentsGridQuery { Parameters = parameters });
 
-            return new JsonCamelCaseResult(new
+            return Json(new
             {
-                Draw = parameters.Draw,
-                RecordsFiltered = result.Item1,
-                RecordsTotal = result.Item1,
-                Data = result.Item2
+                draw = parameters.Draw,
+                recordsFiltered = result.Item1,
+                recordsTotal = result.Item1,
+                data = result.Item2
             });
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetCreateIncident(CreateIncidentCommand request = null)
+        public async Task<ActionResult> GetDetailedIncident(int id, bool? shouldBeDeleted = null)
         {
-            var selectUrgencies = new List<SelectListItem>();
-            var urgencies = Enum.GetValues(typeof(Urgency)).Cast<Urgency>()
-                .ToDictionary(k => (int)k, v => v.ToString());
+            await GetSelectListItems();
 
-            foreach (var urgency in urgencies)
+            var incident = await Mediator.Send(new GetDetailedIncidentQuery { Id = id });
+
+            var ambits = new List<SelectListItem>();
+            if (incident.OriginId != null)
             {
-                selectUrgencies.Add(new SelectListItem() { Value = urgency.Key.ToString(), Text = urgency.Value });
+                var ambitResponse = await Mediator.Send(new GetAmbitsByOriginQuery { OriginId = incident.OriginId.Value });
+                ambits = SelectListMapper.GetSelectListFromDictionary(ambitResponse);
             }
+            ViewBag.Ambits = ambits;
 
-            ViewBag.Urgencies = selectUrgencies;
-
-            var selectTypes = new List<SelectListItem>();
-            var types = Enum.GetValues(typeof(RequestType)).Cast<RequestType>()
-                .ToDictionary(k => (int)k, v => v.ToString());
-
-            foreach (var type in types)
+            var incidentTypes = new List<SelectListItem>();
+            if (incident.AmbitId != null)
             {
-                selectTypes.Add(new SelectListItem() { Value = type.Key.ToString(), Text = type.Value });
+                var incidentTypeResponse = await Mediator.Send
+                    (new GetIncidentTypeByAmbitQuery { AmbitId = incident.AmbitId.Value });
+                incidentTypes = SelectListMapper.GetSelectListFromDictionary(incidentTypeResponse);
             }
+            ViewBag.IncidentTypes = incidentTypes;
 
-            ViewBag.Types = selectTypes;
+            return View("DetailedIncident", incident);
+        }
 
-            var threats = await Mediator.Send(new GetAllThreatsQuery());
-            var selectThreats = new List<SelectListItem>();
-
-            foreach (var threat in threats)
-            {
-                selectThreats.Add(new SelectListItem() { Value = threat.Key.ToString(), Text = threat.Value });
-            }
-
-            ViewBag.Threats = selectThreats;
-
-            var scenarios = await Mediator.Send(new GetAllScenariosQuery());
-            var selectScenarios = new List<SelectListItem>();
-
-            foreach (var scenario in scenarios)
-            {
-                selectScenarios.Add(new SelectListItem() { Value = scenario.Key.ToString(), Text = scenario.Value });
-            }
-
-            ViewBag.Scenarios = selectScenarios;
-
-            var origins = await Mediator.Send(new GetAllOriginsQuery());
-            var selectOrigins = new List<SelectListItem>();
-
-            foreach (var origin in origins)
-            {
-                selectOrigins.Add(new SelectListItem() { Value = origin.Key.ToString(), Text = origin.Value });
-            }
-
-            ViewBag.Origins = selectOrigins;
+        [HttpGet]
+        public async Task<ActionResult> GetCreateIncident(CreateIncidentViewModel request = null)
+        {
+            await GetSelectListItems();
 
             return View("CreateIncident", request);
         }
@@ -110,10 +84,8 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateIncident(CreateIncidentCommand incident)
+        public async Task<ActionResult> CreateIncident(CreateIncidentViewModel incident)
         {
-            incident.CreatorId = int.Parse(HttpContext.User.Identity.GetUserId());
-
             var validator = new CreateIncidentValidator();
             var validateResult = validator.Validate(incident);
 
@@ -132,33 +104,69 @@ namespace CruscottoIncidenti.Controllers
             return RedirectToAction("Index");
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult> GetUpdateIncident(int id)
-        //{
+        [HttpGet]
+        public async Task<ActionResult> GetUpdateIncident(int id)
+        {
+            await GetSelectListItems();
 
-        //}
+            var incident = await Mediator.Send(new GetUpdateIncidentQuery { Id = id });
 
-        //[HttpPost]
-        //public async Task<ActionResult> UpdateIncident(UpdateIncidentCommand incident)
-        //{
-        //    incident.EditorId = int.Parse(HttpContext.User.Identity.GetUserId());
+            var ambits = new List<SelectListItem>();
+            if(incident.OriginId != null)
+            {
+                var ambitResponse = await Mediator.Send
+                    (new GetAmbitsByOriginQuery { OriginId = incident.OriginId.Value });
+                ambits = SelectListMapper.GetSelectListFromDictionary(ambitResponse);
+            }
+            ViewBag.Ambits = ambits;
 
-        //    var validator = new UpdateIncidentValidator();
-        //    var validateResult = validator.Validate(incident);
+            var incidentTypes = new List<SelectListItem>();
+            if (incident.AmbitId != null)
+            {
+                var incidentTypeResponse = await Mediator.Send
+                    (new GetIncidentTypeByAmbitQuery { AmbitId = incident.AmbitId.Value });
+                incidentTypes = SelectListMapper.GetSelectListFromDictionary(incidentTypeResponse);
+            }
+            ViewBag.IncidentTypes = incidentTypes;
 
-        //    if (!validateResult.IsValid)
-        //    {
-        //        foreach (var error in validateResult.Errors)
-        //        {
-        //            ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-        //        }
+            return View("UpdateIncident", incident);
+        }
 
-        //        return await GetUpdateIncident(incident.IncidentId);
-        //    }
+        [HttpPost]
+        public async Task<ActionResult> UpdateIncident(UpdateIncidentViewModel incident)
+        {
+            var validator = new UpdateIncidentValidator();
+            var validateResult = validator.Validate(incident);
 
-        //    await Mediator.Send(incident);
+            if (!validateResult.IsValid)
+            {
+                foreach (var error in validateResult.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
 
-        //    return RedirectToAction("Index");
-        //}
+                return await GetUpdateIncident(incident.Id);
+            }
+
+            await Mediator.Send(incident);
+
+            return RedirectToAction("Index");
+        }
+
+        private async Task GetSelectListItems()
+        {
+            ViewBag.Urgencies = SelectListMapper.GetSelectListFromEnum<Urgency>();
+
+            ViewBag.Types = SelectListMapper.GetSelectListFromEnum<RequestType>();
+
+            var threats = await Mediator.Send(new GetAllThreatsQuery());
+            ViewBag.Threats = SelectListMapper.GetSelectListFromDictionary(threats);
+
+            var scenarios = await Mediator.Send(new GetAllScenariosQuery());
+            ViewBag.Scenarios = SelectListMapper.GetSelectListFromDictionary(scenarios);
+
+            var origins = await Mediator.Send(new GetAllOriginsQuery());
+            ViewBag.Origins = SelectListMapper.GetSelectListFromDictionary(origins);
+        }
     }
 }

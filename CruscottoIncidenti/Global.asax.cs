@@ -6,9 +6,13 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using AutofacSerilogIntegration;
+using AutoMapper.Contrib.Autofac.DependencyInjection;
 using CruscottoIncidenti.Application;
-using CruscottoIncidenti.Infrastructure;
+using CruscottoIncidenti.Application.Interfaces;
+using CruscottoIncidenti.Infrastructure.Persistance;
+using CruscottoIncidenti.Infrastructure.Services;
 using CruscottoIncidenti.Utils;
+using MediatR.Extensions.Autofac.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
@@ -47,10 +51,14 @@ namespace CruscottoIncidenti
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             // Register Application services.
-            builder.AddApplication();
+            builder.AddMediatR(typeof(ApplicationModule).Assembly);
+            builder.AddAutoMapper(typeof(ApplicationModule).Assembly);
 
             // Register Infrastructure services.
-            builder.AddInfrastructure();
+            builder.RegisterType<CruscottoIncidentiDbContext>()
+                .As<ICruscottoIncidentiDbContext>().InstancePerRequest();
+            builder.RegisterType<DateTimeService>().As<IDateTime>().InstancePerDependency();
+            builder.RegisterType<CurrentUserService>().As<ICurrentUserService>().InstancePerRequest();
 
             ModelMetadataProviders.Current = new CustomModelMetadataProvider();
 

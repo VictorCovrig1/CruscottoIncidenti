@@ -1,61 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Common.Exceptions;
 using CruscottoIncidenti.Application.Interfaces;
+using CruscottoIncidenti.Application.Users.ViewModels;
 using CruscottoIncidenti.Domain.Entities;
 using MediatR;
 
 namespace CruscottoIncidenti.Application.User.Commands
 {
-    public class UpdateUserCommand : IRequest<bool>
-    {
-        public int EditorId { get; set; }
-
-        public int UserId { get; set; }
-
-        public string FullName { get; set; }
-
-        public string Username { get; set; }
-
-        public string Email { get; set; }
-
-        public bool IsPasswordEnabled { get; set; }
-
-        public string Password { get; set; }
-
-        public string ConfirmPassword { get; set; }
-
-        public List<int> Roles { get; set; }
-
-        public bool IsEnabled { get; set; }
-    }
-
-    public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, bool>
+    public class UpdateUserHandler : IRequestHandler<UpdateUserViewModel, Unit>
     {
         private readonly ICruscottoIncidentiDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
 
-        public UpdateUserHandler(ICruscottoIncidentiDbContext context)
-            => _context = context;
+        public UpdateUserHandler(ICruscottoIncidentiDbContext context, ICurrentUserService currentUserService)
+        {
+            _context = context;
+            _currentUserService = currentUserService;
+        }
 
-        public async Task<bool> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateUserViewModel request, CancellationToken cancellationToken)
         {
             var dublicatedEmailUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower() && u.Id != request.UserId);
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower() && u.Id != request.Id);
 
             if (dublicatedEmailUser != null)
                 throw new CustomException
                     ($"Another user with the same email ({dublicatedEmailUser.Email}) already exists");
 
-            var user = await _context.Users.Include(u => u.UserRoles).FirstOrDefaultAsync(u => u.Id == request.UserId);
+            var user = await _context.Users.Include(u => u.UserRoles).FirstOrDefaultAsync(u => u.Id == request.Id);
 
             if (user == null)
-                throw new CustomException($"User ({request.UserId}) not found");
+                throw new CustomException($"User ({request.Id}) not found");
 
-            user.LastModifiedBy = request.EditorId;
+            user.LastModifiedBy = _currentUserService.UserId;
             user.LastModified = DateTime.UtcNow;
             user.Email = request.Email;
             user.FullName = request.FullName;
@@ -74,7 +55,9 @@ namespace CruscottoIncidenti.Application.User.Commands
                 });
             } 
 
-            return await _context.SaveChangesAsync(cancellationToken) > 0;
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return Unit.Value;
         }
     }
 }

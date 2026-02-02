@@ -21,11 +21,11 @@ function renderUsersGrid() {
         order: [[1, "asc"]],
         select: "single",
         columns: [
-            { data: "id", title: "Id", name: "id", visible: false },
-            { data: "username", title: "User Name", name: "username" },
-            { data: "email", title: "Email", name: "email" },
+            { data: "Id", title: "Id", name: "id", visible: false },
+            { data: "Username", title: "User Name", name: "username" },
+            { data: "Email", title: "Email", name: "email" },
             {
-                data: "isEnabled", title: "Is Enabled", name: "isEnabled", orderable: false,
+                data: "IsEnabled", title: "Is Enabled", name: "isEnabled", orderable: false,
                 render: function (data, type, full, meta) {
                     return data ?
                         "<i class='fas fa-check-circle text-success'></i>" :
@@ -60,7 +60,7 @@ function setButtonsEnabledOrDisabled(table) {
     });
 }
 
-function createAction() {
+function createUserAction() {
     $.ajax({
         url: "/User/GetCreateUser",
         method: "GET",
@@ -76,8 +76,8 @@ function createAction() {
     });
 }
 
-function editAction() {
-    var id = table.rows({ selected: true }).data()[0].id;
+function editUserAction() {
+    var id = table.rows({ selected: true }).data()[0].Id;
 
     $.ajax({
         url: "/User/GetUpdateUser",
@@ -95,8 +95,10 @@ function editAction() {
     });
 }
 
-function detailedAction(shouldBeDeleted = false) {
-    var id = table.rows({ selected: true }).data()[0].id;
+function detailedUserAction(shouldBeDeleted = false) {
+    var id = table.rows({ selected: true }).data()[0].Id;
+    var id = $("#usersTable").DataTable().rows({ selected: true }).data()[0].Id;
+    
 
     $.ajax({
         url: "/User/GetDetailedUser",
@@ -120,7 +122,7 @@ function detailedAction(shouldBeDeleted = false) {
 function onSuccessModalAction(data) {
     if (!data) {
         $("#modal").modal("hide");
-        $("#usersTable").DataTable().ajax.reload();
+        table.ajax.reload();
         toastr["success"]("Action completed successfuly");
     }
     else {

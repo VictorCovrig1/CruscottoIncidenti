@@ -7,5 +7,9 @@
 
         public const string PasswordRuleSet = "PasswordChars";
         public const string PasswordGenericMessage = "Password should contain at least";
+
+        public const string PickerDefaultText = "None selected";
+        public const string SelectAmbit = "Select Ambit";
+        public const string SelectOrigin = "Select Origin";
     }
 }

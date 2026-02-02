@@ -18,9 +18,9 @@
         </div>
         <div class="mt-3">
             <a href="@Url.Action("GetCreateIncident","Incident")" class="btn btn-success" id="createLink"><i class="fas fa-plus"></i> Add</a>
-            <a href="" class="btn btn-primary" id="editLink"><i class="fas fa-pen"></i> Edit</a>
-            <a href="" class="btn btn-secondary" id="detailsLink"><i class="fas fa-info"></i> Details</a>
-            <a href="" class="btn btn-danger" id="deleteLink"><i class="fas fa-trash"></i> Delete</a>
+            <a href="#" onclick="insertIdIntoUrl(this, 'GetUpdateIncident');" class="btn btn-primary" id="editLink"><i class="fas fa-pen"></i> Edit</a>
+            <a href="#" onclick="insertIdIntoUrl(this, 'GetDetailedIncident');" class="btn btn-secondary" id="detailsLink"><i class="fas fa-info"></i> Details</a>
+            <a href="#" onclick="insertIdIntoUrl(this, `GetDetailedIncident`);" class="btn btn-danger" id="deleteLink"><i class="fas fa-trash"></i> Delete</a>
         </div>
     </div>
     <div class="tab-pane fade p-5" id="import-tab-pane" role="tabpanel" aria-labelledby="import-tab" tabindex="0">
@@ -37,7 +37,18 @@
 @section Scripts {
     @Scripts.Render("~/bundles/dataTables/incidents")
 
-    <script>
-        $(renderIncidentsGrid());
-    </script>
+<script>
+    $(document).ready(function () {
+        renderIncidentsGrid();
+        $("#data-tab").on("click", () => {
+            $("#incidentsTable").DataTable().ajax.reload();
+        });
+    });
+
+    function insertIdIntoUrl(currentLink, action) {
+        const id = $("#incidentsTable").DataTable().rows({ selected: true }).data()[0].Id;
+        $(currentLink).attr("href", `/Incident/${action}/${id}`);
+        return false;
+    }
+</script>
 }
