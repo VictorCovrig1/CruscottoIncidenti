@@ -1,4 +1,6 @@
-﻿namespace CruscottoIncidenti.Application.Incidents.ViewModels
+﻿using System;
+
+namespace CruscottoIncidenti.Application.Incidents.ViewModels
 {
     public class IncidentRowViewModel
     {
@@ -8,9 +10,13 @@
 
         public string Subsystem { get; set; }
 
-        public string OpenDate { get; set; }
+        public DateTime? OpenDateDT { get; set; }
 
-        public string CloseDate { get; set; }
+        public string OpenDate { get { return OpenDateDT?.ToString("dd/MM/yyyy"); } set { } }
+
+        public DateTime? CloseDateDT { get; set; }
+
+        public string CloseDate { get { return CloseDateDT?.ToString("dd/MM/yyyy"); } set { } }
 
         public string Type { get; set; }
 

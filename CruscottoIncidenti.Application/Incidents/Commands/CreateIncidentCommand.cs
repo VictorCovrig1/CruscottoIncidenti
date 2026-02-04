@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Linq;
+using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
+using CruscottoIncidenti.Application.Common.Exceptions;
 using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Common;
@@ -23,35 +24,38 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
 
         public async Task<Unit> Handle(CreateIncidentViewModel request, CancellationToken cancellationToken)
         {
-            string lastRequestNumber = _context.Incidents.AsNoTracking()
-                .OrderByDescending(i => i.Id).FirstOrDefault()?.RequestNr;
+            var dublicatedIncident = await _context.Incidents
+                .FirstOrDefaultAsync(x => x.RequestNr == request.RequestNr, cancellationToken);
 
-            string requestNumber = Constants.DefaultRequestNr;
-            if (lastRequestNumber != null && int.TryParse(lastRequestNumber.Substring(4), out int uniqueNumber))
-            {
-                string incrementedRequestNumber = (uniqueNumber + 1).ToString();
-                requestNumber = $"{Constants.RequestNrPRefix}{incrementedRequestNumber.PadLeft(13, '0')}";
-            }
-            
+            if (dublicatedIncident != null)
+                throw new CustomException($"Incident with the same request number ({dublicatedIncident.RequestNr}) already exists");
+
             var incident = new Incident
             {
                 CreatedBy = _currentUserService.UserId,
                 Created = DateTime.UtcNow,
-                RequestNr = requestNumber,
+                RequestNr = request.RequestNr,
                 Subsystem = request.Subsystem,
-                OpenDate = DateTime.UtcNow,
                 Type = Enum.GetName(typeof(RequestType), request.Type),
                 Urgency = Enum.GetName(typeof(Urgency), request.Type),
                 SubCause = request.SubCause,
-                ProblemSumary = request.ProblemSumary,
+                ProblemSumary = request.ProblemSummary,
                 ProblemDescription = request.ProblemDescription,
+                Solution = request.Solution,
                 IncidentTypeId = request.IncidentTypeId,
                 AmbitId = request.AmbitId,
                 OriginId = request.OriginId,
                 ThreatId = request.ThreatId,
                 ScenarioId = request.ScenarioId,
-                ThirdParty = request.ThirdParty
+                ThirdParty = request.ThirdParty,
+                ApplicationType = request.ApplicationType
             };
+
+            if (DateTime.TryParse(request.OpenDate, out DateTime openDate))
+                incident.OpenDate = openDate;
+
+            if (DateTime.TryParse(request.CloseDate, out DateTime closeDate))
+                incident.CloseDate = closeDate;
 
             _context.Incidents.Add(incident);
             await _context.SaveChangesAsync(cancellationToken);

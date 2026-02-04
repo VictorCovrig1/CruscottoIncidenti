@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.Threats.Queries
+namespace CruscottoIncidenti.Application.Incidents.Queries.Threats
 {
     public class GetAllThreatsQuery : IRequest<Dictionary<string, string>>
     {

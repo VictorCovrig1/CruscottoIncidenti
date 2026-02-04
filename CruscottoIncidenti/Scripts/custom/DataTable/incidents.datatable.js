@@ -23,8 +23,8 @@ function renderIncidentsGrid() {
             { data: "RequestNr", title: "Request Number", name: "requestNr" },
             { data: "OpenDate", title: "Open Date", name: "openDate" },
             { data: "CloseDate", title: "Close Date", name: "closeDate" },
-            { data: "Type", title: "Type", name: "type" },
-            { data: "Urgency", title: "Urgency", name: "urgency" },
+            { data: "Type", title: "Type", name: "type", orderable: false },
+            { data: "Urgency", title: "Urgency", name: "urgency", orderable: false },
         ]
     });
 

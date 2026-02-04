@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
@@ -10,6 +7,7 @@ using System.Data.Entity;
 using CruscottoIncidenti.Application.Common.Exceptions;
 using CruscottoIncidenti.Domain.Entities;
 using CruscottoIncidenti.Application.Users.ViewModels;
+using CruscottoIncidenti.Application.Common.Utils;
 
 namespace CruscottoIncidenti.Application.User.Commands
 {
@@ -41,24 +39,12 @@ namespace CruscottoIncidenti.Application.User.Commands
                 throw new CustomException
                     ($"User with the same username ({dublicatedUsernameUser.UserName}) already exists");
 
-            string encrypted = string.Empty;
-
-            if (request.Password != request.ConfirmPassword)
-                throw new CustomException("Password and Confirm Password doesn't match");
-
-            using (SHA256 hash = SHA256.Create())
-            {
-                encrypted = string.Concat(hash
-                    .ComputeHash(Encoding.UTF8.GetBytes(request.Password))
-                    .Select(item => item.ToString("x2")));
-            }
-
             var user = new Domain.Entities.User
             {
                 CreatedBy = _currentUserService.UserId,
                 Created = DateTime.UtcNow,
                 UserName = request.Username,
-                Password = encrypted,
+                Password = PasswordHelper.EncryptPassword(request.Password),
                 Email = request.Email,
                 FullName = request.FullName
             };

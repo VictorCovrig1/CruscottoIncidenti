@@ -20,59 +20,51 @@ namespace CruscottoIncidenti.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(string username, string password)
         {
-            try
+            var query = new GetUserByUserNameQuery { UserName = username, Password = password };
+
+            var validator = new GetUserByUsernameValidator();
+            var validationResult = validator.Validate(query);
+
+            if(!validationResult.IsValid)
             {
-                var query = new GetUserByUserNameQuery { UserName = username, Password = password };
-
-                var validator = new GetUserByUsernameValidator();
-                var validationResult = validator.Validate(query);
-
-                if(!validationResult.IsValid)
+                foreach(var error in validationResult.Errors)
                 {
-                    foreach(var error in validationResult.Errors)
-                    {
-                        ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                    }
-
-                    return View("Login");
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
 
-                var userModel = await Mediator.Send(query);
-
-                if (userModel == null || !userModel.IsEnabled)
-                {
-                    ModelState.AddModelError("IncorrectLogin", "Non-existent or disabled user");
-                    return View("Login");
-                }
-                else
-                {
-                    var userClaims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, userModel.Id.ToString()),
-                        new Claim(ClaimTypes.Name, userModel.Username),
-                        new Claim("FullName", userModel.FullName),
-                        new Claim(ClaimTypes.Email, userModel.Email)
-                    };
-
-                    foreach (var role in userModel.Roles)
-                        userClaims.Add(new Claim(ClaimTypes.Role, role.Name));
-
-                    var claimsIdentity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
-                    claimsIdentity.AddClaims(userClaims);
-
-                    var principal = new ClaimsPrincipal(claimsIdentity);
-
-                    var context = Request.GetOwinContext();
-                    var authManager = context.Authentication;
-                    authManager.SignIn(new AuthenticationProperties { IsPersistent = false }, claimsIdentity);
-
-                    return RedirectToAction(nameof(HomeController.Index), "Home");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
                 return View("Login");
+            }
+
+            var userModel = await Mediator.Send(query);
+
+            if (userModel == null || !userModel.IsEnabled)
+            {
+                ModelState.AddModelError("IncorrectLogin", "Non-existent or disabled user");
+                return View("Login");
+            }
+            else
+            {
+                var userClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userModel.Id.ToString()),
+                    new Claim(ClaimTypes.Name, userModel.Username),
+                    new Claim("FullName", userModel.FullName),
+                    new Claim(ClaimTypes.Email, userModel.Email)
+                };
+
+                foreach (var role in userModel.Roles)
+                    userClaims.Add(new Claim(ClaimTypes.Role, role.Name));
+
+                var claimsIdentity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
+                claimsIdentity.AddClaims(userClaims);
+
+                var principal = new ClaimsPrincipal(claimsIdentity);
+
+                var context = Request.GetOwinContext();
+                var authManager = context.Authentication;
+                authManager.SignIn(new AuthenticationProperties { IsPersistent = false }, claimsIdentity);
+
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Common.Exceptions;
+using CruscottoIncidenti.Application.Common.Utils;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Application.Users.ViewModels;
 using CruscottoIncidenti.Domain.Entities;
@@ -41,6 +42,9 @@ namespace CruscottoIncidenti.Application.User.Commands
             user.Email = request.Email;
             user.FullName = request.FullName;
             user.IsEnabled = request.IsEnabled;
+
+            if (request.IsPasswordEnabled && request.Password != null)
+                user.Password = PasswordHelper.EncryptPassword(request.Password);
 
             user.UserRoles.Clear();
 

@@ -8,19 +8,19 @@ using MediatR;
 
 namespace CruscottoIncidenti.Application.User.Queries
 {
-    public class GetUserToUpdateQuery : IRequest<UpdateUserViewModel>
+    public class GetUpdateUserQuery : IRequest<UpdateUserViewModel>
     {
         public int Id { get; set; }
     }
 
-    public class GetUserToUpdateHandler : IRequestHandler<GetUserToUpdateQuery, UpdateUserViewModel>
+    public class GetUserToUpdateHandler : IRequestHandler<GetUpdateUserQuery, UpdateUserViewModel>
     {
         private readonly ICruscottoIncidentiDbContext _context;
 
         public GetUserToUpdateHandler(ICruscottoIncidentiDbContext context)
             => _context = context;
 
-        public async Task<UpdateUserViewModel> Handle(GetUserToUpdateQuery request, CancellationToken cancellationToken)
+        public async Task<UpdateUserViewModel> Handle(GetUpdateUserQuery request, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .AsNoTracking()

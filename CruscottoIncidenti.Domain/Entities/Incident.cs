@@ -9,7 +9,7 @@ namespace CruscottoIncidenti.Domain.Entities
 
         public string Subsystem {  get; set; }
 
-        public DateTime OpenDate { get; set; }
+        public DateTime? OpenDate { get; set; }
 
         public DateTime? CloseDate { get; set; }
 

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Common.Exceptions;
 using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
-using CruscottoIncidenti.Common;
 using CruscottoIncidenti.Domain.Entities;
 using MediatR;
 
@@ -87,11 +86,11 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
             incident.LastModified = DateTime.Now;
             incident.LastModifiedBy = _currentUserService.UserId;
             incident.Subsystem = request.Subsystem;
-            incident.Type = Enum.GetName(typeof(RequestType), request.Type);
+            incident.Type = request.Type;
             incident.ApplicationType = request.ApplicationType;
-            incident.Urgency = Enum.GetName(typeof(Urgency), request.Type);
+            incident.Urgency = request.Urgency;
             incident.SubCause = request.SubCause;
-            incident.ProblemSumary = request.ProblemSumary;
+            incident.ProblemSumary = request.ProblemSummary;
             incident.ProblemDescription = request.ProblemDescription;
             incident.Solution = request.Solution;
             incident.IncidentTypeId = request.IncidentTypeId;
@@ -100,12 +99,8 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
             incident.ThreatId = request.ThreatId;
             incident.ScenarioId = request.ScenarioId;
             incident.ThirdParty = request.ThirdParty;
-
-            if (DateTime.TryParse(request.OpenDate, out DateTime openDate))
-                incident.OpenDate = openDate;
-
-            if (DateTime.TryParse(request.CloseDate, out DateTime closeDate))
-                incident.CloseDate = closeDate;
+            incident.OpenDate = request.OpenDate;
+            incident.CloseDate = request.CloseDate;
 
             await _context.SaveChangesAsync(cancellationToken);
 

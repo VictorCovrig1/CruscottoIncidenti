@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.Ambits.Queries
+namespace CruscottoIncidenti.Application.Incidents.Queries.Ambits
 {
     public class GetAmbitsByOriginQuery : IRequest<Dictionary<string, string>>
     {

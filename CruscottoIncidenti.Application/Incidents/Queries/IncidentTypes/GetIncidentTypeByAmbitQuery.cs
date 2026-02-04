@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.IncidentTypes.Queries
+namespace CruscottoIncidenti.Application.Incidents.Queries.IncidentTypes
 {
     public class GetIncidentTypeByAmbitQuery : IRequest<Dictionary<string, string>>
     {

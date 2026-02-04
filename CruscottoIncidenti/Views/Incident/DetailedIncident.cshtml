@@ -7,109 +7,162 @@
 
 <div class="pt-5">
     <div class="d-flex justify-content-center">
-        <div class="alert alert-secondary text-center mb-4 col-8" role="alert">
-            <h5>Edit User</h5>
+        <div class="alert @(ViewBag.ShouldBeDeleted ? "alert-danger" : "alert-secondary") text-center mb-4 col-8" role="alert">
+            <h5>@(ViewBag.ShouldBeDeleted ? "Delete Incident" : "Incident Details")</h5>
+            @if (ViewBag.ShouldBeDeleted)
+            {
+                <h6 class="mt-3">Are you sure you want to delete this incident?</h6>
+            }
         </div>
     </div>
+
+    @if (ViewBag.ShouldBeDeleted)
+    {
+        <div class="mb-3">
+            @Html.ValidationMessage("IncorrectDeleteIncident", string.Empty, new { @class = "text-danger" })
+        </div>
+    }
 
     <div class="row">
         <div class="col-6">
-            @Html.LabelFor(m => m.RequestNr, new { @class = "form-label fw-bold" })
+            @Html.LabelFor(m => m.RequestNr, Constants.RequestNr, new { @class = "form-label fw-bold" })
             @Html.TextBoxFor(m => m.RequestNr, new { @class = "form-control mw-100", disabled = "disabled" })
         </div>
         <div class="col-6">
-            @Html.LabelFor(m => m.Solution, new { @class = "form-label fw-bold" })
-            @Html.TextAreaFor(m => m.Solution, new { @class = "form-control mw-100", disabled = "disabled" })
+            @Html.LabelFor(m => m.SubCause, Constants.SubCause, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.SubCause, new { @class = "form-control mw-100", disabled = "disabled" })
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-6">
-            @Html.LabelFor(m => m.Subsystem, new { @class = "form-label fw-bold" })
+            @Html.LabelFor(m => m.Subsystem, Constants.Subsystem, new { @class = "form-label fw-bold" })
             @Html.TextBoxFor(m => m.Subsystem, new { @class = "form-control  mw-100", disabled = "disabled" })
         </div>
         <div class="col-6">
-            @Html.LabelFor(m => m.ThreatId, new { @class = "form-label fw-bold" })
-            @Html.DropDownListFor(m => m.ThreatId, (IEnumerable<SelectListItem>)ViewBag.Threats, new { @class = "form-control mw-100", disabled = "disabled" })
+            @Html.LabelFor(m => m.Threat, Constants.Threat, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.Threat, Constants.PickerDefaultText, new { @class = "form-control mw-100", disabled = "disabled" })
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-6">
-            @Html.LabelFor(m => m.OpenDate, new { @class = "form-label fw-bold" })
-            @Html.TextBoxFor(m => m.OpenDate, new { @class = "form-control mw-100", data_provide = "datepicker", @data_date_format = "dd/mm/yyyy", disabled = "disabled" })
+            @Html.LabelFor(m => m.OpenDate, Constants.OpenDate, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.OpenDateString, new { @class = "form-control mw-100", data_provide = "datepicker", @data_date_format = "dd/mm/yyyy", disabled = "disabled" })
         </div>
         <div class="col-6">
-            @Html.LabelFor(m => m.ScenarioId, new { @class = "form-label fw-bold" })
-            @Html.DropDownListFor(m => m.ScenarioId, (IEnumerable<SelectListItem>)ViewBag.Scenarios, new { @class = "form-control mw-100", disabled = "disabled" })
-        </div>
-    </div>
-
-    <div class="row mt-3">
-        <div class="col-6">
-            @Html.LabelFor(m => m.CloseDate, new { @class = "form-label fw-bold" })
-            @Html.TextBoxFor(m => m.CloseDate, new { @class = "form-control mw-100", data_provide = "datepicker", @data_date_format = "dd/mm/yyyy", disabled = "disabled" })
-        </div>
-        <div class="col-6">
-            @Html.LabelFor(m => m.OriginId, new { @class = "form-label fw-bold" })
-            @Html.DropDownListFor(m => m.OriginId, (IEnumerable<SelectListItem>)ViewBag.Origins, new { @class = "form-control mw-100", @onchange = $"getAmbitsByOrigin();", @id = "origins", disabled = "disabled" })
+            @Html.LabelFor(m => m.Scenario, Constants.Scenario, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.Scenario, new { @class = "form-control mw-100", disabled = "disabled" })
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-6">
-            @Html.LabelFor(m => m.Type, new { @class = "form-label fw-bold" })
-            @Html.DropDownListFor(m => m.Type, (IEnumerable<SelectListItem>)ViewBag.Types, new { @class = "form-control mw-100", disabled = "disabled" })
+            @Html.LabelFor(m => m.CloseDate, Constants.CloseDate, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.CloseDateString, new
+            {
+                @class = "form-control mw-100",
+                data_provide = "datepicker",
+                @data_date_format = "dd/mm/yyyy",
+                data_date_today_highlight = true,
+                disabled = "disabled"
+            })
         </div>
         <div class="col-6">
-            @Html.LabelFor(m => m.AmbitId, new { @class = "form-label fw-bold" })
-            @Html.DropDownListFor(m => m.AmbitId, (IEnumerable<SelectListItem>)ViewBag.Ambits, new { @class = "form-control mw-100", @onchange = "getIncidentTypeByAmbit();", @id = "ambits", disabled = "disabled" })
-        </div>
-    </div>
-
-    <div class="row mt-3">
-        <div class="col-6">
-            @Html.LabelFor(m => m.Urgency, new { @class = "form-label fw-bold" })
-            @Html.DropDownListFor(m => m.Urgency, (IEnumerable<SelectListItem>)ViewBag.Urgencies, new { @class = "form-control mw-100", disabled = "disabled" })
-        </div>
-        <div class="col-6">
-            @Html.LabelFor(m => m.IncidentTypeId, new { @class = "form-label fw-bold" })
-            @Html.DropDownListFor(m => m.IncidentTypeId, (IEnumerable<SelectListItem>)ViewBag.IncidentTypes, new { @class = "form-control mw-100", @id = "types", disabled = "disabled" })
+            @Html.LabelFor(m => m.Origin, Constants.Origin, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.Origin, new { @class = "form-control mw-100", @onchange = $"getAmbitsByOrigin();", @id = "origins", disabled = "disabled" })
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-6">
-            @Html.LabelFor(m => m.SubCause, new { @class = "form-label fw-bold" })
-            @Html.TextBoxFor(m => m.SubCause, new { @class = "form-control mw-100", disabled = "disabled" })
+            @Html.LabelFor(m => m.Type, Constants.Type, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.Type, Constants.PickerDefaultText, new { @class = "form-control mw-100", disabled = "disabled" })
         </div>
         <div class="col-6">
-            @Html.LabelFor(m => m.ThirdParty, new { @class = "form-label fw-bold" })
-            @Html.TextBoxFor(m => m.ThirdParty, new { @class = "form-control mw-100", disabled = "disabled" })
-        </div>
-    </div>
-
-    <div class="row mt-3">
-        <div class="col-6">
-            @Html.LabelFor(m => m.ProblemSumary, new { @class = "form-label fw-bold" })
-            @Html.TextAreaFor(m => m.ProblemSumary, new { @class = "form-control mw-100", disabled = "disabled" })
-            @Html.ValidationMessageFor(m => m.ProblemSumary, string.Empty, new { @class = "text-danger" })
-        </div>
-        <div class="col-6">
-            @Html.LabelFor(m => m.ApplicationType, new { @class = "form-label fw-bold" })
-            @Html.TextBoxFor(m => m.ApplicationType, new { @class = "form-control mw-100", disabled = "disabled" })
+            @Html.LabelFor(m => m.Ambit, Constants.Ambit, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.Ambit, new { @class = "form-control mw-100", @onchange = "getIncidentTypeByAmbit();", @id = "ambits", disabled = "disabled" })
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-6">
-            @Html.LabelFor(m => m.ProblemDescription, new { @class = "form-label fw-bold" })
-            @Html.TextAreaFor(m => m.ProblemDescription, new { @class = "form-control mw-100", disabled = "disabled" })
-            @Html.ValidationMessageFor(m => m.ProblemDescription, string.Empty, new { @class = "text-danger" })
+            @Html.LabelFor(m => m.Urgency, Constants.Urgency, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.Urgency, new { @class = "form-control mw-100", disabled = "disabled" })
+        </div>
+        <div class="col-6">
+            @Html.LabelFor(m => m.IncidentType, Constants.IncidentType, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.IncidentType, new { @class = "form-control mw-100", @id = "types", disabled = "disabled" })
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-6">
+            @Html.LabelFor(m => m.ProblemSummary, Constants.ProblemSummary, new { @class = "form-label fw-bold" })
+            @Html.TextAreaFor(m => m.ProblemSummary, new { @class = "form-control no-resize mw-100", rows = 5, disabled = "disabled" })
+        </div>
+        <div class="col-6">
+            <div class="mb-4">
+                @Html.LabelFor(m => m.ApplicationType, Constants.ApplicationType, new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(m => m.ApplicationType, new { @class = "form-control mw-100", disabled = "disabled" })
+            </div>
+            <div>
+                @Html.LabelFor(m => m.ThirdParty, Constants.ThirdParty, new { @class = "form-label fw-bold" })
+                @Html.TextBoxFor(m => m.ThirdParty, new { @class = "form-control mw-100", disabled = "disabled" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-6">
+            @Html.LabelFor(m => m.ProblemDescription, Constants.ProblemDescription, new { @class = "form-label fw-bold" })
+            @Html.TextAreaFor(m => m.ProblemDescription, new { @class = "form-control no-resize mw-100", rows = 5, disabled = "disabled" })
+        </div>
+        <div class="col-6">
+            @Html.LabelFor(m => m.LastModifiedString, Constants.LastModified, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(m => m.LastModifiedString, new { @class = "form-control mw-100", disabled = "disabled" })
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-6">
+            @Html.LabelFor(m => m.Solution, Constants.Solution, new { @class = "form-label fw-bold" })
+            @Html.TextAreaFor(m => m.Solution, new { @class = "form-control no-resize mw-100", rows = 5, disabled = "disabled" })
         </div>
     </div>
 
     <div class="d-flex justify-content-center gap-2 my-5">
-        <a href="@Url.Action("Index","Incident")" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+        @if (ViewBag.ShouldBeDeleted)
+        {
+            <a href="@Url.Action("Index","Incident")" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+            <button type="button" class="btn btn-danger" onclick="deleteIncident(@Model.Id);">
+                <i class="fas fa-trash"></i> Delete
+                <span class="spinner-border spinner-border-sm text-light d-none" />
+            </button>
+        }
+        else
+        {
+            <a href="@Url.Action("Index","Incident")" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+        }
     </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/toastrSettings")
+
+    <script>
+        function deleteIncident(id) {
+            $.ajax({
+                url: "/Incident/DeleteIncident",
+                data: {
+                    id: id
+                },
+                method: "POST",
+                success: (data) => {
+                    window.location.href = "/Incident/Index"
+                },
+                error: () => toastr["error"]("Failed to delete incident")
+            });
+        }
+    </script>
+}

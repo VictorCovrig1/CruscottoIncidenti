@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.Scenarios.Queries
+namespace CruscottoIncidenti.Application.Incidents.Queries.Scenarios
 {
     public class GetAllScenariosQuery : IRequest<Dictionary<string, string>>
     {

@@ -1,9 +1,8 @@
 ﻿using System.Data.Entity;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CruscottoIncidenti.Application.Common.Utils;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Application.Roles.ViewModels;
 using CruscottoIncidenti.Application.Users.ViewModels;
@@ -26,19 +25,11 @@ namespace CruscottoIncidenti.Application.User.Queries
 
         public async Task<UserViewModel> Handle(GetUserByUserNameQuery request, CancellationToken cancellationToken)
         {
-            string encrypted = string.Empty;
-
-            using (SHA256 hash = SHA256.Create())
-            {
-                encrypted = string.Concat(hash
-                    .ComputeHash(Encoding.UTF8.GetBytes(request.Password))
-                    .Select(item => item.ToString("x2")));
-            }
+            string encryptedPassword = PasswordHelper.EncryptPassword(request.Password);
 
             return await _context.Users
                 .AsNoTracking()
-                .Where(x => x.UserName.ToLower() == request.UserName.ToLower() && 
-                    x.IsEnabled && x.Password == encrypted)
+                .Where(x => x.UserName.ToLower() == request.UserName.ToLower() && x.IsEnabled && x.Password == encryptedPassword)
                 .Select(x => new UserViewModel
                 {
                     Id = x.Id,

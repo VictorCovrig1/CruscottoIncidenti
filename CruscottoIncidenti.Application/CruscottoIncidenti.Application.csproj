@@ -136,7 +136,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ambits\Queries\GetAmbitsByOriginQuery.cs" />
+    <Compile Include="Common\Utils\PasswordHelper.cs" />
+    <Compile Include="Incidents\Commands\DeleteIncidentCommand.cs" />
+    <Compile Include="Incidents\Queries\Ambits\GetAmbitsByOriginQuery.cs" />
     <Compile Include="ApplicationBuilderExtensions.cs" />
     <Compile Include="ApplicationModule.cs" />
     <Compile Include="Common\Exceptions\CustomException.cs" />
@@ -144,9 +146,9 @@
     <Compile Include="Common\Profiles\CommonProfile.cs" />
     <Compile Include="Incidents\Commands\CreateIncidentCommand.cs" />
     <Compile Include="Incidents\Commands\UpdateIncidentCommand.cs" />
-    <Compile Include="Incidents\Queries\GetDetailedIncidentQuery.cs" />
-    <Compile Include="Incidents\Queries\GetUpdateIncidentQuery.cs" />
-    <Compile Include="Incidents\Queries\GetIncidentsGridQuery.cs" />
+    <Compile Include="Incidents\Queries\Incidents\GetDetailedIncidentQuery.cs" />
+    <Compile Include="Incidents\Queries\Incidents\GetUpdateIncidentQuery.cs" />
+    <Compile Include="Incidents\Queries\Incidents\GetIncidentsGridQuery.cs" />
     <Compile Include="Incidents\Validators\CreateIncidentValidator.cs" />
     <Compile Include="Incidents\Validators\UpdateIncidentValidator.cs" />
     <Compile Include="Incidents\ViewModels\CreateIncidentViewModel.cs" />
@@ -154,27 +156,27 @@
     <Compile Include="Incidents\ViewModels\IncidentRowViewModel.cs" />
     <Compile Include="Incidents\ViewModels\IncidentViewModel.cs" />
     <Compile Include="Incidents\ViewModels\UpdateIncidentViewModel.cs" />
-    <Compile Include="IncidentTypes\Queries\GetIncidentTypeByAmbitQuery.cs" />
+    <Compile Include="Incidents\Queries\IncidentTypes\GetIncidentTypeByAmbitQuery.cs" />
     <Compile Include="Interfaces\ICruscottoIncidentiDbContext.cs" />
     <Compile Include="Interfaces\ICurrentUserService.cs" />
     <Compile Include="Interfaces\IDateTime.cs" />
-    <Compile Include="Origins\Queries\GetAllOriginsQuery.cs" />
+    <Compile Include="Incidents\Queries\Origins\GetAllOriginsQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Roles\Queries\GetRolesQuery.cs" />
     <Compile Include="Roles\ViewModels\RoleViewModel.cs" />
-    <Compile Include="Scenarios\Queries\GetAllScenariosQuery.cs" />
+    <Compile Include="Incidents\Queries\Scenarios\GetAllScenariosQuery.cs" />
     <Compile Include="TableParameters\DataTablesColumn.cs" />
     <Compile Include="TableParameters\DataTablesOrder.cs" />
     <Compile Include="TableParameters\DataTablesParameters.cs" />
     <Compile Include="TableParameters\DataTablesSearch.cs" />
-    <Compile Include="Threats\Queries\GetAllThreatsQuery.cs" />
+    <Compile Include="Incidents\Queries\Threats\GetAllThreatsQuery.cs" />
     <Compile Include="Users\Commands\CreateUserCommand.cs" />
     <Compile Include="Users\Validators\CreateUserValidator.cs" />
     <Compile Include="Users\Commands\DeleteUserCommand.cs" />
     <Compile Include="Users\Commands\UpdateUserCommand.cs" />
     <Compile Include="Users\Validators\UpdateUserValidation.cs" />
     <Compile Include="Users\Queries\GetDetailedUserByIdQuery.cs" />
-    <Compile Include="Users\Queries\GetUserToUpdateQuery.cs" />
+    <Compile Include="Users\Queries\GetUpdateUserQuery.cs" />
     <Compile Include="Users\Queries\GetUserByUserNameQuery.cs" />
     <Compile Include="Users\ViewModels\CreateUserViewModel.cs" />
     <Compile Include="Users\ViewModels\DetailedUserViewModel.cs" />

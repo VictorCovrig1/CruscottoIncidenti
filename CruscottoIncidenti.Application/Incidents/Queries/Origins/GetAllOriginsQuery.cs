@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Interfaces;
 using MediatR;
 
-namespace CruscottoIncidenti.Application.Origins.Queries
+namespace CruscottoIncidenti.Application.Incidents.Queries.Origins
 {
     public class GetAllOriginsQuery : IRequest<Dictionary<string, string>>
     {

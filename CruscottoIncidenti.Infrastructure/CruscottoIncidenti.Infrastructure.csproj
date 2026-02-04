@@ -133,6 +133,10 @@
     <Compile Include="Migrations\202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.Designer.cs">
       <DependentUpon>202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202602041348328_MakeColumnsInIncidentsRequired.cs" />
+    <Compile Include="Migrations\202602041348328_MakeColumnsInIncidentsRequired.Designer.cs">
+      <DependentUpon>202602041348328_MakeColumnsInIncidentsRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Persistance\Configurations\AmbitConfiguration.cs" />
     <Compile Include="Persistance\Configurations\OriginToAmbitConfiguration.cs" />
@@ -209,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.resx">
       <DependentUpon>202601291412395_ChangeUrgencyMaxNumberOfcharsToEight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602041348328_MakeColumnsInIncidentsRequired.resx">
+      <DependentUpon>202602041348328_MakeColumnsInIncidentsRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

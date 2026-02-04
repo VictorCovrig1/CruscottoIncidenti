@@ -22,23 +22,20 @@ namespace CruscottoIncidenti.Application.User.Queries
 
         public async Task<DetailedUserViewModel> Handle(GetDetailedUserByIdQuery request, CancellationToken cancellationToken)
         {
-            return (await _context.Users
+            return await _context.Users
                 .AsNoTracking()
                 .Include(x => x.UserRoles)
                 .Where(x => x.Id == request.Id)
-                .ToListAsync(cancellationToken))
                 .Select(x => new DetailedUserViewModel
                 {
                     Id = x.Id,
-                    LastModified = x.LastModified.HasValue ? 
-                        x.LastModified.Value.ToString("dd/MM/yyyy") : 
-                        string.Empty,
+                    LastModified = x.LastModified,
                     Username = x.UserName,
                     Email = x.Email,
                     FullName = x.FullName,
                     IsEnabled = x.IsEnabled,
-                    Roles = x.UserRoles.Select(r => r.RoleId).ToList()
-                }).FirstOrDefault();
+                    Roles = x.UserRoles.Select(r => r.Role.Name).ToList()
+                }).FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

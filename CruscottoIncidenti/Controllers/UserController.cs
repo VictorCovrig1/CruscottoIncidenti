@@ -29,9 +29,9 @@ namespace CruscottoIncidenti.Controllers
             return Json(new
             {
                 draw = parameters.Draw,
-                recordsFiltered = result.Item1,
-                recordsTotal = result.Item1,
-                data = result.Item2
+                recordsFiltered = parameters.TotalCount,
+                recordsTotal = parameters.TotalCount,
+                data = result
             });
         }
 
@@ -39,16 +39,12 @@ namespace CruscottoIncidenti.Controllers
         public async Task<ActionResult> GetDetailedUser(int id, bool shouldBeDeleted = false)
         {
             var user = await Mediator.Send(new GetDetailedUserByIdQuery { Id = id });
-
-            if (user != null)
-                user.ShouldBeDeleted = shouldBeDeleted;
-
             var userRoles = await Mediator.Send(new GetRolesQuery());
 
             var selectRoles = new List<SelectListItem>();
             foreach (var role in userRoles)
             {
-                selectRoles.Add(new SelectListItem() 
+                selectRoles.Add(new SelectListItem()
                 { 
                     Value = role.Id.ToString(), 
                     Text = role.Name 
@@ -63,7 +59,16 @@ namespace CruscottoIncidenti.Controllers
         [HttpPost]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            await Mediator.Send(new DeleteUserCommand { Id = id });
+            try
+            {
+                await Mediator.Send(new DeleteUserCommand { Id = id });
+            }
+            catch(CustomException ex)
+            {
+                ModelState.AddModelError("IncorrectDeleteUser", ex.FriendlyMessage);
+                return await GetDetailedUser(id, true);
+            }
+
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
@@ -120,7 +125,7 @@ namespace CruscottoIncidenti.Controllers
         [HttpGet]
         public async Task<ActionResult> GetUpdateUser(int id)
         {
-            var user = await Mediator.Send(new GetUserToUpdateQuery() { Id = id });
+            var user = await Mediator.Send(new GetUpdateUserQuery() { Id = id });
 
             if(user == null)
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);

@@ -1,5 +1,14 @@
 ﻿$(document).ready(function () {
     $("select").selectpicker();
+
+    if (!$("#origins").val()) {
+        $("#ambits").prop("disabled", true);
+        $("#ambits").selectpicker("refresh");
+    }
+    if (!$("#ambits").val()) {
+        $("#types").prop("disabled", true);
+        $("#types").selectpicker("refresh");
+    }
 });
 
 const defaultOption = "<option value=''></option>"
@@ -13,20 +22,15 @@ function getAmbitsByOrigin() {
         data: { id: id },
         method: "GET",
         success: (data) => {
-            var ambitText = "";
             $("#ambits").prop("disabled", id == 0);
 
-            if (!id) {
-                const defaultOptionTypes = $(defaultOption).text(`${defaultText} (Select Ambit)`);
-                ambitText = " (Select Origin)";
+            const defaultOptionTypes = $(defaultOption).text(defaultText);
+            $("#types")
+                .html(defaultOptionTypes)
+                .prop("disabled", true)
+                .selectpicker("refresh");
 
-                $("#types")
-                    .html(defaultOptionTypes)
-                    .prop("disabled", true)
-                    .selectpicker("refresh");
-            }
-
-            const defaultOptionAmbits = $(defaultOption).text(`${defaultText}${ambitText}`);
+            const defaultOptionAmbits = $(defaultOption).text(defaultText);
             $("#ambits").html(defaultOptionAmbits);
                    
             for (const [key, value] of Object.entries(data)) {
@@ -50,12 +54,8 @@ function getIncidentTypeByAmbit() {
         method: "GET",
         success: (data) => {
             $("#types").prop("disabled", id == 0);
-            var typesText = "";
 
-            if (!id)
-                typesText = " (Select Ambit)";
-
-            const defaultOptionTypes = $(defaultOption).text(`${defaultText}${typesText}`);
+            const defaultOptionTypes = $(defaultOption).text(defaultText);
             $("#types").html(defaultOptionTypes);
 
             for (const [key, value] of Object.entries(data)) {

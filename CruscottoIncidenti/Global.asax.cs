@@ -11,7 +11,6 @@ using CruscottoIncidenti.Application;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Infrastructure.Persistance;
 using CruscottoIncidenti.Infrastructure.Services;
-using CruscottoIncidenti.Utils;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using Serilog;
 using Serilog.Events;
@@ -59,8 +58,6 @@ namespace CruscottoIncidenti
                 .As<ICruscottoIncidentiDbContext>().InstancePerRequest();
             builder.RegisterType<DateTimeService>().As<IDateTime>().InstancePerDependency();
             builder.RegisterType<CurrentUserService>().As<ICurrentUserService>().InstancePerRequest();
-
-            ModelMetadataProviders.Current = new CustomModelMetadataProvider();
 
             // Register logging
             string logFileAbsolutePath = Path.Combine(Server.MapPath("~"), "Logs", "Log-.json");

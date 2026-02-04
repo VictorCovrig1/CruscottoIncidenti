@@ -18,9 +18,9 @@
         </div>
         <div class="mt-3">
             <a href="@Url.Action("GetCreateIncident","Incident")" class="btn btn-success" id="createLink"><i class="fas fa-plus"></i> Add</a>
-            <a href="#" onclick="insertIdIntoUrl(this, 'GetUpdateIncident');" class="btn btn-primary" id="editLink"><i class="fas fa-pen"></i> Edit</a>
-            <a href="#" onclick="insertIdIntoUrl(this, 'GetDetailedIncident');" class="btn btn-secondary" id="detailsLink"><i class="fas fa-info"></i> Details</a>
-            <a href="#" onclick="insertIdIntoUrl(this, `GetDetailedIncident`);" class="btn btn-danger" id="deleteLink"><i class="fas fa-trash"></i> Delete</a>
+            <button onclick="callIncidentAction('GetUpdateIncident');" class="btn btn-primary" id="editLink"><i class="fas fa-pen"></i> Edit</button>
+            <button onclick="callIncidentAction('GetDetailedIncident');" class="btn btn-secondary" id="detailsLink"><i class="fas fa-info"></i> Details</button>
+            <button onclick="callIncidentAction('GetDetailedIncident', true);" class="btn btn-danger" id="deleteLink"><i class="fas fa-trash"></i> Delete</button>
         </div>
     </div>
     <div class="tab-pane fade p-5" id="import-tab-pane" role="tabpanel" aria-labelledby="import-tab" tabindex="0">
@@ -45,10 +45,10 @@
         });
     });
 
-    function insertIdIntoUrl(currentLink, action) {
+    function callIncidentAction(action, shouldBeDeleted = false) {
         const id = $("#incidentsTable").DataTable().rows({ selected: true }).data()[0].Id;
-        $(currentLink).attr("href", `/Incident/${action}/${id}`);
-        return false;
+        const deleteParam = shouldBeDeleted ? "?shouldBeDeleted=true" : "";
+        window.location.href = `/Incident/${action}/${id}${deleteParam}`;
     }
 </script>
 }
