@@ -14,7 +14,6 @@ using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.TableParameters;
 using CruscottoIncidenti.Common;
 using CruscottoIncidenti.Utils;
-using MediatR;
 
 namespace CruscottoIncidenti.Controllers
 {
@@ -145,6 +144,31 @@ namespace CruscottoIncidenti.Controllers
                 ModelState.AddModelError("IncorrectDeleteIncident", ex.FriendlyMessage);
                 return await GetDetailedIncident(id, true);
             }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ImportIncidents(ImportIncidentsViewModel incidents)
+        {
+            //var validator = new ImportIncidentsValidator();
+            //var validateResult = await validator.ValidateAsync(incidents);
+
+            //if (!validateResult.IsValid)
+            //{
+            //    var invalidIndices = validateResult.Errors
+            //        .Select(e => System.Text.RegularExpressions.Regex.Match(e.PropertyName, @"\[(\d+)\]"))
+            //        .Where(m => m.Success)
+            //        .Select(m => int.Parse(m.Groups[1].Value))
+            //        .Distinct();
+
+            //    foreach (var index in invalidIndices)
+            //    {
+            //        incidents.Incidents.RemoveAt(index);
+            //    }
+            //}
+
+            await Mediator.Send(incidents);
 
             return RedirectToAction("Index");
         }

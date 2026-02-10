@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Common.Exceptions;
+using CruscottoIncidenti.Application.Incidents.Commands.Common;
 using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
-using CruscottoIncidenti.Domain.Entities;
 using MediatR;
 
 namespace CruscottoIncidenti.Application.Incidents.Commands
@@ -24,62 +23,10 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
 
         public async Task<Unit> Handle(UpdateIncidentViewModel request, CancellationToken cancellationToken)
         {
-            Scenario scenario = null;
-            if (request.ScenarioId != null)
-            {
-                scenario = await _context.Scenarios
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.Id == request.ScenarioId);
-                if (scenario == null)
-                    throw new CustomException($"Scenario ({request.ScenarioId}) not found");
-            }
+            await IncidentHelper.CheckEntitiesIfExistAsync(_context, request.ScenarioId,
+                request.ThreatId, request.OriginId, request.AmbitId, request.IncidentTypeId);
 
-            Threat threat = null;
-            if (request.ThreatId != null)
-            {
-                threat = await _context.Threats
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.Id == request.ScenarioId);
-                if (threat == null)
-                    throw new CustomException($"Threat ({request.ThreatId}) not found");
-            }
-
-            Origin origin = null;
-            if(request.OriginId != null)
-            {
-                origin = await _context.Origins
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.Id == request.OriginId);
-                if (origin == null)
-                    throw new CustomException($"Origin ({request.OriginId}) not found");
-            }
-
-            Ambit ambit = null;
-            if(request.AmbitId != null)
-            {
-                ambit = await _context.Ambits
-                    .AsNoTracking()
-                    .Include(x => x.AmbitToOrigins)
-                    .Include(x => x.AmbitToTypes.Select(a => a.Type))
-                    .FirstOrDefaultAsync(x => x.AmbitToOrigins
-                    .Any(o => o.OriginId == request.OriginId) && x.Id == request.AmbitId);
-
-                if (ambit == null)
-                    throw new CustomException($"Ambit ({request.AmbitId}) not found");
-            }
-
-            IncidentType incidentType = null;
-            if (request.IncidentTypeId != null)
-            {
-                incidentType = ambit?.AmbitToTypes
-                    .FirstOrDefault(x => x.TypeId == request.IncidentTypeId)?.Type;
-                if (incidentType == null)
-                    throw new CustomException($"Incident Type ({request.IncidentTypeId}) not found");
-            }
-
-            var incident = await _context.Incidents
-                .FirstOrDefaultAsync(x => x.Id == request.Id);
-
+            var incident = await _context.Incidents.FirstOrDefaultAsync(x => x.Id == request.Id);
             if (incident == null)
                 throw new CustomException($"Incident ({request.Id}) not found");
 

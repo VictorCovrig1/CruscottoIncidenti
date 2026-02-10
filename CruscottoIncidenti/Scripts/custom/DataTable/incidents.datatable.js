@@ -31,6 +31,23 @@ function renderIncidentsGrid() {
     setLinksEnabledOrDisabled(table);
 }
 
+function renderPreviewIncidentswGrid() {
+    $("#incidentsPreviewTable").DataTable({
+        serverSide: false,
+        columnDefs: [
+            { orderSequence: ["asc", "desc"], targets: "_all" }
+        ],
+        order: [[1, "asc"]],
+        columns: [
+            { data: "RequestNr", title: "Request Number", name: "requestNr" },
+            { data: "OpenDate", title: "Open Date", name: "openDate" },
+            { data: "CloseDate", title: "Close Date", name: "closeDate" },
+            { data: "Type", title: "Type", name: "type", orderable: false },
+            { data: "Urgency", title: "Urgency", name: "urgency", orderable: false }
+        ]
+    });
+}
+
 function setLinksEnabledOrDisabled(table) {
     var links = $("#editLink, #detailsLink, #deleteLink");
 
@@ -45,8 +62,4 @@ function setLinksEnabledOrDisabled(table) {
     table.on("draw.dt", function (e, settings) {
         links.addClass("disabled");
     });
-}
-
-function importData() {
-
 }

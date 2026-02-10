@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
@@ -19,14 +20,18 @@ namespace CruscottoIncidenti.Infrastructure.Services
             if (isValidUserId)
                 UserId = userId;
 
-            bool isValidRole = Enum.TryParse(_userIdentity.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value, out Role role);
-            if (isValidRole)
-                Role = role;
+            var roleClaims = _userIdentity.Claims?.Where(c => c.Type == ClaimTypes.Role);
+            foreach (var claim in roleClaims)
+            {
+                bool isValidRole = Enum.TryParse(claim?.Value, out Role role);
+                if (isValidRole)
+                    Roles.Add(role);
+            }
         }
 
         public int UserId { get; }
 
-        public Role Role { get; }
+        public ICollection<Role> Roles { get; } = new List<Role>();
 
         public bool IsAuthenticated { get; }
 

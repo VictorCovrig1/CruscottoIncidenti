@@ -22,7 +22,6 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
         public async Task<Unit> Handle(DeleteIncidentCommand request, CancellationToken cancellationToken)
         {
             var incident = await _context.Incidents.FirstOrDefaultAsync(x => x.Id == request.Id);
-
             if (incident == null)
                 throw new CustomException($"Incident ({request.Id}) not found");
 

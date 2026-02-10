@@ -16,7 +16,7 @@ namespace CruscottoIncidenti.Application.Incidents.ViewModels
 
         public string ApplicationType { get; set; }
 
-        public int? Urgency { get; set; }
+        public int Urgency { get; set; }
 
         public string SubCause { get; set; }
 
@@ -26,15 +26,15 @@ namespace CruscottoIncidenti.Application.Incidents.ViewModels
 
         public string Solution { get; set; }
 
-        public int? IncidentTypeId { get; set; }
+        public int IncidentTypeId { get; set; }
 
-        public int? AmbitId { get; set; }
+        public int AmbitId { get; set; }
 
-        public int? OriginId { get; set; }
+        public int OriginId { get; set; }
 
-        public int? ThreatId { get; set; }
+        public int ThreatId { get; set; }
 
-        public int? ScenarioId { get; set; }
+        public int ScenarioId { get; set; }
 
         public string ThirdParty { get; set; }
     }

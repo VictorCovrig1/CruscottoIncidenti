@@ -1,4 +1,5 @@
-﻿using CruscottoIncidenti.Common;
+﻿using System.Collections.Generic;
+using CruscottoIncidenti.Common;
 
 namespace CruscottoIncidenti.Application.Interfaces
 {
@@ -6,7 +7,7 @@ namespace CruscottoIncidenti.Application.Interfaces
     {
         int UserId { get; }
 
-        Role Role { get; }
+        ICollection<Role> Roles { get; }
 
         bool IsAuthenticated { get; }
 

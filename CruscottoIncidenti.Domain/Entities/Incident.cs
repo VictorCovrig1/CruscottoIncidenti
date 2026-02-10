@@ -27,19 +27,19 @@ namespace CruscottoIncidenti.Domain.Entities
 
         public string Solution { get; set; }
 
-        public int? IncidentTypeId { get; set; }
+        public int IncidentTypeId { get; set; }
         public IncidentType IncidentType { get; set; }
 
-        public int? AmbitId { get; set; }
+        public int AmbitId { get; set; }
         public Ambit Ambit { get; set; }
 
-        public int? OriginId { get; set; }
+        public int OriginId { get; set; }
         public Origin Origin { get; set; }
 
-        public int? ThreatId { get; set; }
+        public int ThreatId { get; set; }
         public Threat Threat { get; set; }
 
-        public int? ScenarioId {  get; set; }
+        public int ScenarioId {  get; set; }
         public Scenario Scenario {  get; set; }
 
         public string ThirdParty { get; set; }

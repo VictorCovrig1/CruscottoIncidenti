@@ -137,7 +137,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Utils\PasswordHelper.cs" />
+    <Compile Include="Incidents\Commands\Common\IncidentComparer.cs" />
+    <Compile Include="Incidents\Commands\Common\IncidentHelper.cs" />
     <Compile Include="Incidents\Commands\DeleteIncidentCommand.cs" />
+    <Compile Include="Incidents\Commands\ImportIncidentCommand.cs" />
     <Compile Include="Incidents\Queries\Ambits\GetAmbitsByOriginQuery.cs" />
     <Compile Include="ApplicationBuilderExtensions.cs" />
     <Compile Include="ApplicationModule.cs" />
@@ -150,11 +153,12 @@
     <Compile Include="Incidents\Queries\Incidents\GetUpdateIncidentQuery.cs" />
     <Compile Include="Incidents\Queries\Incidents\GetIncidentsGridQuery.cs" />
     <Compile Include="Incidents\Validators\CreateIncidentValidator.cs" />
+    <Compile Include="Incidents\Validators\ImportIncidentsValidator.cs" />
     <Compile Include="Incidents\Validators\UpdateIncidentValidator.cs" />
     <Compile Include="Incidents\ViewModels\CreateIncidentViewModel.cs" />
     <Compile Include="Incidents\ViewModels\DetailedIncidentViewModel.cs" />
+    <Compile Include="Incidents\ViewModels\ImportIncidentViewModel.cs" />
     <Compile Include="Incidents\ViewModels\IncidentRowViewModel.cs" />
-    <Compile Include="Incidents\ViewModels\IncidentViewModel.cs" />
     <Compile Include="Incidents\ViewModels\UpdateIncidentViewModel.cs" />
     <Compile Include="Incidents\Queries\IncidentTypes\GetIncidentTypeByAmbitQuery.cs" />
     <Compile Include="Interfaces\ICruscottoIncidentiDbContext.cs" />

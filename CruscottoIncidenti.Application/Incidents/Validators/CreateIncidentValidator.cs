@@ -8,7 +8,8 @@ namespace CruscottoIncidenti.Application.Incidents.Validators
         public CreateIncidentValidator()
         {
             RuleFor(x => x.RequestNr)
-                .NotEmpty().WithMessage("Request Number can't be empty");
+                .NotEmpty().WithMessage("Request Number can't be empty")
+                .Length(17).WithMessage("Request Number must have 17 characters");
 
             RuleFor(x => x.Subsystem)
                 .NotEmpty().WithMessage("Subsystem can't be empty")

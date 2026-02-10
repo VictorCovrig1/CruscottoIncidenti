@@ -54,7 +54,8 @@ namespace CruscottoIncidenti
 
             bundles.Add(new ScriptBundle("~/bundles/datatables/incidents").Include(
                 "~/Scripts/custom/toastrSettings.js",
-                "~/Scripts/custom/DataTable/incidents.datatable.js"));
+                "~/Scripts/custom/DataTable/incidents.datatable.js",
+                "~/Scripts/custom/incidents.csv.processor.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/incidentCommon").Include(
                 "~/Scripts/custom/incidents.common.js"));

@@ -2,6 +2,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@inherits CruscottoIncidenti.Utils.CustomPageBase
+
 <ul class="nav nav-tabs mt-5" id="incidentsTabs" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="data-tab" data-bs-toggle="tab" data-bs-target="#data-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Data</button>
@@ -18,18 +20,21 @@
         </div>
         <div class="mt-3">
             <a href="@Url.Action("GetCreateIncident","Incident")" class="btn btn-success" id="createLink"><i class="fas fa-plus"></i> Add</a>
-            <button onclick="callIncidentAction('GetUpdateIncident');" class="btn btn-primary" id="editLink"><i class="fas fa-pen"></i> Edit</button>
-            <button onclick="callIncidentAction('GetDetailedIncident');" class="btn btn-secondary" id="detailsLink"><i class="fas fa-info"></i> Details</button>
-            <button onclick="callIncidentAction('GetDetailedIncident', true);" class="btn btn-danger" id="deleteLink"><i class="fas fa-trash"></i> Delete</button>
+            <button type="button" onclick="callIncidentAction('GetUpdateIncident');" class="btn btn-primary" id="editLink"><i class="fas fa-pen"></i> Edit</button>
+            <button type="button" onclick="callIncidentAction('GetDetailedIncident');" class="btn btn-secondary" id="detailsLink"><i class="fas fa-info"></i> Details</button>
+            <button type="button" onclick="callIncidentAction('GetDetailedIncident', true);" class="btn btn-danger" id="deleteLink"><i class="fas fa-trash"></i> Delete</button>
         </div>
     </div>
-    <div class="tab-pane fade p-5" id="import-tab-pane" role="tabpanel" aria-labelledby="import-tab" tabindex="0">
-       @using (Html.BeginForm("ImportIncident", "Incident", FormMethod.Post))
-        {
-            <input class="form-control mb-5" type="file" id="importedFile" name="importedFile">
-            <button type="submit" class="btn btn-primary">Import Data</button>
-        }
-    </div>
+    @if (CurrentUserService.Roles.Contains(Role.Operator))
+    {
+        <div class="tab-pane fade p-5" id="import-tab-pane" role="tabpanel" aria-labelledby="import-tab" tabindex="0">
+            <input class="form-control mb-3" type="file" id="importedFile" name="importedFile" accept=".csv" onchange="submitCSV();">
+            <button type="button" onclick="importData();" class="btn btn-primary" id="importData">Import Data</button>
+            <div class="mt-5">
+                <table id="incidentsPreviewTable" class="w-100 table table-striped table-bordered table-hover"></table>
+            </div>
+        </div>
+    }
 </div>
 
 
@@ -37,18 +42,77 @@
 @section Scripts {
     @Scripts.Render("~/bundles/dataTables/incidents")
 
-<script>
-    $(document).ready(function () {
-        renderIncidentsGrid();
-        $("#data-tab").on("click", () => {
-            $("#incidentsTable").DataTable().ajax.reload();
-        });
-    });
+    <script>
+        $(document).ready(function () {
+            renderIncidentsGrid();
+            renderPreviewIncidentswGrid();
 
-    function callIncidentAction(action, shouldBeDeleted = false) {
-        const id = $("#incidentsTable").DataTable().rows({ selected: true }).data()[0].Id;
-        const deleteParam = shouldBeDeleted ? "?shouldBeDeleted=true" : "";
-        window.location.href = `/Incident/${action}/${id}${deleteParam}`;
-    }
-</script>
+            $("#data-tab").on("click", () => {
+                $("#incidentsTable").DataTable().ajax.reload();
+            });
+
+            $("#importData").prop("disabled", true);
+        });
+
+        function callIncidentAction(action, shouldBeDeleted = false) {
+            const id = $("#incidentsTable").DataTable().rows({ selected: true }).data()[0].Id;
+            const deleteParam = shouldBeDeleted ? "?shouldBeDeleted=true" : "";
+            window.location.href = `/Incident/${action}/${id}${deleteParam}`;
+        }
+
+        var data;
+
+        function submitCSV() {
+            var files = $('#importedFile')[0].files;
+            var reader = new FileReader();
+            var table = $("#incidentsPreviewTable").DataTable();
+
+            if (files.length > 0) {
+                reader.onload = function (e) {
+                    var csvContent = e.target.result;
+                    data = processCSVData(csvContent);
+
+                    if (data) {
+                        table.clear();
+                        table.rows.add(data);
+                        table.draw();
+                        $("#importData").prop("disabled", false);
+                    }
+                };
+
+                reader.readAsText(files[0]);
+            }
+            else
+                clearTable();
+        }
+
+        function importData() {
+            $.ajax({
+                url: "/Incident/ImportIncidents",
+                method: "POST",
+                data: {
+                    incidents: {
+                        Incidents: data
+                    }
+                },
+                success: (data) => {
+                    clearTable();
+                    $("#importedFile").val("");
+                    $("#incidentsTable").DataTable().ajax.reload();
+                    $("#data-tab").tab("show");
+                    toastr["success"]("Incidents imported successfuly");
+                },
+                error: () => {
+                    toastr["error"]("Failed to import incidents");
+                }
+            });
+        }
+
+        function clearTable() {
+            var table = $("#incidentsPreviewTable").DataTable();
+            table.clear();
+            table.draw();
+            $("#importData").prop("disabled", true);
+        }
+    </script>
 }
