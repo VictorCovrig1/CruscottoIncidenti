@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Create";
 }
 
 @model CruscottoIncidenti.Application.Incidents.ViewModels.CreateIncidentViewModel
@@ -49,8 +50,14 @@
         <div class="row mt-3">
             <div class="col-6">
                 @Html.LabelFor(m => m.OpenDate, Constants.OpenDate, new { @class = "form-label fw-bold" })
-                @Html.TextBoxFor(m => m.OpenDate, new { @class = "form-control mw-100", data_provide = "datepicker", 
-                    @data_date_format = "dd/mm/yyyy", data_date_today_highlight = true, placeholder = "dd/mm/yyyy" })
+                @Html.TextBoxFor(m => m.OpenDate, new
+                {
+                    @class = "form-control mw-100",
+                    data_provide = "datepicker",
+                    @data_date_format = "dd/mm/yyyy",
+                    data_date_today_highlight = true,
+                    placeholder = "dd/mm/yyyy"
+                })
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.ScenarioId, Constants.Scenario, new { @class = "form-label fw-bold" })
@@ -62,8 +69,14 @@
         <div class="row mt-3">
             <div class="col-6">
                 @Html.LabelFor(m => m.CloseDate, Constants.CloseDate, new { @class = "form-label fw-bold" })
-                @Html.TextBoxFor(m => m.CloseDate, new { @class = "form-control mw-100", data_provide = "datepicker", 
-                    @data_date_format = "dd/mm/yyyy", data_date_today_highlight = true, placeholder = "dd/mm/yyyy" })
+                @Html.TextBoxFor(m => m.CloseDate, new
+                {
+                    @class = "form-control mw-100",
+                    data_provide = "datepicker",
+                    @data_date_format = "dd/mm/yyyy",
+                    data_date_today_highlight = true,
+                    placeholder = "dd/mm/yyyy"
+                })
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.OriginId, Constants.Origin, new { @class = "form-label fw-bold" })
@@ -147,4 +160,11 @@
 @section Scripts {
     @Scripts.Render("~/bundles/incidentCommon")
     @Scripts.Render("~/bundles/bootstrap-picker")
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <script type="text/javascript">
+            toastr.success("@ViewBag.ErrorMessage");
+        </script>
+    }
 }

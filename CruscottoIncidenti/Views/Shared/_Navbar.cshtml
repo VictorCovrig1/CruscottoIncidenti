@@ -4,7 +4,7 @@
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
     <div class="container">
-        @if (CurrentUserService.Roles.Contains(Role.Operator) || CurrentUserService.Roles.Contains(Role.User))
+        @if (CurrentUserService.Roles.Any(x => new Role[] { Role.Operator, Role.User }.Contains(x)))
         {
             @Html.ActionLink("Cruscotto Incidenti", "Index", "Incident", new { area = string.Empty }, new { @class = "navbar-brand" })
         }
@@ -18,25 +18,29 @@
         </button>
         <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
             <ul class="navbar-nav flex-grow-1">
-                @if (CurrentUserService.Roles.Contains(Role.Operator) || CurrentUserService.Roles.Contains(Role.User))
+                @if (CurrentUserService.Roles.Any(x => new Role[] { Role.Operator, Role.User }.Contains(x)))
                 {
                     <li>@Html.ActionLink("Incidents", "Index", "Incident", new { area = string.Empty }, new { @class = "nav-link" })</li>
                 }
-                else if (CurrentUserService.Roles.Contains(Role.Administrator))
+                @if (CurrentUserService.Roles.Contains(Role.Administrator))
                 {
                     <li>@Html.ActionLink("Users", "Index", "User", new { area = string.Empty }, new { @class = "nav-link" })</li>
                 }
             </ul>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    @CurrentUserService.UserName
-                </button>
-                <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Logout", "Logout", "Account", new { area = string.Empty }, new { @class = "dropdown-item" })</li>
-                </ul>
-            </div>
+            @if (!string.IsNullOrEmpty(CurrentUserService.UserName))
+            {
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        @CurrentUserService.UserName
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            @Html.ActionLink("Logout", "Logout", "Account", new { area = string.Empty }, new { @class = "dropdown-item" })
+                        </li>
+                    </ul>
+                </div>
+            }
         </div>
     </div>
 </nav>
 
- 

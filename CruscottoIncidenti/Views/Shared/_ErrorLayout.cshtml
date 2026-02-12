@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CruscottoIncidenti - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+</head>
+<body class="d-flex flex-column">
+    @Html.Partial("_Navbar")
+    <main class="flex-grow-1 d-flex align-items-center justify-content-center">
+        @RenderBody()
+    </main>
+
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>

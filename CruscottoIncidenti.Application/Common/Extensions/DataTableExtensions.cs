@@ -31,6 +31,7 @@ namespace CruscottoIncidenti.Application.Common
                     expression, Expression.Quote(Expression.Lambda(selector, parameter)));
                 count++;
             }
+
             return count > 0 ? source.Provider.CreateQuery<T>(expression) : source;
         }
 
@@ -40,9 +41,7 @@ namespace CruscottoIncidenti.Application.Common
             IEnumerable<string> columnNames = parameters.Columns.Where(x => x.Searchable).Select(x => x.Data);
 
             if (string.IsNullOrWhiteSpace(searchText) || !columnNames.Any())
-            {
                 return source;
-            }
 
             ParameterExpression parameterExpression = Expression.Parameter(typeof(T), "x");
             Expression predicateBuilder = Expression.Constant(false);
@@ -54,9 +53,7 @@ namespace CruscottoIncidenti.Application.Common
                 MemberExpression memberExpression = Expression.Property(parameterExpression, columnName);
 
                 if (memberExpression.Type != typeof(string))
-                {
                     continue;
-                }
 
                 // (x.Member.ToUpper())
                 Expression caseInsentitiveMemberExpression = Expression.Call(
@@ -87,34 +84,16 @@ namespace CruscottoIncidenti.Application.Common
         }
 
         public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource> source, bool condition, Func<TSource, bool> predicate)
-        {
-            if (condition)
-                return source.Where(predicate);
-            else
-                return source;
-        }
+            => condition ? source.Where(predicate) : source;
 
         public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource> source, bool condition, Func<TSource, int, bool> predicate)
-        {
-            if (condition)
-                return source.Where(predicate);
-            else
-                return source;
-        }
+            => condition ? source.Where(predicate) : source;
 
         public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> source, bool condition, Expression<Func<TSource, bool>> predicate)
-        {
-            return condition
-                ? source.Where(predicate)
-                : source;
-        }
+            => condition ? source.Where(predicate) : source;
 
         public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> source, bool condition, Expression<Func<TSource, int, bool>> predicate)
-        {
-            return condition
-                ? source.Where(predicate)
-                : source;
-        }
+            => condition ? source.Where(predicate) : source;
 
         static IEnumerable<TSource> DistinctByImpl<TSource, TKey>(IEnumerable<TSource> source,
               Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
@@ -123,9 +102,7 @@ namespace CruscottoIncidenti.Application.Common
             foreach (TSource element in source)
             {
                 if (knownKeys.Add(keySelector(element)))
-                {
                     yield return element;
-                }
             }
         }
     }

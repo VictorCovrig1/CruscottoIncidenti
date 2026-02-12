@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Update";
 }
 
 @model CruscottoIncidenti.Application.Incidents.ViewModels.UpdateIncidentViewModel
@@ -53,8 +54,14 @@
         <div class="row mt-3">
             <div class="col-6">
                 @Html.LabelFor(m => m.OpenDate, Constants.OpenDate, new { @class = "form-label fw-bold" })
-                @Html.TextBoxFor(m => m.OpenDateString, new { @class = "form-control mw-100", data_provide = "datepicker", 
-                    @data_date_format = "dd/mm/yyyy", data_date_today_highlight = true, placeholder = "dd/mm/yyyy" })
+                @Html.TextBoxFor(m => m.OpenDateString, new
+                {
+                    @class = "form-control mw-100",
+                    data_provide = "datepicker",
+                    @data_date_format = "dd/mm/yyyy",
+                    data_date_today_highlight = true,
+                    placeholder = "dd/mm/yyyy"
+                })
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.ScenarioId, Constants.Scenario, new { @class = "form-label fw-bold" })
@@ -66,8 +73,14 @@
         <div class="row mt-3">
             <div class="col-6">
                 @Html.LabelFor(m => m.CloseDate, Constants.CloseDate, new { @class = "form-label fw-bold" })
-                @Html.TextBoxFor(m => m.CloseDateString, new { @class = "form-control mw-100", data_provide = "datepicker", 
-                    @data_date_format = "dd/mm/yyyy", data_date_today_highlight = true, placeholder = "dd/mm/yyyy" })
+                @Html.TextBoxFor(m => m.CloseDateString, new
+                {
+                    @class = "form-control mw-100",
+                    data_provide = "datepicker",
+                    @data_date_format = "dd/mm/yyyy",
+                    data_date_today_highlight = true,
+                    placeholder = "dd/mm/yyyy"
+                })
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.OriginId, Constants.Origin, new { @class = "form-label fw-bold" })

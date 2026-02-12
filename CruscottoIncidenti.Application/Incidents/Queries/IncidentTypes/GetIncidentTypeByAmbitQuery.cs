@@ -31,9 +31,7 @@ namespace CruscottoIncidenti.Application.Incidents.Queries.IncidentTypes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.Id == request.AmbitId);
 
-            return ambit.AmbitToTypes.ToList()
-                .ToDictionary(k => k.TypeId
-                .ToString(), v => v.Type.Name);
+            return ambit.AmbitToTypes.ToDictionary(k => k.TypeId.ToString(), v => v.Type.Name);
         }
     }
 }

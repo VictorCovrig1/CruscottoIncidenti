@@ -12,25 +12,19 @@ using MediatR;
 
 namespace CruscottoIncidenti.Application.Incidents.Commands
 {
-    public class ImportIncidentHandler : IRequestHandler<ImportIncidentsViewModel, Unit>
+    public class ImportIncidentHandler : IRequestHandler<ImportIncidentsViewModel, List<string>>
     {
         private readonly ICruscottoIncidentiDbContext _context;
         private ICurrentUserService _currentUserService;
-        private IEqualityComparer<CreateIncidentViewModel> _comparer;
 
-        public ImportIncidentHandler(ICruscottoIncidentiDbContext context, 
-            ICurrentUserService currentUserService, IEqualityComparer<CreateIncidentViewModel> comparer)
+        public ImportIncidentHandler(ICruscottoIncidentiDbContext context, ICurrentUserService currentUserService)
         {
             _context = context;
             _currentUserService = currentUserService;
-            _comparer = comparer;
         }
 
-        public async Task<Unit> Handle(ImportIncidentsViewModel request, CancellationToken cancellationToken)
+        public async Task<List<string>> Handle(ImportIncidentsViewModel request, CancellationToken cancellationToken)
         {
-            var existentRequestNumbers = _context.Incidents.Select(x => x.RequestNr);
-            var newIncidents = request.Incidents.Where(x => !existentRequestNumbers.Contains(x.RequestNr)).Distinct(_comparer);
-
             // Scenarios
             var scenariosIds = await _context.Scenarios
                 .AsNoTracking()
@@ -88,6 +82,10 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
             if (invalidTypes.Count() > 0)
                 throw new CustomException($"Incident Types ({string.Join(",", invalidTypes)}) not found");
 
+            // Select unique elements
+            var existentRequestNumbers = _context.Incidents.Select(x => x.RequestNr);
+            var newIncidents = request.Incidents.Where(x => !existentRequestNumbers.Contains(x.RequestNr)).ToList();
+
             foreach (var newIncident in newIncidents)
             {
                 IncidentHelper.InsertIncidentInContext(_currentUserService.UserId, newIncident, _context.Incidents);
@@ -95,7 +93,8 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            // Return inserted incidents
+            return newIncidents.Select(x => x.RequestNr).ToList();
         }
     }
 }

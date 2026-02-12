@@ -13,10 +13,12 @@ using CruscottoIncidenti.Application.Incidents.Validators;
 using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.TableParameters;
 using CruscottoIncidenti.Common;
+using CruscottoIncidenti.Filters;
 using CruscottoIncidenti.Utils;
 
 namespace CruscottoIncidenti.Controllers
 {
+    [ClaimsAuthorize(Role.Operator, Role.User)]
     public class IncidentController : BaseController
     {
         [HttpGet]
@@ -37,9 +39,14 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpGet]
+        [ClaimsAuthorize(Role.Operator)]
         public async Task<ActionResult> GetDetailedIncident(int id, bool shouldBeDeleted = false)
         {
             var incident = await Mediator.Send(new GetDetailedIncidentQuery { Id = id });
+
+            if(incident == null)
+                return RedirectToAction(nameof(ErrorController.NotFound), "Error");
+
             ViewBag.ShouldBeDeleted = shouldBeDeleted;
 
             return View("DetailedIncident", incident);
@@ -95,15 +102,21 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpGet]
+        [ClaimsAuthorize(Role.Operator)]
         public async Task<ActionResult> GetUpdateIncident(int id)
         {
             var incident = await Mediator.Send(new GetUpdateIncidentQuery { Id = id });
+
+            if (incident == null)
+                return RedirectToAction(nameof(ErrorController.NotFound), "Error");
+
             await GetSelectListItems(incident.OriginId, incident.AmbitId);
 
             return View("UpdateIncident", incident);
         }
 
         [HttpPost]
+        [ClaimsAuthorize(Role.Operator)]
         public async Task<ActionResult> UpdateIncident(UpdateIncidentViewModel incident)
         {
             var validator = new UpdateIncidentValidator();
@@ -133,6 +146,7 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpPost]
+        [ClaimsAuthorize(Role.Operator)]
         public async Task<ActionResult> DeleteIncident(int id)
         {
             try
@@ -149,6 +163,7 @@ namespace CruscottoIncidenti.Controllers
         }
 
         [HttpPost]
+        [ClaimsAuthorize(Role.Operator)]
         public async Task<ActionResult> ImportIncidents(ImportIncidentsViewModel incidents)
         {
             //var validator = new ImportIncidentsValidator();
@@ -168,9 +183,9 @@ namespace CruscottoIncidenti.Controllers
             //    }
             //}
 
-            await Mediator.Send(incidents);
+            var insertedIncidents = await Mediator.Send(incidents);
 
-            return RedirectToAction("Index");
+            return Json(insertedIncidents);
         }
 
         private async Task GetSelectListItems(int? originId, int? ambitId)

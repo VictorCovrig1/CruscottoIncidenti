@@ -9,13 +9,15 @@ using CruscottoIncidenti.Application.User.Commands;
 using CruscottoIncidenti.Application.User.Queries;
 using CruscottoIncidenti.Application.Users.Validators;
 using CruscottoIncidenti.Application.Users.ViewModels;
+using CruscottoIncidenti.Common;
+using CruscottoIncidenti.Filters;
 using CruscottoIncidenti.Utils;
 using FluentValidation;
 using static CruscottoIncidenti.Common.Constants;
 
 namespace CruscottoIncidenti.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [ClaimsAuthorize(Role.Administrator)]
     public class UserController : BaseController
     {
         [HttpGet]
@@ -143,9 +145,6 @@ namespace CruscottoIncidenti.Controllers
             }
 
             ViewBag.AllRoles = selectRoles;
-
-            //if (ModelState.ContainsKey("Roles"))
-            //    viewUser.Roles = new List<int>();
 
             return PartialView("_UpdateUserModal", user);
         }

@@ -2,9 +2,9 @@
 {
     public enum Role
     {
-        Administrator = 0,
-        Operator = 1,
-        User = 2
+        Administrator = 1,
+        Operator = 2,
+        User = 3
     }
 
     public enum RequestType

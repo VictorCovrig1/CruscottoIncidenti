@@ -40,7 +40,8 @@ namespace CruscottoIncidenti.Application.Incidents.Queries.Incidents
                     CloseDateDT = x.CloseDate,
                     Type = x.Type,
                     Urgency = x.Urgency
-                }).ToListAsync(cancellationToken);
+                })
+                .ToListAsync(cancellationToken);
         }
     }
 }

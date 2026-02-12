@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CruscottoIncidenti.Application.User.Queries;
 using CruscottoIncidenti.Application.Users.Validators;
+using CruscottoIncidenti.Common;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -62,7 +64,9 @@ namespace CruscottoIncidenti.Controllers
                 var authManager = context.Authentication;
                 authManager.SignIn(new AuthenticationProperties { IsPersistent = false }, claimsIdentity);
 
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return userModel.Roles.Select(x => x.Id).Any(x => x == (int)Role.Administrator)
+                    ? RedirectToAction(nameof(UserController.Index), "User") 
+                    : RedirectToAction(nameof(IncidentController.Index), "Incident");
             }
         }
 

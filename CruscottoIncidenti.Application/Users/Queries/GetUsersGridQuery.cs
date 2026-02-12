@@ -37,7 +37,8 @@ namespace CruscottoIncidenti.Application.User.Queries
                     Username = x.UserName,
                     Email = x.Email,
                     IsEnabled = x.IsEnabled,
-                }).ToListAsync(cancellationToken);
+                })
+                .ToListAsync(cancellationToken);
         }
     }
 }

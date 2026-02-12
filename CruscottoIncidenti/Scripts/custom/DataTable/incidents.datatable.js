@@ -43,7 +43,13 @@ function renderPreviewIncidentswGrid() {
             { data: "OpenDate", title: "Open Date", name: "openDate" },
             { data: "CloseDate", title: "Close Date", name: "closeDate" },
             { data: "Type", title: "Type", name: "type", orderable: false },
-            { data: "Urgency", title: "Urgency", name: "urgency", orderable: false }
+            { data: "Urgency", title: "Urgency", name: "urgency", orderable: false },
+            {
+                data: "IsInserted", title: "Inserted", name: "isInserted", orderable: false,
+                render: function (data, type, full, meta) {
+                    return "<i class='fas fa-minus-circle text-secondary'></i>"
+                }
+            }
         ]
     });
 }

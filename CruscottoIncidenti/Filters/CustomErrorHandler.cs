@@ -19,8 +19,8 @@ namespace CruscottoIncidenti.Filters
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 {
                     area = string.Empty,
-                    controller = "Home",
-                    action = "Error"
+                    controller = "Error",
+                    action = "InternalError"
                 }));
 
                 UpdateFilterContext(filterContext);

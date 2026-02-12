@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using CruscottoIncidenti.Domain.Entities;
@@ -45,86 +44,58 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
             {
                 FullName = "Covrig Victor",
                 Email = "admin@admin.com",
-                UserName = "CRME001",
+                UserName = "admin",
                 IsEnabled = true,
-                Password = "f1490065b81c7f1e406793b5c89994d5c21123ebba42a81a8dfcbfdf77a57d6e",
+                Password = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
             };
 
-            if(!adminUser.UserRoles.Any(x => 
-                x.UserId == adminUser.Id && x.RoleId == adminRole.Id))
+            adminUser.UserRoles.Add(new UserToRole
             {
-                adminUser.UserRoles.Add(new UserToRole
-                {
-                    User = adminUser,
-                    UserId = adminUser.Id,
-                    Role = adminRole,
-                    RoleId = adminRole.Id
-                });
-            }
+                User = adminUser,
+                Role = adminRole,
+            });
 
-            if (!adminUser.UserRoles.Any(x => 
-                x.UserId == adminUser.Id && x.RoleId == operatorRole.Id))
+            adminUser.UserRoles.Add(new UserToRole
             {
-                adminUser.UserRoles.Add(new UserToRole
-                {
-                    User = adminUser,
-                    UserId = adminUser.Id,
-                    Role = operatorRole,
-                    RoleId = operatorRole.Id
-                });
-            }
+                User = adminUser,
+                Role = operatorRole,
+            });
 
-            if (!adminUser.UserRoles.Any(x => 
-                x.UserId == adminUser.Id && x.RoleId == userRole.Id))
+            adminUser.UserRoles.Add(new UserToRole
             {
-                adminUser.UserRoles.Add(new UserToRole
-                {
-                    User = adminUser,
-                    UserId = adminUser.Id,
-                    Role = userRole,
-                    RoleId = userRole.Id
-                });
-            }
+                User = adminUser,
+                Role = userRole,
+            });
 
             if (!context.Users.Any(x => x.Email == adminUser.Email))
                 context.Users.AddOrUpdate(adminUser);
 
             var origin = new Origin()
             {
-                Name = "Applicativa"
+                Name = "Esterna"
             };
 
             var ambit = new Ambit()
             {
-                Name = "Software"
+                Name = "Funzionalità"
             };
 
             var incidentType = new IncidentType()
             {
-                Name = "Saturazione risorse"
+                Name = "Terze Parti"
             };
 
-            if(!origin.OriginToAmbits.Any(x => x.AmbitId == ambit.Id && x.OriginId == origin.Id))
+            origin.OriginToAmbits.Add(new OriginToAmbit()
             {
-                origin.OriginToAmbits.Add(new OriginToAmbit()
-                {
-                    Origin = origin,
-                    OriginId = origin.Id,
-                    Ambit = ambit,
-                    AmbitId = ambit.Id,
-                });
-            }
+                Origin = origin,
+                Ambit = ambit,
+            });
 
-            if (!ambit.AmbitToTypes.Any(x => x.AmbitId == ambit.Id && x.TypeId == incidentType.Id))
+            ambit.AmbitToTypes.Add(new AmbitToType()
             {
-                ambit.AmbitToTypes.Add(new AmbitToType()
-                {
-                    Type = incidentType,
-                    TypeId = incidentType.Id,
-                    Ambit = ambit,
-                    AmbitId = ambit.Id,
-                });
-            }
+                Type = incidentType,
+                Ambit = ambit
+            });
 
             var threat = new Threat()
             {
@@ -139,7 +110,7 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
             var incident = new Incident()
             {
                 Created = DateTime.Now,
-                CreatedBy = adminUser.Id,
+                CreatedBy = 1,
                 RequestNr = "HOST0000000000001",
                 Subsystem = "AA",
                 OpenDate = DateTime.Now,
@@ -149,15 +120,10 @@ namespace CruscottoIncidenti.Infrastructure.Migrations
                 SubCause = "Problem with login",
                 ProblemSumary = "Cannot login into application",
                 ProblemDescription = "Some description",
-                IncidentTypeId = incidentType.Id,
                 IncidentType = incidentType,
-                AmbitId = ambit.Id,
                 Ambit = ambit,
-                OriginId = origin.Id,
                 Origin = origin,
-                ThreatId = threat.Id,
                 Threat = threat,
-                ScenarioId = scenario.Id,
                 Scenario = scenario,
                 ThirdParty = "Microsoft",
                 IsDeleted = false

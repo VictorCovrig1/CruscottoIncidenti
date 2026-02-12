@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Common.Exceptions;
@@ -35,11 +36,20 @@ namespace CruscottoIncidenti.Application.Incidents.Commands.Common
                 ApplicationType = newIncident.ApplicationType
             };
 
-            if (DateTime.TryParse(newIncident.OpenDate, out DateTime openDate))
-                incident.OpenDate = openDate;
+            var acceptableFormats = new string[] { "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy" };
 
-            if (DateTime.TryParse(newIncident.CloseDate, out DateTime closeDate))
+            if (DateTime.TryParseExact(newIncident.OpenDate, acceptableFormats, 
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime openDate))
+            {
+                incident.OpenDate = openDate;
+            }
+                
+
+            if (DateTime.TryParseExact(newIncident.CloseDate, acceptableFormats,
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime closeDate))
+            {
                 incident.CloseDate = closeDate;
+            }  
 
             contextIncidents.Add(incident);
         }
