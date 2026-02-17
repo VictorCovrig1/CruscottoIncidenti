@@ -86,20 +86,21 @@
 
     $("#changePassword").on('change', function (e) {
         checkIfPasswordChangeIsEnable();
-        if($(this).not(':checked')) {
-            $("#Password, #ConfirmPassword").removeClass("input-validation-error");
+        if ($(this).not(':checked')) {
+            const passwordFields = $("#Password, #ConfirmPassword");
+            passwordFields.removeClass("input-validation-error");
 
-            $("#Password, #ConfirmPassword")
+            passwordFields
                 .closest(".mb-3, .form-group")
                 .find(".field-validation-error")
                 .hide();
+
+            passwordFields.val("");
         }
     });
 
     function checkIfPasswordChangeIsEnable() {
-        if ($('#changePassword').is(':checked'))
-            $("#Password, #ConfirmPassword").prop("disabled", false);
-        else
-            $("#Password, #ConfirmPassword").prop("disabled", true);
+        const isDisabled = !$('#changePassword').is(':checked');
+        $("#Password, #ConfirmPassword").prop("disabled", isDisabled);
     }
 </script>

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -7,10 +6,7 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using AutofacSerilogIntegration;
-using AutoMapper.Contrib.Autofac.DependencyInjection;
 using CruscottoIncidenti.Application;
-using CruscottoIncidenti.Application.Incidents.Commands.Common;
-using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Infrastructure.Persistance;
 using CruscottoIncidenti.Infrastructure.Services;
@@ -54,15 +50,14 @@ namespace CruscottoIncidenti
 
             // Register Application services.
             builder.AddMediatR(typeof(ApplicationModule).Assembly);
-            builder.AddAutoMapper(typeof(ApplicationModule).Assembly);
 
             // Register Infrastructure services.
             builder.RegisterType<CruscottoIncidentiDbContext>()
                 .As<ICruscottoIncidentiDbContext>().InstancePerRequest();
+
+            // Register WebUI services.
             builder.RegisterType<DateTimeService>().As<IDateTime>().InstancePerDependency();
             builder.RegisterType<CurrentUserService>().As<ICurrentUserService>().InstancePerRequest();
-            //builder.RegisterType<CreateIncidentValidator>().As<IValidator<CreateIncidentViewModel>>().InstancePerRequest();
-            builder.RegisterType<IncidentComparer>().As<IEqualityComparer<CreateIncidentViewModel>>().InstancePerRequest();
 
             // Register logging
             string logFileAbsolutePath = Path.Combine(Server.MapPath("~"), "Logs", "Log-.json");

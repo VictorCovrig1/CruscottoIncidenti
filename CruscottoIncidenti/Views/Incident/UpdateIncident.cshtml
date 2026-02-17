@@ -46,7 +46,7 @@
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.ThreatId, Constants.Threat, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.ThreatId, (IEnumerable<SelectListItem>)ViewBag.Threats, new { @class = "form-control mw-100" })
+                @Html.DropDownListFor(m => m.ThreatId, (IEnumerable<SelectListItem>)ViewBag.Threats, new { @class = "selectpicker form-control mw-100" })
                 @Html.ValidationMessageFor(m => m.ThreatId, string.Empty, new { @class = "text-danger" })
             </div>
         </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.ScenarioId, Constants.Scenario, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.ScenarioId, (IEnumerable<SelectListItem>)ViewBag.Scenarios, new { @class = "form-control mw-100" })
+                @Html.DropDownListFor(m => m.ScenarioId, (IEnumerable<SelectListItem>)ViewBag.Scenarios, new { @class = "selectpicker form-control mw-100" })
                 @Html.ValidationMessageFor(m => m.ScenarioId, string.Empty, new { @class = "text-danger" })
             </div>
         </div>
@@ -85,7 +85,7 @@
             <div class="col-6">
                 @Html.LabelFor(m => m.OriginId, Constants.Origin, new { @class = "form-label fw-bold" })
                 @Html.DropDownListFor(m => m.OriginId, (IEnumerable<SelectListItem>)ViewBag.Origins,
-                    new { @class = "form-control mw-100", @onchange = $"getAmbitsByOrigin();", @id = "origins" })
+                    new { @class = "selectpicker form-control mw-100", @onchange = $"getAmbitsByOrigin();", @id = "origins" })
                 @Html.ValidationMessageFor(m => m.OriginId, string.Empty, new { @class = "text-danger" })
             </div>
         </div>
@@ -93,13 +93,13 @@
         <div class="row mt-3">
             <div class="col-6">
                 @Html.LabelFor(m => m.Type, Constants.Type, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.TypeInt, (IEnumerable<SelectListItem>)ViewBag.Types, new { @class = "form-control mw-100" })
+                @Html.DropDownListFor(m => m.TypeInt, (IEnumerable<SelectListItem>)ViewBag.Types, new { @class = "selectpicker form-control mw-100" })
                 @Html.ValidationMessageFor(m => m.TypeInt, string.Empty, new { @class = "text-danger" })
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.AmbitId, Constants.Ambit, new { @class = "form-label fw-bold" })
                 @Html.DropDownListFor(m => m.AmbitId, (IEnumerable<SelectListItem>)ViewBag.Ambits,
-                    new { @class = "form-control mw-100", @onchange = "getIncidentTypeByAmbit();", @id = "ambits" })
+                    new { @class = "selectpicker form-control mw-100", @onchange = "getIncidentTypeByAmbit();", @id = "ambits" })
                 @Html.ValidationMessageFor(m => m.AmbitId, string.Empty, new { @class = "text-danger" })
             </div>
         </div>
@@ -107,12 +107,12 @@
         <div class="row mt-3">
             <div class="col-6">
                 @Html.LabelFor(m => m.Urgency, Constants.Urgency, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.UrgencyInt, (IEnumerable<SelectListItem>)ViewBag.Urgencies, new { @class = "form-control mw-100" })
+                @Html.DropDownListFor(m => m.UrgencyInt, (IEnumerable<SelectListItem>)ViewBag.Urgencies, new { @class = "selectpicker form-control mw-100" })
                 @Html.ValidationMessageFor(m => m.UrgencyInt, string.Empty, new { @class = "text-danger" })
             </div>
             <div class="col-6">
                 @Html.LabelFor(m => m.IncidentTypeId, Constants.IncidentType, new { @class = "form-label fw-bold" })
-                @Html.DropDownListFor(m => m.IncidentTypeId, (IEnumerable<SelectListItem>)ViewBag.IncidentTypes, new { @class = "form-control mw-100", @id = "types" })
+                @Html.DropDownListFor(m => m.IncidentTypeId, (IEnumerable<SelectListItem>)ViewBag.IncidentTypes, new { @class = "selectpicker form-control mw-100", @id = "types" })
                 @Html.ValidationMessageFor(m => m.IncidentTypeId, string.Empty, new { @class = "text-danger" })
             </div>
         </div>

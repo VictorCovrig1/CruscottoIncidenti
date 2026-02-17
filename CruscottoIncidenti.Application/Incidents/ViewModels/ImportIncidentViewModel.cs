@@ -3,7 +3,7 @@ using MediatR;
 
 namespace CruscottoIncidenti.Application.Incidents.ViewModels
 {
-    public class ImportIncidentsViewModel : IRequest<List<string>>
+    public class ImportIncidentsViewModel : IRequest<(string, List<string>)>
     {
         public List<CreateIncidentViewModel> Incidents { get; set; }
     }

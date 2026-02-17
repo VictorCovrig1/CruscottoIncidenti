@@ -22,7 +22,7 @@ namespace CruscottoIncidenti.Application.Incidents.Commands.Common
                 RequestNr = newIncident.RequestNr,
                 Subsystem = newIncident.Subsystem,
                 Type = Enum.GetName(typeof(RequestType), newIncident.Type),
-                Urgency = Enum.GetName(typeof(Urgency), newIncident.Type),
+                Urgency = Enum.GetName(typeof(Urgency), newIncident.Urgency),
                 SubCause = newIncident.SubCause,
                 ProblemSumary = newIncident.ProblemSummary,
                 ProblemDescription = newIncident.ProblemDescription,

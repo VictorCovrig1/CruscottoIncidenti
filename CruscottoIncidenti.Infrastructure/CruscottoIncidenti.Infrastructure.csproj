@@ -37,9 +37,6 @@
     <Reference Include="Autofac, Version=5.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.5.2.0\lib\net461\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -149,8 +146,6 @@
     <Compile Include="Persistance\Configurations\ScenarioConfiguration.cs" />
     <Compile Include="Persistance\Configurations\ThreatConfiguration.cs" />
     <Compile Include="Persistance\Configurations\UserConfiguration.cs" />
-    <Compile Include="InfrastructureBuilderExtensions.cs" />
-    <Compile Include="InfrastructureModule.cs" />
     <Compile Include="Persistance\CruscottoIncidentiDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CurrentUserService.cs" />

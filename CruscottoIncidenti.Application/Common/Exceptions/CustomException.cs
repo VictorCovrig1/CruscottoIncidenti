@@ -6,7 +6,7 @@ namespace CruscottoIncidenti.Application.Common.Exceptions
     {
         public CustomException() : base() {}
 
-        public CustomException(string friendlyMessage) : base() 
+        public CustomException(string friendlyMessage) : base()
             => FriendlyMessage = friendlyMessage;
 
         public string FriendlyMessage { get; private set; }

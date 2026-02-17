@@ -12,9 +12,7 @@ namespace CruscottoIncidenti.Filters
         private readonly IEnumerable<Role> claimValues;
 
         public ClaimsAuthorizeAttribute(params Role[] values)
-        {
-            claimValues = values;
-        }
+            => claimValues = values;
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
@@ -22,13 +20,9 @@ namespace CruscottoIncidenti.Filters
             bool isAuthorized = claimValues.Any(item => user.HasClaim(ClaimTypes.Role, item.ToString()));
 
             if (user != null && isAuthorized)
-            {
                 base.OnAuthorization(filterContext);
-            }
             else
-            {
-                this.HandleUnauthorizedRequest(filterContext);
-            }
+                HandleUnauthorizedRequest(filterContext);
         }
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)

@@ -16,30 +16,30 @@ namespace CruscottoIncidenti.Application.Incidents.ViewModels
         public DateTime? OpenDate { get; set; }
 
         public string OpenDateString
-        { 
-            get 
-            { 
+        {
+            get
+            {
                 return OpenDate != null ? OpenDate?.ToString("dd/MM/yyyy") : null;
-            } 
+            }
             set
-            { 
-                OpenDate = DateTime.TryParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture, 
+            {
+                OpenDate = DateTime.TryParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out DateTime openDate)
                     ? (DateTime?)openDate
                     : null;
-            } 
+            }
         }
 
         public DateTime? CloseDate { get; set; }
 
         public string CloseDateString
         {
-            get 
-            { 
+            get
+            {
                 return CloseDate != null ? CloseDate?.ToString("dd/MM/yyyy") : null;
             }
             set
-            { 
+            {
                 CloseDate = DateTime.TryParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out DateTime closeDate)
                     ? (DateTime?)closeDate
@@ -49,14 +49,14 @@ namespace CruscottoIncidenti.Application.Incidents.ViewModels
 
         public string Type { get; set; }
 
-        public int TypeInt 
-        { 
-            get 
+        public int TypeInt
+        {
+            get
             {
-                return Enum.TryParse(Type, out RequestType type) ? (int)type : 0; 
-            } 
+                return Enum.TryParse(Type, out RequestType type) ? (int)type : 0;
+            }
             set
-            { 
+            {
                 Type = Enum.GetName(typeof(RequestType), value);
             }
         }
@@ -65,13 +65,13 @@ namespace CruscottoIncidenti.Application.Incidents.ViewModels
 
         public string Urgency { get; set; }
 
-        public int UrgencyInt 
+        public int UrgencyInt
         {
-            get 
-            { 
-                return Enum.TryParse(Urgency, out Urgency urgency) ? (int)urgency : 0; 
-            } 
-            set 
+            get
+            {
+                return Enum.TryParse(Urgency, out Urgency urgency) ? (int)urgency : 0;
+            }
+            set
             {
                 Urgency = Enum.GetName(typeof(Urgency), value);
             }

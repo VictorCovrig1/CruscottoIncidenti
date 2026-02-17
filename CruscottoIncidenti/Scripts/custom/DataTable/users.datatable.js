@@ -68,6 +68,7 @@ function createUserAction() {
             $("#userModalContent").html(data);
             $("#modal").modal("show");
             $(".selectpicker").selectpicker();
+            clearValidationMessageEvent();
             $(".modal-dialog").removeClass("modal-lg");
         },
         error: () => {
@@ -87,6 +88,7 @@ function editUserAction() {
             $("#userModalContent").html(data);
             $("#modal").modal("show");
             $(".selectpicker").selectpicker();
+            clearValidationMessageEvent();
             $(".modal-dialog").addClass("modal-lg");
         },
         error: () => {
@@ -111,6 +113,7 @@ function detailedUserAction(shouldBeDeleted = false) {
             $("#userModalContent").html(data);
             $("#modal").modal("show");
             $('.selectpicker').selectpicker();
+            clearValidationMessageEvent();
             $(".modal-dialog").removeClass("modal-lg");
         },
         error: () => {
@@ -127,6 +130,7 @@ function onSuccessModalAction(data) {
     }
     else {
         $('.selectpicker').selectpicker();
+        clearValidationMessageEvent();
         toastr["error"]("Action failed");
     }
 }

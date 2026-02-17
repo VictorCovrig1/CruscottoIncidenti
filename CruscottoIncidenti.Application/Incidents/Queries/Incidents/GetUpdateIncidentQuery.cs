@@ -29,7 +29,7 @@ namespace CruscottoIncidenti.Application.Incidents.Queries.Incidents
                 .Include(x => x.Ambit)
                 .Include(x => x.IncidentType)
                 .AsNoTracking()
-                .Where(x => x.Id == request.Id)
+                .Where(x => x.Id == request.Id && !x.IsDeleted)
                 .Select(x => new UpdateIncidentViewModel
                 {
                     Id = x.Id,

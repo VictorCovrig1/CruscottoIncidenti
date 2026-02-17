@@ -55,12 +55,6 @@
     <Reference Include="AutofacSerilogIntegration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d672c67444a98ac9, processorArchitecture=MSIL">
       <HintPath>..\packages\AutofacSerilogIntegration.4.0.0\lib\net461\AutofacSerilogIntegration.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper.Contrib.Autofac.DependencyInjection, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.Contrib.Autofac.DependencyInjection.3.1.0\lib\netstandard2.0\AutoMapper.Contrib.Autofac.DependencyInjection.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -339,6 +333,7 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\custom\common.js" />
     <Content Include="Scripts\custom\toastrSettings.js" />
     <Content Include="Scripts\custom\DataTable\incidents.datatable.js" />
     <Content Include="Scripts\custom\DataTable\users.datatable.js" />

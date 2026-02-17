@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using AutoMapper.Contrib.Autofac.DependencyInjection;
 using MediatR.Extensions.Autofac.DependencyInjection;
 
 namespace CruscottoIncidenti.Application
@@ -9,7 +8,6 @@ namespace CruscottoIncidenti.Application
         protected override void Load(ContainerBuilder builder)
         {
             builder.AddMediatR(typeof(ApplicationModule).Assembly);
-            builder.AddAutoMapper(typeof(ApplicationModule).Assembly);
         }
     }
 }

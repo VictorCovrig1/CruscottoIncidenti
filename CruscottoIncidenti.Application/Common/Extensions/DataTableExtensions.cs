@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using CruscottoIncidenti.Application.TableParameters;
@@ -33,6 +34,68 @@ namespace CruscottoIncidenti.Application.Common
             }
 
             return count > 0 ? source.Provider.CreateQuery<T>(expression) : source;
+        }
+
+        public static IQueryable<T> SearchByDate<T>(this IQueryable<T> source, DataTablesParameters parameters)
+        {
+            string searchText = parameters.Search.Value;
+            IEnumerable<string> columnNames = parameters.Columns.Where(x => x.Searchable).Select(x => x.Data);
+
+            if (string.IsNullOrWhiteSpace(searchText) || !columnNames.Any())
+                return source;
+
+            ParameterExpression parameterExpression = Expression.Parameter(typeof(T), "x");
+            Expression predicateBuilder = Expression.Constant(false);
+            ConstantExpression constantExpression = Expression.Constant(searchText.ToUpper().Trim());
+
+            foreach (string columnName in columnNames)
+            {
+                // (x.Member)
+                MemberExpression memberExpression = Expression.Property(parameterExpression, columnName);
+
+                if (memberExpression.Type == typeof(string))
+                {
+                    // (x.Member.ToUpper())
+                    Expression caseInsentitiveMemberExpression = Expression.Call(
+                        memberExpression,
+                        typeof(string).GetMethod(nameof(String.ToUpper), Type.EmptyTypes));
+
+                    // (x.Member.ToUpper().Contains(constantExpression))
+                    Expression containsMemberExpression = Expression.Call(
+                        caseInsentitiveMemberExpression,
+                        typeof(string).GetMethod(nameof(String.Contains), new[] { typeof(string) }),
+                        constantExpression);
+
+                    predicateBuilder = Expression.OrElse(predicateBuilder, containsMemberExpression);
+                }
+                else if (memberExpression.Type == typeof(DateTime?))
+                {
+                    bool canParseDate = DateTime.TryParseExact(searchText, "dd/MM/yyyy", 
+                        CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDate);
+
+                    if (!canParseDate)
+                        continue;
+
+                    var dateEqualityMemberExpression = Expression.Equal
+                        (memberExpression, Expression.Constant(searchDate, typeof(DateTime?)));
+
+                    // Combinarea condițiilor: (x.CreatedAt >= start) AND (x.CreatedAt < end)
+                    predicateBuilder = Expression.OrElse(predicateBuilder, dateEqualityMemberExpression);
+                }
+            }
+
+            LambdaExpression lambdaExpression = Expression.Lambda(predicateBuilder, parameterExpression);
+
+            Expression expression = source.Expression;
+            expression = Expression.Call(
+                typeof(Queryable),
+                nameof(Queryable.Where),
+                new Type[] { source.ElementType },
+                expression,
+                Expression.Quote(lambdaExpression));
+
+            IQueryable<T> query = source.Provider.CreateQuery<T>(expression);
+            return query;
         }
 
         public static IQueryable<T> Search<T>(this IQueryable<T> source, DataTablesParameters parameters)

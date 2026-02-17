@@ -183,9 +183,9 @@ namespace CruscottoIncidenti.Controllers
             //    }
             //}
 
-            var insertedIncidents = await Mediator.Send(incidents);
+            var (validationMessage, insertedIncidents) = await Mediator.Send(incidents);
 
-            return Json(insertedIncidents);
+            return Json(new { validationMessage, insertedIncidents });
         }
 
         private async Task GetSelectListItems(int? originId, int? ambitId)

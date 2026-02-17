@@ -14,6 +14,8 @@ namespace CruscottoIncidenti.Filters
             if (filterContext.ExceptionHandled)
                 return;
 
+            Logger.Error(filterContext.Exception, string.Empty);
+
             if (!filterContext.HttpContext.Request.IsAjaxRequest())
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
@@ -24,25 +26,10 @@ namespace CruscottoIncidenti.Filters
                 }));
 
                 UpdateFilterContext(filterContext);
-                Logger.Error(filterContext.Exception, string.Empty);
                 return;
             }
 
             var code = HttpStatusCode.InternalServerError;
-            //ExceptionJsonResponse result = new ExceptionJsonResponse();
-
-            //if (string.IsNullOrEmpty(result.Message))
-            //{
-            //    result = new ExceptionJsonResponse { Message = "Internal Server Error, Contattare l'amministratore.", StackTrace = filterContext.Exception.StackTrace };
-            //    Logger.Error(filterContext.Exception, "");
-            //}
-
-            //filterContext.Result = new JsonResult
-            //{
-            //    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-            //    Data = result
-            //};
-
             UpdateFilterContext(filterContext, (int)code);
         }
 

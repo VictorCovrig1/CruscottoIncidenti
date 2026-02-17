@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     $("select").selectpicker();
+    clearValidationMessageEvent();
 
     if (!$("#origins").val()) {
         $("#ambits").prop("disabled", true);

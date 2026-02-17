@@ -68,6 +68,9 @@ namespace CruscottoIncidenti
 
             bundles.Add(new ScriptBundle("~/bundles/toastrSettings").Include(
                 "~/Scripts/custom/toastrSettings.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/common").Include(
+                "~/Scripts/custom/common.js"));
         }
     }
 }

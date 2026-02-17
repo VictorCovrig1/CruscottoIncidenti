@@ -29,7 +29,7 @@ namespace CruscottoIncidenti.Application.Incidents.Queries.Incidents
                 .AsNoTracking()
                 .Where(x => !x.IsDeleted)
                 .OrderBy(request.Parameters)
-                .Search(request.Parameters)
+                .SearchByDate(request.Parameters)
                 .Page(request.Parameters)
                 .Select(x => new IncidentRowViewModel
                 {
