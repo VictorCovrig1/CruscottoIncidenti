@@ -1,10 +1,13 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Common.Exceptions;
 using CruscottoIncidenti.Application.Incidents.Commands.Common;
 using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
+using CruscottoIncidenti.Common;
+using CruscottoIncidenti.Domain.Entities;
 using MediatR;
 
 namespace CruscottoIncidenti.Application.Incidents.Commands
@@ -30,7 +33,31 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
             if (dublicatedIncident != null)
                 throw new CustomException($"Incident with the same request number ({dublicatedIncident.RequestNr}) already exists");
 
-            IncidentHelper.InsertIncidentInContext(_currentUserService.UserId, request, _context.Incidents);
+            var incident = new Incident
+            {
+                CreatedBy = _currentUserService.UserId,
+                Created = DateTime.UtcNow,
+                RequestNr = request.RequestNr,
+                Subsystem = request.Subsystem,
+                Type = Enum.GetName(typeof(RequestType), request.Type),
+                Urgency = Enum.GetName(typeof(Urgency), request.Urgency),
+                SubCause = request.SubCause,
+                ProblemSumary = request.ProblemSummary,
+                ProblemDescription = request.ProblemDescription,
+                Solution = request.Solution,
+                IncidentTypeId = request.IncidentTypeId.Value,
+                AmbitId = request.AmbitId.Value,
+                OriginId = request.OriginId.Value,
+                ThreatId = request.ThreatId.Value,
+                ScenarioId = request.ScenarioId.Value,
+                ThirdParty = request.ThirdParty,
+                ApplicationType = request.ApplicationType
+            };
+
+            IncidentHelper.InsertDateToIncident(request.OpenDate, incident);
+            IncidentHelper.InsertDateToIncident(request.CloseDate, incident);
+
+            _context.Incidents.Add(incident);
 
             await _context.SaveChangesAsync(cancellationToken);
 

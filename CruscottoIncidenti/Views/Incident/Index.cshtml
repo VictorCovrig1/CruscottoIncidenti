@@ -21,7 +21,7 @@
         <div class="mt-3">
             <table id="incidentsTable" class="w-100 table table-striped table-bordered table-hover"></table>
         </div>
-        <div class="mt-3">
+        <div class="d-flex flex-wrap gap-2 mt-3">
             <a href="@Url.Action("GetCreateIncident", "Incident")" class="btn btn-success" id="createLink"><i class="fas fa-plus"></i> Add</a>
             @if (CurrentUserService.Roles.Contains(Role.Operator))
             {
@@ -33,7 +33,7 @@
     </div>
     @if (CurrentUserService.Roles.Contains(Role.Operator))
     {
-        <div class="tab-pane fade p-5" id="import-tab-pane" role="tabpanel" aria-labelledby="import-tab" tabindex="0">
+        <div class="tab-pane fade py-5 px-3 p-lg-5" id="import-tab-pane" role="tabpanel" aria-labelledby="import-tab" tabindex="0">
             <input class="form-control mb-3" type="file" id="importedFile" name="importedFile" accept=".csv" onchange="submitCSV();">
             <button type="button" onclick="importData();" class="btn btn-primary" id="importData">Import Data</button>
             @Html.ValidationMessage("IncorrectImportIncidents", string.Empty, new { @class = "d-block text-danger mt-3", @style= "white-space: pre-line" })
@@ -86,7 +86,7 @@
                     }
                 };
 
-                reader.readAsText(files[0]);
+                reader.readAsText(files[0], "iso-8859-1");
             }
             else {
                 table.clear();

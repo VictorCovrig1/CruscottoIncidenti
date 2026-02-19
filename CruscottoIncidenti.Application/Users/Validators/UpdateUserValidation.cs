@@ -8,11 +8,15 @@ namespace CruscottoIncidenti.Application.Users.Validators
     {
         public UpdateUserValidation() 
         {
-            RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("Email should be a valid email address");
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("Email can't be empty")
+                .EmailAddress().WithMessage("Email should be a valid email address");
 
-            RuleFor(x => x.FullName).NotEmpty().WithMessage("Full name can't be empty");
+            RuleFor(x => x.FullName)
+                .NotEmpty().WithMessage("Full name can't be empty");
 
-            RuleFor(x => x.Roles).Must(roles => roles != null && roles.Count > 0)
+            RuleFor(x => x.Roles)
+                .Must(roles => roles != null && roles.Count > 0)
                 .WithMessage("User should have at least one role");
 
             RuleFor(x => x.Password)

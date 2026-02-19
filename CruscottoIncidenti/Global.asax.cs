@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -7,6 +9,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using AutofacSerilogIntegration;
 using CruscottoIncidenti.Application;
+using CruscottoIncidenti.Application.Incidents.Commands.Common;
 using CruscottoIncidenti.Application.Interfaces;
 using CruscottoIncidenti.Infrastructure.Persistance;
 using CruscottoIncidenti.Infrastructure.Services;
@@ -58,6 +61,7 @@ namespace CruscottoIncidenti
             // Register WebUI services.
             builder.RegisterType<DateTimeService>().As<IDateTime>().InstancePerDependency();
             builder.RegisterType<CurrentUserService>().As<ICurrentUserService>().InstancePerRequest();
+            builder.RegisterType<IncidentStringComparer>().As<IEqualityComparer<string>>().InstancePerRequest();
 
             // Register logging
             string logFileAbsolutePath = Path.Combine(Server.MapPath("~"), "Logs", "Log-.json");

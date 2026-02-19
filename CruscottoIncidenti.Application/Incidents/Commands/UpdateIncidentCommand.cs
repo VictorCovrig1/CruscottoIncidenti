@@ -40,8 +40,8 @@ namespace CruscottoIncidenti.Application.Incidents.Commands
             incident.ProblemSumary = request.ProblemSummary;
             incident.ProblemDescription = request.ProblemDescription;
             incident.Solution = request.Solution;
-            incident.IncidentTypeId = request.IncidentTypeId;
-            incident.AmbitId = request.AmbitId;
+            incident.IncidentTypeId = request.IncidentTypeId.Value;
+            incident.AmbitId = request.AmbitId.Value;
             incident.OriginId = request.OriginId;
             incident.ThreatId = request.ThreatId;
             incident.ScenarioId = request.ScenarioId;

@@ -32,7 +32,7 @@
                     $(this).addClass("active");
             });
 
-            if (location.pathname === "/Incident") {
+            if (location.pathname.includes("Incident")) {
                 $("a[href='/']").addClass("active");
             }
         });

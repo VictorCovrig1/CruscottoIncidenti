@@ -6,6 +6,7 @@ function renderIncidentsGrid() {
     var table = $("#incidentsTable").DataTable({
         processing: true,
         serverSide: true,
+        scrollX: true,
         ajax: {
             url: "/Incident/GetIncidentsGrid",
             type: "POST",
@@ -24,7 +25,7 @@ function renderIncidentsGrid() {
             { data: "OpenDate", title: "Open Date", name: "openDate" },
             { data: "CloseDate", title: "Close Date", name: "closeDate" },
             { data: "Type", title: "Type", name: "type", orderable: false },
-            { data: "Urgency", title: "Urgency", name: "urgency", orderable: false },
+            { data: "Urgency", title: "Urgency", name: "urgency", orderable: false }
         ]
     });
 
@@ -34,6 +35,7 @@ function renderIncidentsGrid() {
 function renderPreviewIncidentswGrid() {
     $("#incidentsPreviewTable").DataTable({
         serverSide: false,
+        scrollX: true,
         columnDefs: [
             { orderSequence: ["asc", "desc"], targets: "_all" }
         ],
@@ -42,12 +44,24 @@ function renderPreviewIncidentswGrid() {
             { data: "RequestNr", title: "Request Number", name: "requestNr" },
             { data: "OpenDate", title: "Open Date", name: "openDate" },
             { data: "CloseDate", title: "Close Date", name: "closeDate" },
-            { data: "Type", title: "Type", name: "type", orderable: false },
-            { data: "Urgency", title: "Urgency", name: "urgency", orderable: false },
+            {
+                data: "Type", title: "Type", name: "type", orderable: false, render: function (data, type, full, meta) {
+                    const types = ["Incident", "Request", "Bug", "Security", "Maintenances"];
+                    const typeName = types.find(element => element.includes(data));
+                    return typeName ? typeName : data;
+                }
+            },
+            {
+                data: "Urgency", title: "Urgency", name: "urgency", orderable: false, render: function (data, type, full, meta) {
+                    const urgencies = ["Low", "Medium", "High", "Critical"];
+                    const typeName = urgencies.find(element => element.includes(data));
+                    return typeName ? typeName : data;
+                }
+            },
             {
                 data: "IsInserted", title: "Inserted", name: "isInserted", orderable: false,
                 render: function (data, type, full, meta) {
-                    return "<i class='fas fa-minus-circle text-secondary'></i>"
+                    return ""
                 }
             }
         ]

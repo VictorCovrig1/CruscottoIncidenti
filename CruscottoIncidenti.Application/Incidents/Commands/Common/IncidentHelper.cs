@@ -4,58 +4,26 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CruscottoIncidenti.Application.Common.Exceptions;
-using CruscottoIncidenti.Application.Incidents.ViewModels;
 using CruscottoIncidenti.Application.Interfaces;
-using CruscottoIncidenti.Common;
 using CruscottoIncidenti.Domain.Entities;
 
 namespace CruscottoIncidenti.Application.Incidents.Commands.Common
 {
     public static class IncidentHelper
     {
-        public static void InsertIncidentInContext(int currentUserId, CreateIncidentViewModel newIncident, DbSet<Incident> contextIncidents)
+        public static void InsertDateToIncident(string date, Incident incident)
         {
-            var incident = new Incident
-            {
-                CreatedBy = currentUserId,
-                Created = DateTime.UtcNow,
-                RequestNr = newIncident.RequestNr,
-                Subsystem = newIncident.Subsystem,
-                Type = Enum.GetName(typeof(RequestType), newIncident.Type),
-                Urgency = Enum.GetName(typeof(Urgency), newIncident.Urgency),
-                SubCause = newIncident.SubCause,
-                ProblemSumary = newIncident.ProblemSummary,
-                ProblemDescription = newIncident.ProblemDescription,
-                Solution = newIncident.Solution,
-                IncidentTypeId = newIncident.IncidentTypeId,
-                AmbitId = newIncident.AmbitId,
-                OriginId = newIncident.OriginId,
-                ThreatId = newIncident.ThreatId,
-                ScenarioId = newIncident.ScenarioId,
-                ThirdParty = newIncident.ThirdParty,
-                ApplicationType = newIncident.ApplicationType
-            };
-
             var acceptableFormats = new string[] { "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy" };
 
-            if (DateTime.TryParseExact(newIncident.OpenDate, acceptableFormats, 
+            if (DateTime.TryParseExact(date, acceptableFormats,
                 CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime openDate))
             {
                 incident.OpenDate = openDate;
             }
-                
-
-            if (DateTime.TryParseExact(newIncident.CloseDate, acceptableFormats,
-                CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime closeDate))
-            {
-                incident.CloseDate = closeDate;
-            }  
-
-            contextIncidents.Add(incident);
         }
         
         public static async Task CheckEntitiesIfExistAsync(ICruscottoIncidentiDbContext context, 
-            int scenarioId, int threatId, int originId, int ambitId, int incidentTypeId)
+            int? scenarioId, int? threatId, int? originId, int? ambitId, int? incidentTypeId)
         {
             Scenario scenario = await context.Scenarios
                 .AsNoTracking()

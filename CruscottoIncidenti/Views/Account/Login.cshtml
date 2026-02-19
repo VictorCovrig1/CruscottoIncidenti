@@ -5,10 +5,10 @@
 }
 
 <div class="d-flex align-items-center justify-content-center vh-100">
-    <div class="row">
-        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "col-12 bg-white p-5 rounded", id = "loginForm" }))
+    <div class="col-12 col-sm-8 col-lg-6 col-xxl-5">
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "col-12 bg-white py-5 px-2 px-lg-4 px-xl-5 rounded", id = "loginForm" }))
         {
-            <div class="px-5">
+            <div class="px-xxl-5 px-3">
                 @Html.AntiForgeryToken()
 
                 <h1 class="text-center mb-4">Cruscotto Incidenti</h1>

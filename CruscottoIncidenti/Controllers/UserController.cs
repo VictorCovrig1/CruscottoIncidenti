@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -130,23 +131,9 @@ namespace CruscottoIncidenti.Controllers
             var user = await Mediator.Send(new GetUpdateUserQuery() { Id = id });
 
             if(user == null)
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
-            var roles = await Mediator.Send(new GetRolesQuery());
-
-            var selectRoles = new List<SelectListItem>();
-            foreach (var role in roles)
-            {
-                selectRoles.Add(new SelectListItem() 
-                { 
-                    Value = role.Id.ToString(),
-                    Text = role.Name
-                });
-            }
-
-            ViewBag.AllRoles = selectRoles;
-
-            return PartialView("_UpdateUserModal", user);
+            return await GetUpdateModalWithRoles(user);
         }
 
         [HttpPost]
@@ -167,7 +154,7 @@ namespace CruscottoIncidenti.Controllers
             ModelState.ValidatePasswordCharRules(passwordValidateResult, user);
 
             if (!validateResult.IsValid || !passwordValidateResult.IsValid)
-                return await GetUpdateUser(user.Id);
+                return await GetUpdateModalWithRoles(user);
 
             try
             {
@@ -180,6 +167,19 @@ namespace CruscottoIncidenti.Controllers
             }
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        private async Task<ActionResult> GetUpdateModalWithRoles(UpdateUserViewModel user)
+        {
+            var roles = await Mediator.Send(new GetRolesQuery());
+
+            ViewBag.AllRoles = roles.Select(r => new SelectListItem
+            {
+                Value = r.Id.ToString(),
+                Text = r.Name
+            });
+
+            return PartialView("_UpdateUserModal", user);
         }
     }
 }

@@ -42,3 +42,7 @@ table.table.dataTable.table-hover tbody tr:hover > .sorting_1 {
 .no-resize {
     resize: none;
 }
+
+.textarea-height {
+    height: 7.7rem;
+}

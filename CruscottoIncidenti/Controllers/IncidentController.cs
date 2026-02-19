@@ -129,7 +129,8 @@ namespace CruscottoIncidenti.Controllers
                     ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
 
-                return await GetUpdateIncident(incident.Id);
+                await GetSelectListItems(incident.OriginId, incident.AmbitId);
+                return View("UpdateIncident", incident);
             }
 
             try
@@ -139,7 +140,9 @@ namespace CruscottoIncidenti.Controllers
             catch (CustomException ex)
             {
                 ModelState.AddModelError("IncorrectUpdateIncident", ex.FriendlyMessage);
-                return await GetUpdateIncident(incident.Id);
+
+                await GetSelectListItems(incident.OriginId, incident.AmbitId);
+                return View("UpdateIncident", incident);
             }
 
             return RedirectToAction("Index");
@@ -166,25 +169,7 @@ namespace CruscottoIncidenti.Controllers
         [ClaimsAuthorize(Role.Operator)]
         public async Task<ActionResult> ImportIncidents(ImportIncidentsViewModel incidents)
         {
-            //var validator = new ImportIncidentsValidator();
-            //var validateResult = await validator.ValidateAsync(incidents);
-
-            //if (!validateResult.IsValid)
-            //{
-            //    var invalidIndices = validateResult.Errors
-            //        .Select(e => System.Text.RegularExpressions.Regex.Match(e.PropertyName, @"\[(\d+)\]"))
-            //        .Where(m => m.Success)
-            //        .Select(m => int.Parse(m.Groups[1].Value))
-            //        .Distinct();
-
-            //    foreach (var index in invalidIndices)
-            //    {
-            //        incidents.Incidents.RemoveAt(index);
-            //    }
-            //}
-
             var (validationMessage, insertedIncidents) = await Mediator.Send(incidents);
-
             return Json(new { validationMessage, insertedIncidents });
         }
 

@@ -4,10 +4,11 @@
 
 var table;
 
-function renderUsersGrid() {
+function renderUsersGrid(isUser) {
     table = $("#usersTable").DataTable({
         processing: true,
         serverSide: true,
+        scrollX: true,
         ajax: {
             url: "/User/GetUsersGrid",
             type: "POST",

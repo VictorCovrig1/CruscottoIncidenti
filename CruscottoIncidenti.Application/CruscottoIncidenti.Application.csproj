@@ -137,7 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Utils\PasswordHelper.cs" />
-    <Compile Include="Incidents\Commands\Common\IncidentComparer.cs" />
+    <Compile Include="Incidents\Commands\Common\IncidentStringComparer.cs" />
     <Compile Include="Incidents\Commands\Common\IncidentHelper.cs" />
     <Compile Include="Incidents\Commands\DeleteIncidentCommand.cs" />
     <Compile Include="Incidents\Commands\ImportIncidentCommand.cs" />
@@ -151,7 +151,6 @@
     <Compile Include="Incidents\Queries\Incidents\GetUpdateIncidentQuery.cs" />
     <Compile Include="Incidents\Queries\Incidents\GetIncidentsGridQuery.cs" />
     <Compile Include="Incidents\Validators\CreateIncidentValidator.cs" />
-    <Compile Include="Incidents\Validators\ImportIncidentsValidator.cs" />
     <Compile Include="Incidents\Validators\UpdateIncidentValidator.cs" />
     <Compile Include="Incidents\ViewModels\CreateIncidentViewModel.cs" />
     <Compile Include="Incidents\ViewModels\DetailedIncidentViewModel.cs" />
